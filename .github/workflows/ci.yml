@@ -10,11 +10,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: yarn install, build
+      - name: yarn install, export
         run: |
           yarn install
-          yarn run build
+          yarn run export
+          mkdir -p .lighthousereports
       - name: run Lighthouse CI
         run: |
-          # yarn global add @lhci/cli@0.6.x
-          npx lhci autorun
+          yarn run lh

@@ -1,10 +1,11 @@
 module.exports = {
   ci: {
     upload: {
-      target: "temporary-public-storage",
+      target: "filesystem",
+      outputDir: ".lighthousereports",
     },
     collect: {
-      staticDistDir: "/.next/static.",
+      staticDistDir: "out",
     },
   },
 };
