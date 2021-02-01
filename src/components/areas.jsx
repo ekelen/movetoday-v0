@@ -2,9 +2,9 @@ import { areas, areaNames, getArea } from "../util";
 import Move from "./move";
 import MovesArea from "./movesArea";
 
-const Areas = ({ moves, selectedAreaNames, children }) => {
+const Areas = ({ children }) => {
   return (
-    <section>
+    <section style={{ border: "1px solid orange" }}>
       <header>
         <h2>Categories</h2>
       </header>

@@ -21,26 +21,6 @@ export default ({ content }) => {
         <h1 sx={{ fontSize: 8, my: 0 }}>Move Today</h1>
         <pre>{JSON.stringify(selectedMoves.map((m) => m.name))}</pre>
         <aside>
-          <Areas moves={allMoves}>
-            {areaNames.map((area) => {
-              return (
-                <MovesArea key={area} areaTitle={area}>
-                  {allMoves
-                    .filter((m) => m.focus.includes(area))
-                    .map((move) => {
-                      console.log(`move:`, move);
-                      return (
-                        <div onClick={() => toggleMove(move)}>
-                          <Move move={move} />
-                        </div>
-                      );
-                    })}
-                </MovesArea>
-              );
-            })}
-          </Areas>
-        </aside>
-        <aside>
           <header>
             <h2>
               Today's Plan -{" "}
@@ -52,7 +32,7 @@ export default ({ content }) => {
             </h2>
           </header>
           <section>
-            {areaNames.map((area) => {
+            {/* {selectedAreas.map((area) => {
               return (
                 <MovesArea key={area} areaTitle={area}>
                   {selectedMoves
@@ -67,8 +47,30 @@ export default ({ content }) => {
                     })}
                 </MovesArea>
               );
-            })}
+            })} */}
           </section>
+        </aside>
+        <aside>
+          <Areas moves={allMoves}>
+            {areaNames.map((area) => {
+              return (
+                <MovesArea key={area} areaTitle={area}>
+                  {allMoves
+                    .filter((m) => m.focus.includes(area))
+                    .map((move) => {
+                      return (
+                        <div
+                          onClick={() => toggleMove(move)}
+                          key={`${move.name}`}
+                        >
+                          <Move move={move} />
+                        </div>
+                      );
+                    })}
+                </MovesArea>
+              );
+            })}
+          </Areas>
         </aside>
       </div>
     </div>

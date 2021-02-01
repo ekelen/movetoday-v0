@@ -1,65 +1,81 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useEffect, useMemo, useState } from "react";
+import Areas from "../src/components/areas";
+import allMoves from "../src/data/cleanData.json";
+import { areaNames } from "../src/util";
+import { xorBy } from "lodash";
+import MovesArea from "../src/components/movesArea";
+import Move from "../src/components/move";
 
-export default function Home() {
+const Home = ({ content }) => {
+  const [selectedMoves, setSelectedMoves] = useState([]);
+  const selectedAreas = useMemo(() => {
+    [...new Set(...selectedMoves.map((m) => m.focus.split(",")))];
+  }, [selectedMoves]);
+
+  const toggleMove = (move) =>
+    setSelectedMoves(xorBy(selectedMoves, [move], "id"));
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div sx={{ height: `calc(100vh - 60px)` }}>
+      <div sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+        <h1 sx={{ fontSize: 8, my: 0 }}>Move Today</h1>
+        <h2>{process.env.NODE_ENV}</h2>
+        <pre>{JSON.stringify(selectedMoves.map((m) => m.name))}</pre>
+        <aside>
+          <header>
+            <h2>
+              Today's Plan -{" "}
+              {new Date().toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </h2>
+          </header>
+          <section>
+            {/* {selectedAreas.map((area) => {
+              return (
+                <MovesArea key={area} areaTitle={area}>
+                  {selectedMoves
+                    .filter((m) => m.focus.includes(area))
+                    .map((move) => {
+                      console.log(`move:`, move);
+                      return (
+                        <div onClick={() => toggleMove(move)}>
+                          <Move move={move} />
+                        </div>
+                      );
+                    })}
+                </MovesArea>
+              );
+            })} */}
+          </section>
+        </aside>
+        <aside>
+          <Areas moves={allMoves}>
+            {areaNames.map((area) => {
+              return (
+                <MovesArea key={area} areaTitle={area}>
+                  {allMoves
+                    .filter((m) => m.focus.includes(area))
+                    .map((move) => {
+                      return (
+                        <div
+                          onClick={() => toggleMove(move)}
+                          key={`${move.name}`}
+                        >
+                          <Move move={move} />
+                        </div>
+                      );
+                    })}
+                </MovesArea>
+              );
+            })}
+          </Areas>
+        </aside>
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default Home;
