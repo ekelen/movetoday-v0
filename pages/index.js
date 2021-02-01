@@ -5,6 +5,7 @@ import { areaNames } from "../src/util";
 import { xorBy } from "lodash";
 import MovesArea from "../src/components/movesArea";
 import Move from "../src/components/move";
+import Link from "next/link";
 
 const Home = ({ content }) => {
   const [selectedMoves, setSelectedMoves] = useState([]);
@@ -21,6 +22,7 @@ const Home = ({ content }) => {
         <h1 sx={{ fontSize: 8, my: 0 }}>Move Today</h1>
         <h2>{process.env.NODE_ENV}</h2>
         <pre>{JSON.stringify(selectedMoves.map((m) => m.name))}</pre>
+        <Link href="secondpage">Go to SECOND PAGE</Link>
         <aside>
           <header>
             <h2>
