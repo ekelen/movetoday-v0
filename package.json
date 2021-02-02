@@ -5,11 +5,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "heavy": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" yarn dev",
+    "lh": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun --config=\"./.lighthouserc.js\"",
+    "lh-local": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun --config=\"./.lighthouserc.local.js\" && node ./scripts/quickLighthouseCheck.js",
+    "export": "next export"
   },
   "dependencies": {
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1"
+  },
+  "devDependencies": {
+    "@lhci/cli": "0.6.x"
   }
 }
