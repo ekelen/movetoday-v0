@@ -4,20 +4,14 @@ import { areaNames } from "../src/util/util";
 import { xorBy } from "lodash";
 import MovesArea from "../src/components/movesArea";
 import Move from "../src/components/move";
-import allMoves from "../src/data/cleanData.json";
-import { bloatStaticData } from "../src/util/test.js";
-
-console.log(
-  `process.env.NEXT_PUBLIC_LIGHTHOUSE:`,
-  process.env.NEXT_PUBLIC_LIGHTHOUSE
-);
-
-const moves =
-  process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
-    ? bloatStaticData(allMoves)
-    : allMoves;
+import moveList from "../src/data/moveList.json";
+import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
+  const allMoves =
+    process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
+      ? bloatDataInMemory(moveList)
+      : moveList;
   const [selectedMoves, setSelectedMoves] = useState([]);
   const selectedAreas = useMemo(() => {
     [...new Set(...selectedMoves.map((m) => m.focus.split(",")))];
@@ -28,15 +22,13 @@ const Home = ({ content }) => {
 
   return (
     <div>
-      {/* <div sx={{ display: "flex", alignItems: "center", height: "100%" }}> */}
-      {/* <div sx={{ display: "flex", alignItems: "center", height: "100%" }}> */}
       <Areas>
         <div className="allMovesArea">
-          <h4>All moves (n = {moves.length})</h4>
+          <h4>All moves (n = {allMoves.length})</h4>
           {areaNames.map((area) => {
             return (
               <MovesArea key={area} areaTitle={area}>
-                {moves
+                {allMoves
                   .filter((m) => m.focus.includes(area))
                   .map((m, i) => {
                     return (

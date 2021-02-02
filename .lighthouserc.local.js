@@ -4,6 +4,9 @@ module.exports = {
       target: "filesystem",
       outputDir: ".lighthousereports",
     },
+    assert: {
+      preset: "lighthouse:no-pwa",
+    },
     collect: {
       staticDistDir: "out",
     },

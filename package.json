@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "heavy": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next dev",
-    "lh": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun && node ./scripts/checkLighthouseReports.js",
+    "heavy": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" yarn dev",
+    "lh": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun --config=\"./.lighthouserc.js\"",
+    "lh-local": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun --config=\"./.lighthouserc.local.js\" && node ./scripts/quickLighthouseCheck.js",
     "export": "next export"
   },
   "dependencies": {
