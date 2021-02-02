@@ -2,11 +2,11 @@ const Move = ({ move }) => {
   return (
     <section>
       <header>
-        <strong>{move.name}</strong>
+        <strong className="font-mono">{move.name}</strong>
       </header>
       <ul>
         {Object.entries(move).map(([k, v], i) => (
-          <li key={`${k}-${i}`}>
+          <li key={`${k}-${i}`} className="font-light">
             <span>{k}: </span>
             <span>{v}</span>
           </li>
