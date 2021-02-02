@@ -1,32 +1,18 @@
 ul.props {
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  list-style-type: none;
 }
 
 li.li {
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -ms-flex-direction: column;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: red;
+  /* border: 1px solid cornflowerblue; */
+}
+
+.moveName {
+  font-family: "Jetbrains Mono", sans serif;
+  font-weight: 400;
+  color: black;
+}
+
+.min {
+  font-family: "Jetbrains Mono", sans serif;
+  font-weight: 100;
 }

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lh": "lhci autorun",
+    "heavy": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next dev",
+    "lh": "NEXT_PUBLIC_LIGHTHOUSE=\"on\" next build && next export && lhci autorun && node ./scripts/checkLighthouseReports.js",
     "export": "next export"
   },
   "dependencies": {
