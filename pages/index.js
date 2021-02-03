@@ -27,7 +27,7 @@ const Home = ({ content }) => {
             return (
               <div
                 key={`${area}-${i}`}
-                className="flex flex-wrap space-x-2 space-y-2"
+                className="flex flex-wrap space-x-2 space-y-2 items-start"
               >
                 <h4 className="font-display bg-blue-600 bg-opacity-30 w-min">
                   {area}
@@ -51,28 +51,45 @@ const Home = ({ content }) => {
         </div>
       </div>
 
-      <div className="w-1/2">
-        <h3 className="font-display">
+      <div className="w-1/2 flex flex-wrap space-y-3 space-x-2 items-start flex-start content-start">
+        <h3 className="font-display w-full">
           Selected moves (n = {selectedMoves.length})
         </h3>
         {areaNames
           .filter((a) => selectedMoves.some((m) => m.focus.includes(a)))
           .map((area, i) => {
             return (
-              <div>
+              <div className="flex flex-wrap space-x-2 space-y-2 items-start">
                 <h4 className="font-display bg-blue-600 bg-opacity-60 w-min">
                   {area}
                 </h4>
                 {selectedMoves
                   .filter((m) => m.focus.includes(area))
                   .map((m, i) => {
+                    const {
+                      name,
+                      repsMin,
+                      repsMax,
+                      durationMin,
+                      durationMax,
+                      sets,
+                    } = m;
                     return (
                       <div
-                        className="pt-10 p-5 bg-yellow-200"
+                        className="pt-3 p-2 w-min bg-yellow-200"
                         onClick={() => toggleMove(m)}
                         key={`${m.name}-${i}`}
                       >
-                        <Move move={{ name: m.name }} />
+                        <Move
+                          move={{
+                            name,
+                            repsMin,
+                            repsMax,
+                            durationMax,
+                            durationMin,
+                            sets,
+                          }}
+                        />
                       </div>
                     );
                   })}
