@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { areaNames } from "../src/util/util";
-import { xorBy, uniqBy } from "lodash";
+import { xorBy, uniqBy, flatten } from "lodash";
 import Move from "../src/components/move";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
@@ -15,8 +15,24 @@ const Home = ({ content }) => {
   const toggleMove = (move) =>
     setSelectedMoves(xorBy(selectedMoves, [move], "id"));
 
+  const chooseRandom = () =>
+    setSelectedMoves(
+      flatten(
+        areaNames.map(
+          (a) =>
+            allMoves.filter((m) => m.focus.includes(a))[
+              Math.floor(
+                Math.random() *
+                  Math.floor(allMoves.filter((m) => m.focus.includes(a)).length)
+              )
+            ]
+        )
+      )
+    );
+
   return (
     <div className="w-full flex p-5">
+      <button onClick={chooseRandom}>Choose</button>
       {/* All */}
       <div className="w-1/2">
         <div className="w-full flex flex-wrap flex-grow flex-shrink-0 space-x-1 space-y-2">
