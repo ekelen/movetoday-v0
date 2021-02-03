@@ -6,7 +6,7 @@ const Move = ({ move }) => {
       </header>
       <ul>
         {Object.entries(move).map(([k, v], i) => (
-          <li key={`${k}-${i}`} className="font-light">
+          <li key={`${k}-${i}`} className="font-light text-xs">
             <span>{k}: </span>
             <span>{v}</span>
           </li>

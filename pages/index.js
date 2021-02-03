@@ -16,31 +16,39 @@ const Home = ({ content }) => {
     setSelectedMoves(xorBy(selectedMoves, [move], "id"));
 
   return (
-    <div className="w-screen flex p-5">
+    <div className="w-full flex p-5">
+      {/* All */}
       <div className="w-1/2">
-        <h3 className="font-display">All moves (n = {allMoves.length})</h3>
-        {areaNames.map((area, i) => {
-          return (
-            <div>
-              <h4 className="font-display bg-blue-600 bg-opacity-30 w-min">
-                {area}
-              </h4>
-              {allMoves
-                .filter((m) => m.focus.includes(area))
-                .map((m, i) => {
-                  return (
-                    <div
-                      className="pt-10 p-5 bg-blue-200 bg-opacity-20 border-black border-b-2"
-                      onClick={() => toggleMove(m)}
-                      key={`${m.name}-${i}`}
-                    >
-                      <Move move={{ name: m.name }} />
-                    </div>
-                  );
-                })}
-            </div>
-          );
-        })}
+        <div className="w-full flex flex-wrap flex-grow flex-shrink-0 space-x-1 space-y-2">
+          <h3 className="font-display w-full">
+            All moves (n = {allMoves.length})
+          </h3>
+          {areaNames.map((area, i) => {
+            return (
+              <div
+                key={`${area}-${i}`}
+                className="flex flex-wrap space-x-2 space-y-2"
+              >
+                <h4 className="font-display bg-blue-600 bg-opacity-30 w-min">
+                  {area}
+                </h4>
+                {allMoves
+                  .filter((m) => m.focus.includes(area))
+                  .map((m, i) => {
+                    return (
+                      <div
+                        className="pt-2 p-1 bg-blue-200 bg-opacity-20 border-black border-b-2"
+                        onClick={() => toggleMove(m)}
+                        key={`${m.name}-${i}`}
+                      >
+                        <Move move={{ name: m.name }} />
+                      </div>
+                    );
+                  })}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="w-1/2">
