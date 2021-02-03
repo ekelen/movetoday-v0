@@ -1,7 +1,7 @@
 import { xorBy } from "lodash";
 import { useState } from "react";
 import Move from "../src/components/move";
-import { areaNames } from "../src/data/constants";
+import { foci } from "../src/data/constants";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 import { randInt } from "../src/util/util";
@@ -19,10 +19,10 @@ const Home = ({ content }) => {
     allMoves.filter((m) => m.focus.includes(focus));
 
   const chooseRandom = () => {
-    const randomMoves = areaNames
-      .map((area) => getMovesForFocus(area))
-      .filter((movesByArea) => movesByArea.length)
-      .map((movesByArea) => movesByArea[randInt(movesByArea.length)]);
+    const randomMoves = foci
+      .map((focus) => getMovesForFocus(focus))
+      .filter((movesByFocus) => movesByFocus.length)
+      .map((movesByFocus) => movesByFocus[randInt(movesByFocus.length)]);
     setSelectedMoves(randomMoves);
   };
 
@@ -40,17 +40,17 @@ const Home = ({ content }) => {
           <h3 className="font-display w-full">
             All moves (n = {allMoves.length})
           </h3>
-          {areaNames.map((area, i) => {
+          {foci.map((focus, i) => {
             return (
               <div
-                key={`${area}-${i}`}
+                key={`${focus}-${i}`}
                 className="flex flex-wrap space-x-2 space-y-2 items-start"
               >
                 <h4 className="font-display bg-blue-600 bg-opacity-30 w-min">
-                  {area}
+                  {focus}
                 </h4>
                 {allMoves
-                  .filter((m) => m.focus.includes(area))
+                  .filter((m) => m.focus.includes(focus))
                   .map((m, i) => {
                     return (
                       <div
@@ -67,21 +67,24 @@ const Home = ({ content }) => {
           })}
         </div>
       </div>
-
+      {/* Selected */}
       <div className="w-1/2 flex flex-wrap space-y-3 space-x-2 items-start flex-start content-start">
         <h3 className="font-display w-full">
           Selected moves (n = {selectedMoves.length})
         </h3>
-        {areaNames
-          .filter((a) => selectedMoves.some((m) => m.focus.includes(a)))
-          .map((area, i) => {
+        {foci
+          .filter((focus) => selectedMoves.some((m) => m.focus.includes(focus)))
+          .map((focus, i) => {
             return (
-              <div className="flex flex-wrap space-x-2 space-y-2 items-start">
+              <div
+                key={`${focus}-${i}`}
+                className="flex flex-wrap space-x-2 space-y-2 items-start"
+              >
                 <h4 className="font-display bg-blue-600 bg-opacity-60 w-min">
-                  {area}
+                  {focus}
                 </h4>
                 {selectedMoves
-                  .filter((m) => m.focus.includes(area))
+                  .filter((m) => m.focus.includes(focus))
                   .map((m, i) => {
                     const {
                       name,
