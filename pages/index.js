@@ -34,7 +34,7 @@ const Home = ({ content }) => {
       >
         move!
       </button>
-      <div className="overflow-x-scroll grid grid-rows-3 grid-flow-col auto-cols-max gap-2">
+      <div className="overflow-x-scroll scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300  grid grid-rows-3 grid-flow-col auto-cols-max gap-2">
         {/* All */}
         {allMoves.map((m, i) => {
           return (
