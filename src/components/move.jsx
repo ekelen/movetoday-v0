@@ -1,9 +1,6 @@
 const Move = ({ move }) => {
   return (
     <section>
-      <header>
-        <strong className="font-mono">{move.name}</strong>
-      </header>
       <ul>
         {Object.entries(move)
           .filter(([_, v]) => !!v)

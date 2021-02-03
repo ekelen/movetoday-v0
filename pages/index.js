@@ -27,7 +27,7 @@ const Home = ({ content }) => {
   };
 
   return (
-    <div className="border-2 border-gray-600 h-screen bg-red-100 overflow-x-scroll">
+    <div className="h-screen overflow-hidden border-2 border-gray-600 bg-red-100 ">
       <button
         onClick={chooseRandom}
         className="bg-gray-800 text-white text-sm py-3 px-4 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
@@ -81,18 +81,13 @@ const Home = ({ content }) => {
                     } = m;
                     return (
                       <div
-                        className="pt-3 p-2 w-min bg-yellow-200"
+                        className="w-min bg-yellow-200"
                         onClick={() => toggleMove(m)}
                         key={`${m.name}-${i}`}
                       >
                         <Move
                           move={{
                             name,
-                            repsMin,
-                            repsMax,
-                            durationMax,
-                            durationMin,
-                            sets,
                           }}
                         />
                       </div>
