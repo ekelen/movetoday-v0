@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { areaNames } from "../src/util/util";
-import { xorBy, uniqBy, flatten } from "lodash";
+import { xorBy } from "lodash";
+import { useState } from "react";
 import Move from "../src/components/move";
+import { areaNames } from "../src/data/constants";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
+import { randInt } from "../src/util/util";
 
 const Home = ({ content }) => {
   const allMoves =
@@ -14,25 +15,25 @@ const Home = ({ content }) => {
 
   const toggleMove = (move) =>
     setSelectedMoves(xorBy(selectedMoves, [move], "id"));
+  const getMovesForFocus = (focus) =>
+    allMoves.filter((m) => m.focus.includes(focus));
 
-  const chooseRandom = () =>
-    setSelectedMoves(
-      flatten(
-        areaNames.map(
-          (a) =>
-            allMoves.filter((m) => m.focus.includes(a))[
-              Math.floor(
-                Math.random() *
-                  Math.floor(allMoves.filter((m) => m.focus.includes(a)).length)
-              )
-            ]
-        )
-      )
-    );
+  const chooseRandom = () => {
+    const randomMoves = areaNames
+      .map((area) => getMovesForFocus(area))
+      .filter((movesByArea) => movesByArea.length)
+      .map((movesByArea) => movesByArea[randInt(movesByArea.length)]);
+    setSelectedMoves(randomMoves);
+  };
 
   return (
-    <div className="w-full flex p-5">
-      <button onClick={chooseRandom}>Choose</button>
+    <div className="w-full flex p-5 items-start">
+      <button
+        onClick={chooseRandom}
+        className="bg-gray-800 text-white text-sm py-3 px-4 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+      >
+        move!
+      </button>
       {/* All */}
       <div className="w-1/2">
         <div className="w-full flex flex-wrap flex-grow flex-shrink-0 space-x-1 space-y-2">
