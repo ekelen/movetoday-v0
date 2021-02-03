@@ -12,12 +12,10 @@ jobs:
       - name: Use Node.js 12
         uses: actions/setup-node@v2
         with:
-          node-version: "12"
-      - name: yarn install
+          node-version: "12.x"
+      - name: yarn
         run: |
-          yarn install
-          mkdir -p .lighthousereports
+          yarn
       - name: run Lighthouse CI
         run: |
-          ls -a
           yarn run lh
