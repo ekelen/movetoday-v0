@@ -129,7 +129,7 @@
     "repsMin": 3,
     "sets": 3,
     "isPerSide": "",
-    "focus": "core",
+    "focus": "core, challenge pose",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2
@@ -428,7 +428,7 @@
     "repsMin": "",
     "sets": 3,
     "isPerSide": "",
-    "focus": "core",
+    "focus": "core, handstand",
     "source": "ALIGNED",
     "warning": ""
   },
@@ -498,7 +498,7 @@
     "repsMin": 10,
     "sets": 3,
     "isPerSide": "TRUE",
-    "focus": "lower body strength",
+    "focus": "lower body strength, mobility",
     "source": "ALIGNED",
     "warning": ""
   },
@@ -582,7 +582,7 @@
     "repsMin": "",
     "sets": 3,
     "isPerSide": "",
-    "focus": "handstand",
+    "focus": "handstand, mobility",
     "source": "ALIGNED",
     "warning": ""
   },
@@ -624,7 +624,7 @@
     "repsMin": "",
     "sets": 1,
     "isPerSide": "",
-    "focus": "handstand",
+    "focus": "handstand, challenge pose",
     "source": "ALIGNED",
     "warning": "wrists"
   },
@@ -638,7 +638,7 @@
     "repsMin": "",
     "sets": 1,
     "isPerSide": "",
-    "focus": "handstand",
+    "focus": "handstand, challenge pose",
     "source": "ALIGNED",
     "warning": "wrists"
   },
@@ -666,7 +666,7 @@
     "repsMin": 3,
     "sets": "",
     "isPerSide": "",
-    "focus": "warmup",
+    "focus": "warmup, flow, mobility, leg balance",
     "source": "CUSTOM",
     "warning": ""
   },
@@ -680,7 +680,7 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "",
+    "focus": "mobility",
     "source": "CUSTOM",
     "warning": ""
   },
@@ -694,7 +694,7 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "",
+    "focus": "mobility",
     "source": "CUSTOM",
     "warning": ""
   },
@@ -736,7 +736,7 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "warmup",
+    "focus": "warmup, mobility",
     "source": "CUSTOM",
     "warning": ""
   },
@@ -750,12 +750,12 @@
     "repsMin": 2,
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility",
+    "focus": "mobility, flow, leg balance, warmup",
     "source": "CUSTOM",
     "warning": ""
   },
   {
-    "name": "warriors and crescent flow",
+    "name": "warriors + crescent flow",
     "id": 52,
     "notes": "",
     "durationMax": "",
@@ -764,7 +764,7 @@
     "repsMin": 1,
     "sets": "",
     "isPerSide": "TRUE",
-    "focus": "warmup, general, balance",
+    "focus": "warmup, leg balance, flow, mobility",
     "source": "CUSTOM",
     "warning": ""
   }
