@@ -566,6 +566,7 @@
     "warning": "wrists",
     "slug": "chest_to_wall"
   },
+
   {
     "name": "straddle jump",
     "id": 36,
@@ -820,5 +821,35 @@
     "source": "CUSTOM",
     "warning": "",
     "slug": "warriors_crescent_flow"
+  },
+  {
+    "name": "single leg kickup",
+    "id": 53,
+    "notes": "",
+    "durationMax": "",
+    "durationMin": "",
+    "repsMax": "",
+    "repsMin": 8,
+    "sets": 2,
+    "isPerSide": "TRUE",
+    "focus": "handstand",
+    "source": "ALIGNED",
+    "warning": "wrists",
+    "slug": "single_leg_kickup"
+  },
+  {
+    "name": "baddha konasana leans",
+    "id": 54,
+    "notes": "",
+    "durationMax": "",
+    "durationMin": "",
+    "repsMax": "",
+    "repsMin": 8,
+    "sets": 1,
+    "isPerSide": "",
+    "focus": "mobility",
+    "source": "CUSTOM",
+    "warning": "wrists",
+    "slug": "baddha_konasana_leans"
   }
 ]
