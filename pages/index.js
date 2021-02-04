@@ -42,7 +42,7 @@ const Home = ({ content }) => {
   };
 
   return (
-    <div className="h-screen overflow-hidden border-2 border-gray-600 bg-red-100 ">
+    <div className="h-screen overflow-hidden border-2 border-gray-600">
       <button
         onClick={chooseRandom}
         className="bg-gray-800 text-white text-sm py-3 px-4 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
@@ -53,23 +53,18 @@ const Home = ({ content }) => {
       <div
         className={`${
           editMode
-            ? "overflow-x-scroll scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300"
+            ? "overflow-x-scroll scrollbar scrollbar-thumb-yellow-900 scrollbar-track-yellow-600"
             : "relative overflow-hidden"
-        }  grid grid-rows-3 grid-flow-col auto-cols-max gap-2`}
+        }  p-5 grid grid-rows-3 grid-flow-col auto-cols-max gap-2`}
       >
         {/* All */}
         {allMoves.map((m, i) => {
           return (
-            <div
-              className="relative pt-2 p-1 bg-blue-200 border-black border-b-2"
+            <Move
               onClick={() => toggleMove(m)}
-              key={`${m.name}-${i}`}
-            >
-              <Move move={{ name: m.name }} />
-              <div className="absolute bottom-0 right-0 text-xs bg-purple-600 text-white p-1">
-                {m.focus}
-              </div>
-            </div>
+              move={{ name: m.name }}
+              tags={[m.focus]}
+            />
           );
         })}
       </div>
@@ -108,17 +103,13 @@ const Home = ({ content }) => {
                       sets,
                     } = m;
                     return (
-                      <div
-                        className="w-min bg-yellow-200"
-                        onClick={() => toggleMove(m)}
+                      <Move
                         key={`${m.name}-${i}`}
-                      >
-                        <Move
-                          move={{
-                            name,
-                          }}
-                        />
-                      </div>
+                        onClick={() => toggleMove(m)}
+                        move={{
+                          name,
+                        }}
+                      />
                     );
                   })}
               </div>
