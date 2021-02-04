@@ -19,7 +19,7 @@ const Move = ({ move, onClick, tags }) => {
         tags.length > 0 &&
         tags.map((t, i) => (
           <div
-            key={i}
+            key={`${t}-${i}`}
             className="absolute -bottom-1.5 -right-0.5 text-xs bg-purple-900 text-white p-0 font-light font-sans"
           >
             {t}
