@@ -12,7 +12,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "toe_touch_raise"
   },
   {
     "name": "butterfly crunch",
@@ -27,7 +28,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "butterfly_crunch"
   },
   {
     "name": "side to side",
@@ -42,7 +44,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "side_to_side"
   },
   {
     "name": "leg raises",
@@ -57,7 +60,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "leg_raises"
   },
   {
     "name": "eagle crunches",
@@ -72,7 +76,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "eagle_crunches"
   },
   {
     "name": "hi-lo boat",
@@ -87,7 +92,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "hilo_boat"
   },
   {
     "name": "candle",
@@ -102,7 +108,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 1
+    "corePlayWeek": 1,
+    "slug": "candle"
   },
   {
     "name": "knee to elbow",
@@ -117,7 +124,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "knee_to_elbow"
   },
   {
     "name": "L sit",
@@ -132,7 +140,8 @@
     "focus": "core, challenge pose",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "l_sit"
   },
   {
     "name": "lolasana stepup",
@@ -147,7 +156,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "lolasana_stepup"
   },
   {
     "name": "side slides",
@@ -162,7 +172,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "side_slides"
   },
   {
     "name": "hips back",
@@ -177,7 +188,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "hips_back"
   },
   {
     "name": "slide through",
@@ -192,7 +204,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 2
+    "corePlayWeek": 2,
+    "slug": "slide_through"
   },
   {
     "name": "frog jumps",
@@ -207,7 +220,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "frog_jumps"
   },
   {
     "name": "scorpion",
@@ -222,7 +236,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "scorpion"
   },
   {
     "name": "tuck to side kick",
@@ -237,7 +252,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "tuck_to_side_kick"
   },
   {
     "name": "side kick",
@@ -252,7 +268,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "side_kick"
   },
   {
     "name": "back roll to sit",
@@ -267,7 +284,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "back_roll_to_sit"
   },
   {
     "name": "bear crawl",
@@ -282,7 +300,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "bear_crawl"
   },
   {
     "name": "lateral ape",
@@ -297,7 +316,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 3
+    "corePlayWeek": 3,
+    "slug": "lateral_ape"
   },
   {
     "name": "shift weight",
@@ -312,7 +332,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "shift_weight"
   },
   {
     "name": "long walk out",
@@ -327,7 +348,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "long_walk_out"
   },
   {
     "name": "hollowback hold",
@@ -342,7 +364,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "hollowback_hold"
   },
   {
     "name": "pike press",
@@ -357,7 +380,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "pike_press"
   },
   {
     "name": "tiptoe walk",
@@ -372,7 +396,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "tiptoe_walk"
   },
   {
     "name": "toe to wrist taps",
@@ -387,7 +412,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "toe_to_wrist_taps"
   },
   {
     "name": "squat to press",
@@ -402,7 +428,8 @@
     "focus": "core",
     "source": "COREPLAY",
     "warning": "wrists",
-    "corePlayWeek": 4
+    "corePlayWeek": 4,
+    "slug": "squat_to_press"
   },
   {
     "name": "L hold",
@@ -416,7 +443,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists, back"
+    "warning": "wrists, back",
+    "slug": "l_hold"
   },
   {
     "name": "bodyline hold",
@@ -430,7 +458,8 @@
     "isPerSide": "",
     "focus": "core, handstand",
     "source": "ALIGNED",
-    "warning": ""
+    "warning": "",
+    "slug": "bodyline_hold"
   },
   {
     "name": "up down legs",
@@ -444,7 +473,8 @@
     "isPerSide": "TRUE",
     "focus": "core",
     "source": "ALIGNED",
-    "warning": ""
+    "warning": "",
+    "slug": "up_down_legs"
   },
   {
     "name": "1 ft away",
@@ -458,7 +488,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "1_ft_away"
   },
   {
     "name": "wall walks",
@@ -472,7 +503,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "wall_walks"
   },
   {
     "name": "crow hold",
@@ -486,7 +518,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "crow_hold"
   },
   {
     "name": "leg overs",
@@ -500,7 +533,8 @@
     "isPerSide": "TRUE",
     "focus": "lower body strength, mobility",
     "source": "ALIGNED",
-    "warning": ""
+    "warning": "",
+    "slug": "leg_overs"
   },
   {
     "name": "scissor hold",
@@ -514,7 +548,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "scissor_hold"
   },
   {
     "name": "chest to wall",
@@ -528,7 +563,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "chest_to_wall"
   },
   {
     "name": "straddle jump",
@@ -542,7 +578,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "CUSTOM",
-    "warning": "wrists, back"
+    "warning": "wrists, back",
+    "slug": "straddle_jump"
   },
   {
     "name": "heel pulls",
@@ -556,7 +593,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "heel_pulls"
   },
   {
     "name": "toe pulls",
@@ -570,7 +608,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "toe_pulls"
   },
   {
     "name": "dolphin",
@@ -584,7 +623,8 @@
     "isPerSide": "",
     "focus": "handstand, mobility",
     "source": "ALIGNED",
-    "warning": ""
+    "warning": "",
+    "slug": "dolphin"
   },
   {
     "name": "shoulder line pushups",
@@ -598,7 +638,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "shoulder_line_pushups"
   },
   {
     "name": "tuck slides",
@@ -612,7 +653,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "tuck_slides"
   },
   {
     "name": "tuck handstand",
@@ -626,7 +668,8 @@
     "isPerSide": "",
     "focus": "handstand, challenge pose",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "tuck_handstand"
   },
   {
     "name": "freestanding handstand",
@@ -640,7 +683,8 @@
     "isPerSide": "",
     "focus": "handstand, challenge pose",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "freestanding_handstand"
   },
   {
     "name": "handstand shrugs",
@@ -654,7 +698,8 @@
     "isPerSide": "",
     "focus": "handstand",
     "source": "ALIGNED",
-    "warning": "wrists"
+    "warning": "wrists",
+    "slug": "handstand_shrugs"
   },
   {
     "name": "surya namaskar a",
@@ -668,7 +713,8 @@
     "isPerSide": "",
     "focus": "warmup, flow, mobility, leg balance",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "surya_namaskar_a"
   },
   {
     "name": "wrist mobility sequence",
@@ -680,9 +726,10 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility",
+    "focus": "mobility, warmup",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "wrist_mobility_sequence"
   },
   {
     "name": "hip mobility sequence",
@@ -694,9 +741,10 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility",
+    "focus": "mobility, warmup",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "hip_mobility_sequence"
   },
   {
     "name": "jump squats",
@@ -710,7 +758,8 @@
     "isPerSide": "",
     "focus": "lower body strength",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "jump_squats"
   },
   {
     "name": "star jumps",
@@ -724,7 +773,8 @@
     "isPerSide": "",
     "focus": "warmup",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "star_jumps"
   },
   {
     "name": "shoulder mobility sequence",
@@ -738,7 +788,8 @@
     "isPerSide": "",
     "focus": "warmup, mobility",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "shoulder_mobility_sequence"
   },
   {
     "name": "surya namaskar b",
@@ -752,7 +803,8 @@
     "isPerSide": "",
     "focus": "mobility, flow, leg balance, warmup",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "surya_namaskar_b"
   },
   {
     "name": "warriors + crescent flow",
@@ -766,6 +818,7 @@
     "isPerSide": "TRUE",
     "focus": "warmup, leg balance, flow, mobility",
     "source": "CUSTOM",
-    "warning": ""
+    "warning": "",
+    "slug": "warriors_crescent_flow"
   }
 ]
