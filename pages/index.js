@@ -7,6 +7,8 @@ import {
   pick,
   omit,
   omitBy,
+  uniqBy,
+  intersectionBy,
 } from "lodash";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Move from "../src/components/move";
@@ -24,23 +26,30 @@ const Home = ({ content }) => {
       : moveList
   );
   const [searchFilter, setSearchFilter] = useState("");
+  const [focusFilter, setFocusFilter] = useState("");
   const [selectedMoves, setSelectedMoves] = useState(
     meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
   );
   const [allMoves, setAllMoves] = useState(initialMoveList);
+  // const [availableMoves, setAvailableMoves] = useState();
 
   const onSearch = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSearchFilter(value);
-    setAllMoves(
-      !value
-        ? allMoves
-        : allMoves.filter((move) => move.name.includes(searchFilter))
-    );
-    // e.preventDefault();
+    setSearchFilter(e.target.value);
   };
+
+  const availableMoves = useMemo(() => {
+    const containsQuery = !searchFilter
+      ? initialMoveList
+      : initialMoveList.filter(
+          (m) => m.name.includes(searchFilter) || m.focus.includes(searchFilter)
+        );
+    const hasFocus = !focusFilter
+      ? initialMoveList
+      : initialMoveList.filter((m) => m.focus.includes(focusFilter));
+    // setAllMoves(uniqBy(containsQuery.concat(hasFocus)), 'id')
+    // setAvailableMoves(uniqBy(containsQuery.concat(hasFocus)), "id");
+    return intersectionBy(containsQuery, hasFocus, "id");
+  }, [searchFilter, focusFilter]);
 
   const onToggleDone = (move) =>
     // todo
@@ -89,38 +98,64 @@ const Home = ({ content }) => {
             placeholder="🔎 search!"
             onChange={onSearch}
             value={searchFilter}
-            className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100"
+            className={`w-min text-yellow-100 bg-gray-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100`}
           ></input>
           <div className="flex space-x-2 items-center">
             <button
               aria-label="flow-focus"
-              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+              className={`${
+                focusFilter === "flow" ? "bg-yellow-700" : "bg-gray-700"
+              }  w-min py-2 px-4 rounded-full`}
+              onClick={() => setFocusFilter("flow")}
             >
               flow
             </button>
             <button
               aria-label="handstand-focus"
-              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+              className={`${
+                focusFilter === "handstand" ? "bg-yellow-700" : "bg-gray-700"
+              }  w-min py-2 px-4 rounded-full`}
+              onClick={() => setFocusFilter("handstand")}
             >
               handstand
             </button>
             <button
               aria-label="warmup focus"
-              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+              className={`${
+                focusFilter === "warmup" ? "bg-yellow-700" : "bg-gray-700"
+              }  w-min py-2 px-4 rounded-full`}
+              onClick={() => setFocusFilter("warmup")}
             >
               warmup
             </button>
             <button
               aria-label="challenge pose focus"
-              className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap"
+              className={`${
+                focusFilter === "challenge pose"
+                  ? "bg-yellow-700"
+                  : "bg-gray-700"
+              }  w-min py-2 px-4 rounded-full whitespace-nowrap`}
+              onClick={() => setFocusFilter("challenge pose")}
             >
               challenge pose
+            </button>
+            <button
+              aria-label="no focus filter"
+              className={`${
+                focusFilter === "all" || !focusFilter
+                  ? "bg-yellow-700"
+                  : "bg-gray-700"
+              }  w-min py-2 px-4 rounded-full whitespace-nowrap`}
+              onClick={() => setFocusFilter("")}
+            >
+              all
             </button>
           </div>
           <button
             aria-label="clear filters"
             onClick={() => {
               setSearchFilter("");
+              setFocusFilter("");
             }}
             className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
@@ -136,13 +171,14 @@ const Home = ({ content }) => {
         >
           {/* All */}
 
-          {sortBy(allMoves, SORTKEY).map((m, i) => {
+          {availableMoves.map((m, i) => {
             return (
               <Move
                 key={`${m.name}-${i}`}
                 onClick={() => toggleMove(m)}
                 move={{ name: m.name }}
                 tags={[m.focus]}
+                editMode={true}
               />
             );
           })}
