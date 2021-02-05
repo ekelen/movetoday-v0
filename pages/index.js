@@ -6,30 +6,27 @@ import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
-  const initialMoveList =
+  const [initialMoveList] = useState(
     process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
-      ? bloatDataInMemory(moveList).sortBy
-      : moveList;
+      ? bloatDataInMemory(moveList)
+      : moveList
+  );
   const [searchFilter, setSearchFilter] = useState("");
   const [selectedMoves, setSelectedMoves] = useState(
     meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
   );
   const [sortKey, setSortKey] = useState("name");
-
-  const allMoves = !searchFilter
-    ? sortBy(initialMoveList, sortKey)
-    : sortBy(
-        initialMoveList.filter((move) => move.name.includes(searchFilter)),
-        sortKey
-      );
+  const [allMoves, setAllMoves] = useState(sortBy(initialMoveList, sortKey));
 
   const onSearch = (e) => {
     const {
       target: { value },
     } = e;
     setSearchFilter(value);
+    setAllMoves(allMoves.filter((move) => move.name.includes(searchFilter)));
     e.preventDefault();
   };
+
   const [editMode, setEditMode] = useState(true);
 
   const toggleMove = (move) =>
@@ -39,10 +36,6 @@ const Home = ({ content }) => {
     const randomMoves = sampleSize(allMoves, 10);
     setSelectedMoves(randomMoves);
   };
-
-  useEffect(() => {
-    console.log(`selectedMoves:`, selectedMoves);
-  }, [selectedMoves]);
 
   const onFinalize = () => {
     // router.push(`/?editmode=false`, undefined, { shallow: true });
@@ -54,8 +47,9 @@ const Home = ({ content }) => {
     setEditMode(true);
   };
 
-  const onChangeSortKey = (e) => {
-    setSortKey(e.target.value);
+  const onChangeSortKey = (newKey) => {
+    setSortKey(newKey);
+    setAllMoves(sortBy(allMoves, newKey));
     // e.preventDefault();
   };
 
@@ -89,10 +83,19 @@ const Home = ({ content }) => {
           <button className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap">
             challenge pose
           </button>
+          <button
+            className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap"
+            onClick={() =>
+              onChangeSortKey(sortKey === "name" ? "focus" : "name")
+            }
+          >
+            ↕ {sortKey}
+          </button>
         </div>
         <button
           onClick={() => {
-            setSortKey("name");
+            // todo bleh
+            if (sortKey !== "name") onChangeSortKey("name");
             setSearchFilter("");
           }}
           className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
