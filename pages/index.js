@@ -1,4 +1,4 @@
-import { sampleSize, xorBy, sortBy } from "lodash";
+import { sampleSize, sample, xorBy, sortBy } from "lodash";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Move from "../src/components/move";
 import meta from "../src/data/meta.json";
@@ -138,31 +138,35 @@ const Home = ({ content }) => {
           className={`${
             editMode
               ? "w-full h-4/6 flex flex-wrap space-y-3 space-x-2 items-start flex-start content-start"
-              : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll bg-gray-900"
+              : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll space-y-3 bg-gray-900"
           }`}
         >
           <header className="w-full flex p-2 items-center space-x-2">
             <h3 className="text-yellow-100 font-display">
               Selected moves (n = {selectedMoves.length})
             </h3>
-            <button
-              onClick={onSelectDefault}
-              className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-            >
-              default!
-            </button>
-            <button
-              onClick={chooseRandom}
-              className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-            >
-              random!
-            </button>
-            <button
-              onClick={() => setSelectedMoves([])}
-              className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-            >
-              clear!
-            </button>
+            {editMode && (
+              <Fragment>
+                <button
+                  onClick={onSelectDefault}
+                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                >
+                  default!
+                </button>
+                <button
+                  onClick={chooseRandom}
+                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                >
+                  random!
+                </button>
+                <button
+                  onClick={() => setSelectedMoves([])}
+                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                >
+                  clear!
+                </button>
+              </Fragment>
+            )}
             <button
               onClick={editMode ? onFinalize : onEdit}
               className="bg-yellow-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
@@ -188,6 +192,8 @@ const Home = ({ content }) => {
                 move={{
                   name,
                 }}
+                editMode={editMode}
+                done={!editMode && sample([true, false])}
                 tags={m.focus.split(",")}
               />
             );
