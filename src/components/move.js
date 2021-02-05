@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import styles from "./move.module.css";
 
 const Move = ({ move, onClick, tags }) => {
@@ -6,15 +7,20 @@ const Move = ({ move, onClick, tags }) => {
     move.name && move.name.charAt(0) < "m" ? styles.bg0 : styles.bg1;
 
   return (
-    <ul className={`p-3 relative ${styles.test} ${bgStyle}`} onClick={onClick}>
-      {Object.entries(move)
-        .filter(([_, v]) => !!v)
-        .map(([k, v], i) => (
-          <li key={`${k}-${i}`} className="text-xs whitespace-nowrap">
-            <span>{k}: </span>
-            <span>{v}</span>
-          </li>
-        ))}
+    <Fragment>
+      <ul
+        className={`p-3 relative ${styles.test} ${bgStyle}`}
+        onClick={onClick}
+      >
+        {Object.entries(move)
+          .filter(([_, v]) => !!v)
+          .map(([k, v], i) => (
+            <li key={`${k}-${i}`} className="text-xs whitespace-nowrap">
+              <span>{k}: </span>
+              <span>{v}</span>
+            </li>
+          ))}
+      </ul>
       {tags &&
         tags.length > 0 &&
         tags.map((t, i) => (
@@ -25,7 +31,7 @@ const Move = ({ move, onClick, tags }) => {
             {t}
           </div>
         ))}
-    </ul>
+    </Fragment>
   );
 };
 
