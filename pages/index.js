@@ -70,26 +70,40 @@ const Home = ({ content }) => {
         <header className="flex wrap p-2 items-center w-full text-yellow-100 font-mono space-x-2 space-y-2">
           <input
             type="text"
+            aria-label="search"
             placeholder="🔎 search!"
             onChange={onSearch}
             value={searchFilter}
             className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100"
           ></input>
           <div className="flex space-x-2 items-center">
-            <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            <button
+              aria-label="flow-focus"
+              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+            >
               flow
             </button>
-            <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            <button
+              aria-label="handstand-focus"
+              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+            >
               handstand
             </button>
-            <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            <button
+              aria-label="warmup focus"
+              className="w-min py-2 px-4 bg-gray-700 rounded-full"
+            >
               warmup
             </button>
-            <button className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap">
+            <button
+              aria-label="challenge pose focus"
+              className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap"
+            >
               challenge pose
             </button>
           </div>
           <button
+            aria-label="clear filters"
             onClick={() => {
               setSearchFilter("");
             }}
