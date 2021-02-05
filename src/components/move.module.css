@@ -30,3 +30,7 @@
   color: hsla(50, 100%, 90%, 1);
   font-family: monospace;
 }
+
+.moveNotDone {
+  background: hsla(320, 99%, 20%, 1);
+}
