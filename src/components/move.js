@@ -5,6 +5,9 @@ const Move = ({ move, onClick, tags, editMode = true, done = null }) => {
   return (
     <div className="relative">
       <button
+        aria-label={
+          !editMode ? `mark as ${done ? "not done" : "done"}` : move.name
+        }
         className={`m-1 p-3 relative text-yellow-100 font-bold font-mono ${
           editMode
             ? styles.bg1

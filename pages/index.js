@@ -1,4 +1,13 @@
-import { sampleSize, sample, xorBy, sortBy } from "lodash";
+import {
+  sampleSize,
+  sample,
+  xorBy,
+  sortBy,
+  pickBy,
+  pick,
+  omit,
+  omitBy,
+} from "lodash";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Move from "../src/components/move";
 import meta from "../src/data/meta.json";
@@ -33,6 +42,12 @@ const Home = ({ content }) => {
     // e.preventDefault();
   };
 
+  const onToggleDone = (move) =>
+    // todo
+    {
+      move.done = !move.done;
+      setAllMoves([...allMoves.filter((m) => m.id !== move.id), move]);
+    };
   const [editMode, setEditMode] = useState(true);
 
   const toggleMove = (move) =>
@@ -188,12 +203,12 @@ const Home = ({ content }) => {
             return (
               <Move
                 key={`${m.name}-${i}`}
-                onClick={() => toggleMove(m)}
+                onClick={editMode ? () => toggleMove(m) : () => onToggleDone(m)}
                 move={{
                   name,
                 }}
-                editMode={editMode}
-                done={!editMode && sample([true, false])}
+                editMode={!!editMode}
+                done={!editMode && !!m.done}
                 tags={m.focus.split(",")}
               />
             );
