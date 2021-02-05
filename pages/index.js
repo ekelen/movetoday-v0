@@ -1,34 +1,49 @@
-import { sampleSize, xorBy } from "lodash";
-import { useEffect, useState } from "react";
+import { sampleSize, xorBy, sortBy } from "lodash";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Move from "../src/components/move";
 import meta from "../src/data/meta.json";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
-  const allMoves =
+  const initialMoveList =
     process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
-      ? bloatDataInMemory(moveList)
+      ? bloatDataInMemory(moveList).sortBy
       : moveList;
-
+  const [searchFilter, setSearchFilter] = useState("");
   const [selectedMoves, setSelectedMoves] = useState(
-    meta.defaults.map((slug) => allMoves.find((mv) => mv.slug === slug))
+    meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
   );
+  const [sortKey, setSortKey] = useState("name");
 
+  const allMoves = !searchFilter
+    ? sortBy(initialMoveList, sortKey)
+    : sortBy(
+        initialMoveList.filter((move) => move.name.includes(searchFilter)),
+        sortKey
+      );
+
+  const onSearch = (e) => {
+    const {
+      target: { value },
+    } = e;
+    setSearchFilter(value);
+    e.preventDefault();
+  };
   const [editMode, setEditMode] = useState(true);
 
   const toggleMove = (move) =>
     editMode && setSelectedMoves(xorBy(selectedMoves, [move], "id"));
 
   const chooseRandom = () => {
-    const randomMoves = sampleSize(moveList, 10);
+    const randomMoves = sampleSize(allMoves, 10);
     setSelectedMoves(randomMoves);
-    onFinalize();
   };
 
   useEffect(() => {
     console.log(`selectedMoves:`, selectedMoves);
   }, [selectedMoves]);
+
   const onFinalize = () => {
     // router.push(`/?editmode=false`, undefined, { shallow: true });
     setEditMode(false);
@@ -39,14 +54,52 @@ const Home = ({ content }) => {
     setEditMode(true);
   };
 
+  const onChangeSortKey = (e) => {
+    setSortKey(e.target.value);
+    // e.preventDefault();
+  };
+
+  const onSelectDefault = () =>
+    setSelectedMoves(
+      meta.defaults.map((slug) =>
+        initialMoveList.find((mv) => mv.slug === slug)
+      )
+    );
+
   return (
     <div className="h-screen relative overflow-hidden border-2 border-gray-600">
-      <button
-        onClick={chooseRandom}
-        className="w-min bg-yellow-700 text-yellow-100 text-sm py-3 px-4 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-      >
-        random!
-      </button>
+      <header className="flex wrap p-2 items-center w-full text-yellow-100 font-mono space-x-2 space-y-2">
+        <input
+          type="text"
+          placeholder="🔎 search!"
+          onChange={onSearch}
+          value={searchFilter}
+          className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100"
+        ></input>
+        <div className="flex space-x-2 items-center">
+          <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            flow
+          </button>
+          <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            handstand
+          </button>
+          <button className="w-min py-2 px-4 bg-gray-700 rounded-full">
+            warmup
+          </button>
+          <button className="w-min py-2 px-4 bg-gray-700 rounded-full whitespace-nowrap">
+            challenge pose
+          </button>
+        </div>
+        <button
+          onClick={() => {
+            setSortKey("name");
+            setSearchFilter("");
+          }}
+          className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+        >
+          reset!
+        </button>
+      </header>
       <div
         className={`${
           editMode
@@ -55,6 +108,7 @@ const Home = ({ content }) => {
         }  p-5 grid grid-rows-3 grid-flow-col auto-cols-max gap-2`}
       >
         {/* All */}
+
         {allMoves.map((m, i) => {
           return (
             <Move
@@ -75,9 +129,35 @@ const Home = ({ content }) => {
             : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll bg-gray-900"
         }`}
       >
-        <h3 className="text-yellow-100 pt-7 p-3 font-display w-full">
-          Selected moves (n = {selectedMoves.length})
-        </h3>
+        <header className="w-full flex p-2 items-center space-x-2">
+          <h3 className="text-yellow-100 font-display">
+            Selected moves (n = {selectedMoves.length})
+          </h3>
+          <button
+            onClick={onSelectDefault}
+            className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+          >
+            default!
+          </button>
+          <button
+            onClick={chooseRandom}
+            className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+          >
+            random!
+          </button>
+          <button
+            onClick={() => setSelectedMoves([])}
+            className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+          >
+            clear!
+          </button>
+          <button
+            onClick={editMode ? onFinalize : onEdit}
+            className="bg-yellow-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
+          >
+            {editMode ? "done!" : "x"}
+          </button>
+        </header>
 
         {selectedMoves.map((m, i) => {
           const { name, repsMin, repsMax, durationMin, durationMax, sets } = m;
@@ -94,14 +174,6 @@ const Home = ({ content }) => {
           );
         })}
       </div>
-      {true && (
-        <button
-          onClick={editMode ? onFinalize : onEdit}
-          className="absolute bottom-0 right-0 bg-yellow-800 text-yellow-100 text-sm py-3 px-4 rounded font-bold flex items-center mr-4 hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
-        >
-          {editMode ? "done!" : "x"}
-        </button>
-      )}
     </div>
   );
 };
