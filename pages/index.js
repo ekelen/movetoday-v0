@@ -1,26 +1,14 @@
-import {
-  intersectionBy,
-  omit,
-  omitBy,
-  pick,
-  pickBy,
-  sample,
-  sampleSize,
-  sortBy,
-  uniqBy,
-  xorBy,
-} from "lodash";
+import { intersectionBy, sampleSize, xorBy } from "lodash";
 import Head from "next/head";
-import { Fragment, useEffect, useMemo, useState } from "react";
-
+import { Fragment, useMemo, useState } from "react";
 import Move from "../src/components/move";
+import SequenceDisplay from "../src/components/sequenceDisplay";
 import { foci } from "../src/data/constants";
 import meta from "../src/data/meta.json";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
-  const SORTKEY = "name";
   const [initialMoveList] = useState(
     process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
       ? bloatDataInMemory(moveList)
@@ -47,8 +35,7 @@ const Home = ({ content }) => {
     const hasFocus = !focusFilter
       ? initialMoveList
       : initialMoveList.filter((m) => m.focus === focusFilter);
-    // setAllMoves(uniqBy(containsQuery.concat(hasFocus)), 'id')
-    // setAvailableMoves(uniqBy(containsQuery.concat(hasFocus)), "id");
+
     return intersectionBy(containsQuery, hasFocus, "id");
   }, [searchFilter, focusFilter]);
 
@@ -192,29 +179,35 @@ const Home = ({ content }) => {
             </button>
           </header>
 
-          {selectedMoves.map((m, i) => {
-            const {
-              name,
-              repsMin,
-              repsMax,
-              durationMin,
-              durationMax,
-              sets,
-            } = m;
+          {editMode ? (
+            selectedMoves.map((m, i) => {
+              const {
+                name,
+                repsMin,
+                repsMax,
+                durationMin,
+                durationMax,
+                sets,
+              } = m;
 
-            return (
-              <Move
-                key={`${m.name}-${i}`}
-                onClick={editMode ? () => toggleMove(m) : () => onToggleDone(m)}
-                move={{
-                  name,
-                }}
-                editMode={!!editMode}
-                done={!editMode && !!m.done}
-                tags={m.focus.split(",")}
-              />
-            );
-          })}
+              return (
+                <Move
+                  key={`${m.name}-${i}`}
+                  onClick={
+                    editMode ? () => toggleMove(m) : () => onToggleDone(m)
+                  }
+                  move={{
+                    name,
+                  }}
+                  editMode={!!editMode}
+                  done={!editMode && !!m.done}
+                  tags={m.focus.split(",")}
+                />
+              );
+            })
+          ) : (
+            <SequenceDisplay {...{ selectedMoves, onToggleDone, onEdit }} />
+          )}
         </div>
       </div>
     </Fragment>
