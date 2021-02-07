@@ -10,6 +10,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -26,6 +27,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -42,6 +44,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -58,6 +61,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -74,6 +78,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -90,6 +95,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -106,6 +112,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 1,
@@ -122,6 +129,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -137,7 +145,8 @@
     "repsMin": 3,
     "sets": 3,
     "isPerSide": "",
-    "focus": "core, challenge pose",
+    "focus": "challenge pose",
+    "other foci": "core",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -154,6 +163,7 @@
     "sets": 3,
     "isPerSide": "FALSE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -170,6 +180,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -186,6 +197,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -202,6 +214,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 2,
@@ -218,6 +231,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -234,6 +248,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -250,6 +265,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -266,6 +282,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -282,6 +299,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "",
     "corePlayWeek": 3,
@@ -298,6 +316,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -314,6 +333,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 3,
@@ -330,6 +350,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -346,6 +367,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -362,6 +384,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -378,6 +401,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -394,6 +418,7 @@
     "sets": 3,
     "isPerSide": "FALSE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -410,6 +435,7 @@
     "sets": 3,
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -426,6 +452,7 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "core",
+    "other foci": "",
     "source": "COREPLAY",
     "warning": "wrists",
     "corePlayWeek": 4,
@@ -442,8 +469,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists, back",
+    "corePlayWeek": "",
     "slug": "l_hold"
   },
   {
@@ -456,9 +485,11 @@
     "repsMin": "",
     "sets": 3,
     "isPerSide": "",
-    "focus": "core, handstand",
+    "focus": "handstand",
+    "other foci": "core, back strength",
     "source": "ALIGNED",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "bodyline_hold"
   },
   {
@@ -472,8 +503,10 @@
     "sets": "",
     "isPerSide": "TRUE",
     "focus": "core",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "up_down_legs"
   },
   {
@@ -487,8 +520,10 @@
     "sets": "",
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "1_ft_away"
   },
   {
@@ -502,8 +537,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "wall_walks"
   },
   {
@@ -517,8 +554,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "crow_hold"
   },
   {
@@ -531,9 +570,11 @@
     "repsMin": 10,
     "sets": 3,
     "isPerSide": "TRUE",
-    "focus": "lower body strength, mobility",
+    "focus": "mobility",
+    "other foci": "lower body strength",
     "source": "ALIGNED",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "leg_overs"
   },
   {
@@ -547,8 +588,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "scissor_hold"
   },
   {
@@ -562,11 +605,12 @@
     "sets": 2,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "chest_to_wall"
   },
-
   {
     "name": "straddle jump",
     "id": 36,
@@ -578,8 +622,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "CUSTOM",
     "warning": "wrists, back",
+    "corePlayWeek": "",
     "slug": "straddle_jump"
   },
   {
@@ -593,8 +639,10 @@
     "sets": 1,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "heel_pulls"
   },
   {
@@ -608,8 +656,10 @@
     "sets": 1,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "toe_pulls"
   },
   {
@@ -622,9 +672,11 @@
     "repsMin": "",
     "sets": 3,
     "isPerSide": "",
-    "focus": "handstand, mobility",
+    "focus": "handstand",
+    "other foci": "mobility",
     "source": "ALIGNED",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "dolphin"
   },
   {
@@ -638,8 +690,10 @@
     "sets": 1,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "shoulder_line_pushups"
   },
   {
@@ -653,8 +707,10 @@
     "sets": 2,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "tuck_slides"
   },
   {
@@ -667,9 +723,11 @@
     "repsMin": "",
     "sets": 1,
     "isPerSide": "",
-    "focus": "handstand, challenge pose",
+    "focus": "challenge pose",
+    "other foci": "handstand",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "tuck_handstand"
   },
   {
@@ -682,9 +740,11 @@
     "repsMin": "",
     "sets": 1,
     "isPerSide": "",
-    "focus": "handstand, challenge pose",
+    "focus": "challenge pose",
+    "other foci": "handstand",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "freestanding_handstand"
   },
   {
@@ -698,8 +758,10 @@
     "sets": 2,
     "isPerSide": "",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "handstand_shrugs"
   },
   {
@@ -712,9 +774,11 @@
     "repsMin": 3,
     "sets": "",
     "isPerSide": "",
-    "focus": "warmup, flow, mobility, leg balance",
+    "focus": "flow",
+    "other foci": "warmup, flow, mobility, leg balance",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "surya_namaskar_a"
   },
   {
@@ -727,9 +791,11 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility, warmup",
+    "focus": "warmup",
+    "other foci": "mobility",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "wrist_mobility_sequence"
   },
   {
@@ -742,9 +808,11 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility, warmup",
+    "focus": "warmup",
+    "other foci": "mobility",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "hip_mobility_sequence"
   },
   {
@@ -758,8 +826,10 @@
     "sets": 3,
     "isPerSide": "",
     "focus": "lower body strength",
+    "other foci": "",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "jump_squats"
   },
   {
@@ -773,8 +843,10 @@
     "sets": "",
     "isPerSide": "",
     "focus": "warmup",
+    "other foci": "",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "star_jumps"
   },
   {
@@ -787,9 +859,11 @@
     "repsMin": "",
     "sets": "",
     "isPerSide": "",
-    "focus": "warmup, mobility",
+    "focus": "warmup",
+    "other foci": "mobility",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "shoulder_mobility_sequence"
   },
   {
@@ -802,9 +876,11 @@
     "repsMin": 2,
     "sets": "",
     "isPerSide": "",
-    "focus": "mobility, flow, leg balance, warmup",
+    "focus": "flow",
+    "other foci": "mobility, flow, leg balance, warmup",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "surya_namaskar_b"
   },
   {
@@ -817,9 +893,11 @@
     "repsMin": 1,
     "sets": "",
     "isPerSide": "TRUE",
-    "focus": "warmup, leg balance, flow, mobility",
+    "focus": "flow",
+    "other foci": "warmup, leg balance, flow, mobility",
     "source": "CUSTOM",
     "warning": "",
+    "corePlayWeek": "",
     "slug": "warriors_crescent_flow"
   },
   {
@@ -833,8 +911,10 @@
     "sets": 2,
     "isPerSide": "TRUE",
     "focus": "handstand",
+    "other foci": "",
     "source": "ALIGNED",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "single_leg_kickup"
   },
   {
@@ -848,8 +928,10 @@
     "sets": 1,
     "isPerSide": "",
     "focus": "mobility",
+    "other foci": "",
     "source": "CUSTOM",
     "warning": "wrists",
+    "corePlayWeek": "",
     "slug": "baddha_konasana_leans"
   }
 ]
