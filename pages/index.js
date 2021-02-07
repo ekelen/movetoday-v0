@@ -1,22 +1,23 @@
 import {
-  sampleSize,
-  sample,
-  xorBy,
-  sortBy,
-  pickBy,
-  pick,
+  intersectionBy,
   omit,
   omitBy,
+  pick,
+  pickBy,
+  sample,
+  sampleSize,
+  sortBy,
   uniqBy,
-  intersectionBy,
+  xorBy,
 } from "lodash";
+import Head from "next/head";
 import { Fragment, useEffect, useMemo, useState } from "react";
+
 import Move from "../src/components/move";
+import { foci } from "../src/data/constants";
 import meta from "../src/data/meta.json";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
-
-import Head from "next/head";
 
 const Home = ({ content }) => {
   const SORTKEY = "name";
@@ -45,7 +46,7 @@ const Home = ({ content }) => {
         );
     const hasFocus = !focusFilter
       ? initialMoveList
-      : initialMoveList.filter((m) => m.focus.includes(focusFilter));
+      : initialMoveList.filter((m) => m.focus === focusFilter);
     // setAllMoves(uniqBy(containsQuery.concat(hasFocus)), 'id')
     // setAvailableMoves(uniqBy(containsQuery.concat(hasFocus)), "id");
     return intersectionBy(containsQuery, hasFocus, "id");
@@ -90,8 +91,8 @@ const Home = ({ content }) => {
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="h-screen relative overflow-hidden border-2 border-gray-600">
-        <header className="flex wrap p-2 items-center w-full text-yellow-100 font-mono space-x-2 space-y-2">
+      <div className="h-screen relative overflow-hidden border-2 border-gray-600 flex flex-wrap items-center">
+        <header className="flex flex-wrap p-2 items-center w-full text-yellow-100 font-mono space-x-2 space-y-2">
           <input
             type="text"
             aria-label="search"
@@ -101,55 +102,20 @@ const Home = ({ content }) => {
             className={`w-min text-yellow-100 bg-gray-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100`}
           ></input>
           <div className="flex space-x-2 items-center">
-            <button
-              aria-label="flow-focus"
-              className={`${
-                focusFilter === "flow" ? "bg-yellow-700" : "bg-gray-700"
-              }  w-min py-2 px-4 rounded-full`}
-              onClick={() => setFocusFilter("flow")}
-            >
-              flow
-            </button>
-            <button
-              aria-label="handstand-focus"
-              className={`${
-                focusFilter === "handstand" ? "bg-yellow-700" : "bg-gray-700"
-              }  w-min py-2 px-4 rounded-full`}
-              onClick={() => setFocusFilter("handstand")}
-            >
-              handstand
-            </button>
-            <button
-              aria-label="warmup focus"
-              className={`${
-                focusFilter === "warmup" ? "bg-yellow-700" : "bg-gray-700"
-              }  w-min py-2 px-4 rounded-full`}
-              onClick={() => setFocusFilter("warmup")}
-            >
-              warmup
-            </button>
-            <button
-              aria-label="challenge pose focus"
-              className={`${
-                focusFilter === "challenge pose"
-                  ? "bg-yellow-700"
-                  : "bg-gray-700"
-              }  w-min py-2 px-4 rounded-full whitespace-nowrap`}
-              onClick={() => setFocusFilter("challenge pose")}
-            >
-              challenge pose
-            </button>
-            <button
-              aria-label="no focus filter"
-              className={`${
-                focusFilter === "all" || !focusFilter
-                  ? "bg-yellow-700"
-                  : "bg-gray-700"
-              }  w-min py-2 px-4 rounded-full whitespace-nowrap`}
-              onClick={() => setFocusFilter("")}
-            >
-              all
-            </button>
+            {[...foci, "any"].map((focus, i) => (
+              <button
+                key={`${focus}-${i}`}
+                aria-label={`moves with ${focus} focus`}
+                className={`${
+                  focus === focusFilter || (!focusFilter && focus === "any")
+                    ? "bg-indigo-600"
+                    : "bg-gray-700"
+                }  whitespace-nowrap text-xs w-min py-2 px-4 rounded-full`}
+                onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
+              >
+                {focus}
+              </button>
+            ))}
           </div>
           <button
             aria-label="clear filters"
@@ -157,7 +123,7 @@ const Home = ({ content }) => {
               setSearchFilter("");
               setFocusFilter("");
             }}
-            className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+            className="w-min bg-purple-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
             reset!
           </button>
@@ -200,29 +166,29 @@ const Home = ({ content }) => {
               <Fragment>
                 <button
                   onClick={onSelectDefault}
-                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                 >
-                  default!
+                  default
                 </button>
                 <button
                   onClick={chooseRandom}
-                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                 >
-                  random!
+                  random
                 </button>
                 <button
                   onClick={() => setSelectedMoves([])}
-                  className="w-min bg-yellow-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                 >
-                  clear!
+                  clear
                 </button>
               </Fragment>
             )}
             <button
               onClick={editMode ? onFinalize : onEdit}
-              className="bg-yellow-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
+              className="bg-yellow-600 text-yellow-100 text-sm py-2 px-3 rounded-full font-bold flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
             >
-              {editMode ? "done!" : "x"}
+              {editMode ? "done! ▶" : "x"}
             </button>
           </header>
 
