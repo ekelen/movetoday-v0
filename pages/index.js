@@ -117,19 +117,15 @@ const Home = ({ content }) => {
           </div>
           <button
             aria-label="clear filters"
-            disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
+            // disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
+            disabled
             onClick={() => {
               setSearchFilter("");
               setFocusFilter("");
             }}
-            className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 disabled:opacity-50"
+            className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 disabled:bg-black"
           >
-            reset{" "}
-            {!searchFilter && (!focusFilter || focusFilter === "any")
-              ? "filters"
-              : "no filters"}
-            {focusFilter}
-            {searchFilter}
+            reset
           </button>
         </header>
         <div
