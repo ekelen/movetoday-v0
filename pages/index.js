@@ -113,6 +113,7 @@ const Home = ({ content }) => {
                 onSearch,
                 editMode,
                 setEditMode,
+                toggleMove,
               }}
             />
             <SelectedMoves

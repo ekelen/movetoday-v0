@@ -8,6 +8,7 @@ const AllMovesHeader = ({
   focusFilter,
   onChange,
   setSearchFilter,
+  setFocusFilter,
 }) => {
   return (
     <div className="flex items-center w-full space-x-3 px-3 p-4">
@@ -86,8 +87,15 @@ const AllMoves = ({
 }) => {
   const containerGrid =
     "grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2";
+
+  const presetText =
+    "text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
   return (
-    <Fragment>
+    <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2 ">
+      <div className="text-primary-400 text-xs uppercase">
+        1. Choose moves or use <span className={presetText}>default</span> or{" "}
+        <span className={presetText}>random</span>
+      </div>
       <AllMovesHeader
         {...{
           setFocusFilter,
@@ -99,7 +107,7 @@ const AllMoves = ({
         }}
       />
       <div
-        className={`${containerGrid} relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5`}
+        className={`${containerGrid} w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5`}
       >
         {availableMoves.map((m, i) => {
           return (
@@ -112,7 +120,7 @@ const AllMoves = ({
           );
         })}
       </div>
-    </Fragment>
+    </div>
   );
 };
 
