@@ -67,7 +67,7 @@ const SequenceDisplay = ({
   const background = "bg-primary-900";
   return (
     <div
-      className={`${background} fixed top-0 left-0 right-0 bottom-0 overflow-y-auto px-2 flex flex-wrap space-y-4 space-x-4 pr-4 items-stretch content-start`}
+      className={`${background} fixed top-0 left-0 right-0 bottom-0 overflow-y-auto p-5 flex flex-wrap space-y-4 space-x-4 pr-4 items-stretch content-start`}
     >
       <div className="w-full">
         <Back onClick={onEdit} />

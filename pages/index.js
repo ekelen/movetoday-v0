@@ -1,6 +1,18 @@
-import { intersectionBy, sampleSize, xorBy } from "lodash";
+import {
+  intersectionBy,
+  omit,
+  omitBy,
+  pick,
+  pickBy,
+  sample,
+  sampleSize,
+  sortBy,
+  uniqBy,
+  xorBy,
+} from "lodash";
 import Head from "next/head";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+
 import Move from "../src/components/move";
 import SequenceDisplay from "../src/components/sequenceDisplay";
 import { foci } from "../src/data/constants";
@@ -20,6 +32,7 @@ const Home = ({ content }) => {
     meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
   );
   const [allMoves, setAllMoves] = useState(initialMoveList);
+  const [editMode, setEditMode] = useState(true);
   // const [availableMoves, setAvailableMoves] = useState();
 
   const onSearch = (e) => {
@@ -35,7 +48,6 @@ const Home = ({ content }) => {
     const hasFocus = !focusFilter
       ? initialMoveList
       : initialMoveList.filter((m) => m.focus === focusFilter);
-
     return intersectionBy(containsQuery, hasFocus, "id");
   }, [searchFilter, focusFilter]);
 
@@ -45,7 +57,6 @@ const Home = ({ content }) => {
       move.done = !move.done;
       setAllMoves([...allMoves.filter((m) => m.id !== move.id), move]);
     };
-  const [editMode, setEditMode] = useState(true);
 
   const toggleMove = (move) =>
     editMode && setSelectedMoves(xorBy(selectedMoves, [move], "id"));
@@ -78,15 +89,15 @@ const Home = ({ content }) => {
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="h-screen relative overflow-hidden border-2 border-gray-600 flex flex-wrap items-center">
-        <header className="flex flex-wrap p-2 items-center w-full text-yellow-100 font-mono space-x-2 space-y-2">
+      <div className="bg-primary-900 h-screen relative overflow-hidden border-2 border-gray-600 flex flex-wrap items-center">
+        <header className="flex flex-wrap p-2 items-center w-full text-primary-100 font-mono space-x-2 space-y-2">
           <input
             type="text"
             aria-label="search"
             placeholder="🔎 search!"
             onChange={onSearch}
             value={searchFilter}
-            className={`w-min text-yellow-100 bg-gray-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-yellow-100`}
+            className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-primary-100`}
           ></input>
           <div className="flex space-x-2 items-center">
             {[...foci, "any"].map((focus, i) => (
@@ -95,9 +106,9 @@ const Home = ({ content }) => {
                 aria-label={`moves with ${focus} focus`}
                 className={`${
                   focus === focusFilter || (!focusFilter && focus === "any")
-                    ? "bg-indigo-600"
+                    ? "bg-secondary-600"
                     : "bg-gray-700"
-                }  whitespace-nowrap text-xs w-min py-2 px-4 rounded-full`}
+                }  whitespace-nowrap uppercase text-xs w-min py-2 px-4 rounded-full`}
                 onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
               >
                 {focus}
@@ -106,20 +117,26 @@ const Home = ({ content }) => {
           </div>
           <button
             aria-label="clear filters"
+            disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
             onClick={() => {
               setSearchFilter("");
               setFocusFilter("");
             }}
-            className="w-min bg-purple-700 text-yellow-100 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+            className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 disabled:opacity-50"
           >
-            reset!
+            reset{" "}
+            {!searchFilter && (!focusFilter || focusFilter === "any")
+              ? "filters"
+              : "no filters"}
+            {focusFilter}
+            {searchFilter}
           </button>
         </header>
         <div
           className={`${
             editMode
-              ? "relative overflow-x-scroll scrollbar scrollbar-thumb-yellow-900 scrollbar-track-yellow-600"
-              : "relative overflow-hidden"
+              ? "relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900"
+              : "relative hidden"
           }  p-5 grid grid-rows-3 grid-flow-col auto-cols-max gap-2`}
         >
           {/* All */}
@@ -129,9 +146,8 @@ const Home = ({ content }) => {
               <Move
                 key={`${m.name}-${i}`}
                 onClick={() => toggleMove(m)}
-                move={{ name: m.name }}
-                tags={[m.focus]}
-                editMode={true}
+                move={m}
+                selected={selectedMoves.map((m) => m.id).includes(m.id)}
               />
             );
           })}
@@ -141,74 +157,64 @@ const Home = ({ content }) => {
         <div
           className={`${
             editMode
-              ? "w-full h-4/6 flex flex-wrap space-y-3 space-x-2 items-start flex-start content-start"
-              : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll space-y-3 bg-gray-900"
+              ? "p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-auto scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900"
+              : // : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll space-y-3 bg-gray-900"
+                "hidden"
           }`}
         >
-          <header className="w-full flex p-2 items-center space-x-2">
-            <h3 className="text-yellow-100 font-display">
-              Selected moves (n = {selectedMoves.length})
-            </h3>
-            {editMode && (
-              <Fragment>
-                <button
-                  onClick={onSelectDefault}
-                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                >
-                  default
-                </button>
-                <button
-                  onClick={chooseRandom}
-                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                >
-                  random
-                </button>
-                <button
-                  onClick={() => setSelectedMoves([])}
-                  className="w-min bg-purple-800 text-yellow-100 text-sm py-2 px-3 rounded font-bold font-mono flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                >
-                  clear
-                </button>
-              </Fragment>
-            )}
-            <button
-              onClick={editMode ? onFinalize : onEdit}
-              className="bg-yellow-600 text-yellow-100 text-sm py-2 px-3 rounded-full font-bold flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
-            >
-              {editMode ? "done! ▶" : "x"}
-            </button>
-          </header>
+          <div className="bg-primary-800 mb-5 w-full p-2 rounded-md flex flex-wrap space-y-4 space-x-4 items-start flex-start content-start">
+            <header className="w-full flex p-2 items-center space-x-4 space-y-2">
+              <h3 className="text-yellow-100 font-display">
+                {selectedMoves.length} selected
+              </h3>
 
-          {editMode ? (
-            selectedMoves.map((m, i) => {
-              const {
-                name,
-                repsMin,
-                repsMax,
-                durationMin,
-                durationMax,
-                sets,
-              } = m;
+              <button
+                onClick={onSelectDefault}
+                className="shadow-lg w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300"
+              >
+                default
+              </button>
+              <button
+                onClick={chooseRandom}
+                className="w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300"
+              >
+                random
+              </button>
+              <button
+                onClick={() => setSelectedMoves([])}
+                className="w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300"
+              >
+                clear
+              </button>
+              <button
+                onClick={onFinalize}
+                className="bg-primaryAction-600 text-black font-display py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
+              >
+                {"done! ▶"}
+              </button>
+            </header>
 
-              return (
-                <Move
-                  key={`${m.name}-${i}`}
-                  onClick={
-                    editMode ? () => toggleMove(m) : () => onToggleDone(m)
-                  }
-                  move={{
-                    name,
-                  }}
-                  editMode={!!editMode}
-                  done={!editMode && !!m.done}
-                  tags={m.focus.split(",")}
-                />
-              );
-            })
-          ) : (
-            <SequenceDisplay {...{ selectedMoves, onToggleDone, onEdit }} />
-          )}
+            <Fragment>
+              {selectedMoves.map((m, i) => {
+                return (
+                  <Move
+                    key={`${m.name}-${i}`}
+                    onClick={() => toggleMove(m)}
+                    move={m}
+                    area="selected"
+                  />
+                );
+              })}
+            </Fragment>
+          </div>
         </div>
+        {!editMode && (
+          <SequenceDisplay
+            selectedMoves={selectedMoves}
+            onToggleDone={onToggleDone}
+            onEdit={onEdit}
+          />
+        )}
       </div>
     </Fragment>
   );

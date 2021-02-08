@@ -1,42 +1,50 @@
-import { Fragment } from "react";
-import styles from "./move.module.css";
-
-const Move = ({ move, onClick, tags, editMode = true, done = null }) => {
+const AvailableMove = ({ move, onClick, selected }) => {
+  const { name, focus } = move;
+  const selectedClass = "bg-primary-700 text-primary-100 opacity-50";
+  const unselectedClass = "bg-secondary-900 text-primary-100";
   return (
-    <div className="relative">
-      <button
-        aria-label={
-          !editMode ? `mark as ${done ? "not done" : "done"}` : move.name
-        }
-        className={`m-1 p-3 relative text-yellow-100 font-bold font-mono ${
-          editMode
-            ? styles.bg1
-            : done
-            ? "bg-green-900 bg-opacity-50"
-            : "bg-blue-900"
-        }`}
-        onClick={onClick}
-      >
-        {Object.entries(move)
-          .filter(([_, v]) => !!v)
-          .map(([k, v], i) => (
-            <span key={`${k}-${i}`} className="text-xs whitespace-nowrap">
-              <span>{k}: </span>
-              <span>{v}</span>
-            </span>
-          ))}
-        {tags &&
-          tags.length > 0 &&
-          tags.map((t, i) => (
-            <div
-              key={`${t}-${i}`}
-              className="absolute -bottom-1.5 -right-0.5 text-xs bg-purple-900 text-white p-0 font-light font-sans"
-            >
-              {t}
-            </div>
-          ))}
-      </button>
-    </div>
+    <button
+      aria-label={`select ${name}`}
+      disabled={selected}
+      onClick={onClick}
+      className={`${
+        selected ? selectedClass : unselectedClass
+      } flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono`}
+    >
+      <div className="mr-2 text-xs">{name}</div>
+      <div className="text-secondary-200 bg-primary-800 text-xs px-2 py-1 rounded">
+        {focus}
+      </div>
+    </button>
+  );
+};
+
+const SelectedMove = ({ move, onClick }) => {
+  const { name, focus } = move;
+  return (
+    <button
+      aria-label={`unselect ${name}`}
+      onClick={onClick}
+      className={`font-mono bg-secondary-600 flex text-sm items-center py-2 px-2 rounded-md`}
+    >
+      <div className="mr-2">{name}</div>
+      <div className="text-secondary-200 bg-primary-800 text-xs px-2 py-1 rounded">
+        {focus}
+      </div>
+    </button>
+  );
+};
+
+const Move = ({
+  selected = false,
+  area = "available",
+  move = {},
+  onClick = () => {},
+}) => {
+  return area === "available" ? (
+    <AvailableMove selected={selected} move={move} onClick={onClick} />
+  ) : (
+    <SelectedMove move={move} onClick={onClick} />
   );
 };
 
