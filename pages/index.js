@@ -12,6 +12,7 @@ import {
 } from "lodash";
 import Head from "next/head";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import AllMovesHeader from "../src/components/allMovesHeader";
 
 import Header from "../src/components/header";
 import Move from "../src/components/move";
@@ -43,16 +44,16 @@ const AllMoves = ({
         1. Choose moves or use <span className={presetText}>default</span> or{" "}
         <span className={presetText}>random</span>
       </div>
-      {/* <AllMovesHeader
-          {...{
-            setFocusFilter,
-            setSearchFilter,
-            onChange,
-            onSearch,
-            searchFilter,
-            focusFilter,
-          }}
-        /> */}
+      <AllMovesHeader
+        {...{
+          setFocusFilter,
+          setSearchFilter,
+          onChange,
+          onSearch,
+          searchFilter,
+          focusFilter,
+        }}
+      />
       <div
         className={`${containerGrid} w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5`}
       >
