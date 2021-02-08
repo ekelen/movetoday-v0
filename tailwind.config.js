@@ -31,10 +31,15 @@ module.exports = {
         primaryAction: colors.amber,
         secondaryAction: colors.violet,
       },
+      backgroundImage: (theme) => ({
+        heart: "url('/noun_Heart_170033.svg')",
+      }),
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      opacity: ["disabled"],
+    },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar"), require("@tailwindcss/forms")],
 };

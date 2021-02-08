@@ -1,11 +1,12 @@
 import { keys, mapKeys, mapValues, values, merge, assign } from "lodash";
 import { Fragment } from "react";
+import Header from "./header";
 import Move from "./move";
 
 const Back = ({ onClick }) => (
   <button
     onClick={onClick}
-    className={`bg-primaryAction-600 text-black font-display ml-4 py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400 self-start`}
+    className={`bg-primaryAction-600 text-black font-display ml-4 py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400`}
   >
     {`◀ back`}
   </button>
@@ -67,11 +68,11 @@ const SequenceDisplay = ({
   const background = "bg-primary-900";
   return (
     <div
-      className={`${background} fixed top-0 left-0 right-0 bottom-0 overflow-y-auto p-5 flex flex-wrap space-y-4 space-x-4 pr-4 items-stretch content-start`}
+      className={`${background} fixed top-0 left-0 right-0 bottom-0 overflow-y-auto p-5 pt-0 flex flex-wrap space-y-4 space-x-4 pr-4 items-stretch content-start`}
     >
-      <div className="w-full">
+      <Header>
         <Back onClick={onEdit} />
-      </div>
+      </Header>
       {selectedMoves.map((move, i) => (
         <MoveBlock key={`${move.id}-${i}`} move={move} onClick={onToggleDone} />
       ))}
