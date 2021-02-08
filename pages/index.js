@@ -97,7 +97,7 @@ const Home = ({ content }) => {
             placeholder="🔎 search!"
             onChange={onSearch}
             value={searchFilter}
-            className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 placeholder-primary-100`}
+            className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-primary-100`}
           ></input>
           <div className="flex space-x-2 items-center">
             {[...foci, "any"].map((focus, i) => (
@@ -106,8 +106,8 @@ const Home = ({ content }) => {
                 aria-label={`moves with ${focus} focus`}
                 className={`${
                   focus === focusFilter || (!focusFilter && focus === "any")
-                    ? "bg-secondary-600"
-                    : "bg-gray-700"
+                    ? "bg-primary-600"
+                    : "bg-primary-700"
                 }  whitespace-nowrap uppercase text-xs w-min py-2 px-4 rounded-full`}
                 onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
               >
@@ -117,13 +117,13 @@ const Home = ({ content }) => {
           </div>
           <button
             aria-label="clear filters"
-            // disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
+            disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
             disabled
             onClick={() => {
               setSearchFilter("");
               setFocusFilter("");
             }}
-            className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-gray-700 focus:outline-none focus:bg-gray-700 disabled:bg-black"
+            className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-primary-500"
           >
             reset
           </button>
@@ -154,13 +154,13 @@ const Home = ({ content }) => {
           className={`${
             editMode
               ? "p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-auto scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900"
-              : // : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll space-y-3 bg-gray-900"
+              : // : "fixed top-0 left-0 right-0 bottom-0 overflow-y-scroll space-y-3 bg-primary-900"
                 "hidden"
           }`}
         >
           <div className="bg-primary-800 mb-5 w-full p-2 rounded-md flex flex-wrap space-y-4 space-x-4 items-start flex-start content-start">
             <header className="w-full flex p-2 items-center space-x-4 space-y-2">
-              <h3 className="text-yellow-100 font-display">
+              <h3 className="text-primary-100 font-display">
                 {selectedMoves.length} selected
               </h3>
 
@@ -184,7 +184,7 @@ const Home = ({ content }) => {
               </button>
               <button
                 onClick={onFinalize}
-                className="bg-primaryAction-600 text-black font-display py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:outline-none focus:bg-yellow-400"
+                className="bg-primary-600 text-primary-900 font-display py-1 px-3 rounded-full flex items-center hover:bg-primary-500 focus:outline-none focus:bg-primary-400"
               >
                 {"done! ▶"}
               </button>
