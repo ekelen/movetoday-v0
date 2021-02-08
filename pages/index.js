@@ -54,7 +54,7 @@ const Home = ({ content }) => {
   }, [searchFilter, focusFilter]);
 
   const onToggleDone = (move) =>
-    // todo
+    // TODO
     {
       move.done = !move.done;
       setAllMoves([...allMoves.filter((m) => m.id !== move.id), move]);
