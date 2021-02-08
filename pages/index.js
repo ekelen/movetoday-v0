@@ -31,9 +31,7 @@ const Home = ({ content }) => {
   );
   const [searchFilter, setSearchFilter] = useState("");
   const [focusFilter, setFocusFilter] = useState("");
-  const [selectedMoves, setSelectedMoves] = useState(
-    meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
-  );
+  const [selectedMoves, setSelectedMoves] = useState([]);
   const [allMoves, setAllMoves] = useState(initialMoveList);
   const [editMode, setEditMode] = useState(true);
 
@@ -42,6 +40,24 @@ const Home = ({ content }) => {
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
   };
+
+  useEffect(() => {
+    setSelectedMoves(
+      typeof window !== "undefined" && localStorage.getItem("selectedMoves")
+        ? JSON.parse(localStorage.getItem("selectedMoves"))
+        : meta.defaults.map((slug) =>
+            initialMoveList.find((mv) => mv.slug === slug)
+          )
+    );
+  }, []);
+
+  useEffect(() => {
+    setEditMode(
+      !(
+        typeof window !== "undefined" && !!localStorage.getItem("selectedMoves")
+      )
+    );
+  }, []);
 
   const availableMoves = useMemo(() => {
     const containsQuery = !searchFilter
@@ -71,12 +87,12 @@ const Home = ({ content }) => {
   };
 
   const onFinalize = () => {
-    // router.push(`/?editmode=false`, undefined, { shallow: true });
+    localStorage.setItem("selectedMoves", JSON.stringify(selectedMoves));
     setEditMode(false);
   };
 
   const onEdit = () => {
-    // router.push(`/?editmode=true`, undefined, { shallow: true });
+    localStorage.removeItem("selectedMoves");
     setEditMode(true);
   };
 
@@ -96,10 +112,10 @@ const Home = ({ content }) => {
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      {/* <Header></Header> */}
       {editMode && (
         <Fragment>
           <div className="relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap items-center">
-            <Header></Header>
             <AllMoves
               {...{
                 searchFilter,
@@ -132,6 +148,7 @@ const Home = ({ content }) => {
                 onSelectDefault,
                 chooseRandom,
                 onFinalize,
+                toggleMove,
               }}
             />
           </div>
