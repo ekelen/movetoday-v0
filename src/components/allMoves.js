@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { foci } from "../data/constants";
+import { foci } from "../data/meta.json";
 import Move from "./move";
 
 const AllMovesHeader = ({
@@ -84,7 +84,6 @@ const AllMoves = ({
   setSearchFilter,
   searchFilter,
   onToggleMove,
-  selectedMoves,
   onChange,
   onSearch,
   onSelectDefault,
@@ -121,7 +120,7 @@ const AllMoves = ({
               key={`${m.name}-${i}`}
               onClick={() => onToggleMove(m)}
               move={m}
-              selected={selectedMoves.map((m) => m.id).includes(m.id)}
+              selected={!!m.selected}
             />
           );
         })}

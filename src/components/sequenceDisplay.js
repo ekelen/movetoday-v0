@@ -17,9 +17,19 @@ const MoveBlock = ({ onClick, move }) => {
     durationMax,
     sets,
     source,
+    done = false,
   } = move;
+  // Todo: More graceful way to handle purgeable CSS
+  const containerCn =
+    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
+  const containerCnDone =
+    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
   return (
-    <button className="bg-primary-800 py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start">
+    <button
+      onClick={() => onClick(move)}
+      className={done ? containerCnDone : containerCn}
+    >
+      {!!done && <div className="absolute right-2 center">☑️</div>}
       <header className="text-primary-400 text-sm sm:text-sm md:text-lg font-display w-full">
         <span>{name}</span>
       </header>
