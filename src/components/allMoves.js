@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { foci } from "../data/constants";
+import { foci } from "../data/meta.json";
 import Move from "./move";
 
 const AllMovesHeader = ({

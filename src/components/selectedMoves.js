@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import { foci } from "../data/constants";
 import Move from "./move";
 
 const SelectedMoves = ({

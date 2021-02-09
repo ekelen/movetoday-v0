@@ -18,12 +18,16 @@ import Header from "../src/components/header";
 import Move from "../src/components/move";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
-import { foci } from "../src/data/constants";
-import meta from "../src/data/meta.json";
+import { defaults, foci } from "../src/data/meta.json";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
+  // TODO: Replace [allMoves, selectedMoves, availableMoves] by one move list, preserving indices, adding 'selected' and 'available' prop
+  //    so we don't have to sort every time we update lists of moves
+  const defaultSort = (arr) =>
+    sortBy(arr, (item) => foci.indexOf(item.focus), ["name"]);
+
   const [initialMoveList] = useState(
     process.env.NEXT_PUBLIC_HEAVY === "on"
       ? bloatDataInMemory(moveList)
@@ -35,19 +39,19 @@ const Home = ({ content }) => {
   const [allMoves, setAllMoves] = useState(initialMoveList);
   const [editMode, setEditMode] = useState(true);
 
-  // const [availableMoves, setAvailableMoves] = useState();
-
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
   };
 
   useEffect(() => {
     setSelectedMoves(
-      typeof window !== "undefined" && localStorage.getItem("selectedMoves")
-        ? JSON.parse(localStorage.getItem("selectedMoves"))
-        : meta.defaults.map((slug) =>
-            initialMoveList.find((mv) => mv.slug === slug)
-          )
+      defaultSort(
+        typeof window !== "undefined" && localStorage.getItem("selectedMoves")
+          ? JSON.parse(localStorage.getItem("selectedMoves"))
+          : defaults.map((slug) =>
+              initialMoveList.find((mv) => mv.slug === slug)
+            )
+      )
     );
   }, []);
 
@@ -68,22 +72,28 @@ const Home = ({ content }) => {
     const hasFocus = !focusFilter
       ? initialMoveList
       : initialMoveList.filter((m) => m.focus === focusFilter);
-    return intersectionBy(containsQuery, hasFocus, "id");
+    return defaultSort(intersectionBy(containsQuery, hasFocus, "id"));
   }, [searchFilter, focusFilter]);
 
   const onToggleDone = (move) =>
     // todo
     {
       move.done = !move.done;
-      setAllMoves([...allMoves.filter((m) => m.id !== move.id), move]);
+      const updatedMoveList = defaultSort([
+        ...selectedMoves.filter((m) => m.id !== move.id),
+        move,
+      ]);
+      setSelectedMoves(updatedMoveList);
+      localStorage.setItem("selectedMoves", JSON.stringify(updatedMoveList));
     };
 
   const onToggleMove = (move) =>
-    editMode && setSelectedMoves(xorBy(selectedMoves, [move], "id"));
+    editMode &&
+    setSelectedMoves(defaultSort(xorBy(selectedMoves, [move], "id")));
 
   const onSelectRandom = () => {
     const randomMoves = sampleSize(allMoves, 20);
-    setSelectedMoves(randomMoves);
+    setSelectedMoves(defaultSort(randomMoves));
   };
 
   const onFinalize = () => {
@@ -98,8 +108,8 @@ const Home = ({ content }) => {
 
   const onSelectDefault = () =>
     setSelectedMoves(
-      meta.defaults.map((slug) =>
-        initialMoveList.find((mv) => mv.slug === slug)
+      defaultSort(
+        defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
       )
     );
 
