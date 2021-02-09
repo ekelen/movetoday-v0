@@ -31,9 +31,7 @@ const Home = ({ content }) => {
   );
   const [searchFilter, setSearchFilter] = useState("");
   const [focusFilter, setFocusFilter] = useState("");
-  const [selectedMoves, setSelectedMoves] = useState(
-    meta.defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
-  );
+  const [selectedMoves, setSelectedMoves] = useState([]);
   const [allMoves, setAllMoves] = useState(initialMoveList);
   const [editMode, setEditMode] = useState(true);
 
@@ -42,6 +40,24 @@ const Home = ({ content }) => {
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
   };
+
+  useEffect(() => {
+    setSelectedMoves(
+      typeof window !== "undefined" && localStorage.getItem("selectedMoves")
+        ? JSON.parse(localStorage.getItem("selectedMoves"))
+        : meta.defaults.map((slug) =>
+            initialMoveList.find((mv) => mv.slug === slug)
+          )
+    );
+  }, []);
+
+  useEffect(() => {
+    setEditMode(
+      !(
+        typeof window !== "undefined" && !!localStorage.getItem("selectedMoves")
+      )
+    );
+  }, []);
 
   const availableMoves = useMemo(() => {
     const containsQuery = !searchFilter
@@ -62,21 +78,21 @@ const Home = ({ content }) => {
       setAllMoves([...allMoves.filter((m) => m.id !== move.id), move]);
     };
 
-  const toggleMove = (move) =>
+  const onToggleMove = (move) =>
     editMode && setSelectedMoves(xorBy(selectedMoves, [move], "id"));
 
-  const chooseRandom = () => {
-    const randomMoves = sampleSize(allMoves, 10);
+  const onSelectRandom = () => {
+    const randomMoves = sampleSize(allMoves, 20);
     setSelectedMoves(randomMoves);
   };
 
   const onFinalize = () => {
-    // router.push(`/?editmode=false`, undefined, { shallow: true });
+    localStorage.setItem("selectedMoves", JSON.stringify(selectedMoves));
     setEditMode(false);
   };
 
   const onEdit = () => {
-    // router.push(`/?editmode=true`, undefined, { shallow: true });
+    localStorage.removeItem("selectedMoves");
     setEditMode(true);
   };
 
@@ -90,16 +106,19 @@ const Home = ({ content }) => {
   const onChange = (e) => {
     setFocusFilter(e.target.value === "any" ? "" : e.target.value);
   };
+
+  const appWrapperCn =
+    "relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap";
   return (
-    <Fragment>
+    <div className={appWrapperCn}>
       <Head>
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <Header />
       {editMode && (
         <Fragment>
-          <div className="relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap items-center">
-            <Header></Header>
+          <div className="contents">
             <AllMoves
               {...{
                 searchFilter,
@@ -113,7 +132,9 @@ const Home = ({ content }) => {
                 onSearch,
                 editMode,
                 setEditMode,
-                toggleMove,
+                onToggleMove,
+                onSelectDefault,
+                onSelectRandom,
               }}
             />
             <SelectedMoves
@@ -130,8 +151,9 @@ const Home = ({ content }) => {
                 editMode,
                 setEditMode,
                 onSelectDefault,
-                chooseRandom,
+                onSelectRandom,
                 onFinalize,
+                onToggleMove,
               }}
             />
           </div>
@@ -144,7 +166,7 @@ const Home = ({ content }) => {
           onEdit={onEdit}
         />
       )}
-    </Fragment>
+    </div>
   );
 };
 

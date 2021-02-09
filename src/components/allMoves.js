@@ -46,11 +46,14 @@ const AllMovesHeader = ({
           <button
             key={`${focus}-${i}`}
             aria-label={`moves with ${focus} focus`}
-            className={`${
+            disabled={
               focus === focusFilter || (!focusFilter && focus === "any")
-                ? "bg-primaryAction-500"
-                : "bg-primary-400 opacity-60"
-            }  whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full`}
+            }
+            className={
+              focus === focusFilter || (!focusFilter && focus === "any")
+                ? "bg-primaryAction-500 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full cursor-default"
+                : "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full"
+            }
             onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
           >
             {focus}
@@ -66,7 +69,7 @@ const AllMovesHeader = ({
           setSearchFilter("");
           setFocusFilter("");
         }}
-        className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-primary-500 disabled:opacity-30 disabled:hover:cursor-not-allowed"
+        className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 focus:ring-opacity-50 disabled:opacity-30 disabled:cursor-not-allowed"
       >
         reset
       </button>
@@ -80,21 +83,26 @@ const AllMoves = ({
   focusFilter,
   setSearchFilter,
   searchFilter,
-  toggleMove,
+  onToggleMove,
   selectedMoves,
   onChange,
   onSearch,
+  onSelectDefault,
+  onSelectRandom,
 }) => {
-  const containerGrid =
-    "grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2";
-
   const presetText =
-    "text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
+    "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
   return (
-    <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2 ">
+    <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
       <div className="text-primary-400 text-xs uppercase">
-        1. Choose moves or use <span className={presetText}>default</span> or{" "}
-        <span className={presetText}>random</span>
+        1. Choose moves or use{" "}
+        <button className={presetText} onClick={onSelectDefault}>
+          default
+        </button>{" "}
+        or{" "}
+        <button className={presetText} onClick={onSelectRandom}>
+          random
+        </button>
       </div>
       <AllMovesHeader
         {...{
@@ -106,14 +114,12 @@ const AllMoves = ({
           focusFilter,
         }}
       />
-      <div
-        className={`${containerGrid} w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5`}
-      >
+      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5">
         {availableMoves.map((m, i) => {
           return (
             <Move
               key={`${m.name}-${i}`}
-              onClick={() => toggleMove(m)}
+              onClick={() => onToggleMove(m)}
               move={m}
               selected={selectedMoves.map((m) => m.id).includes(m.id)}
             />
