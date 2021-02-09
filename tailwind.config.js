@@ -1,7 +1,10 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  purge: ["./pages/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
+  purge: {
+    enabled: process.env.NODE_ENV === "production",
+    content: ["src/components/**/*.js", "pages/**/*.js"],
+  },
   darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
@@ -12,7 +15,8 @@ module.exports = {
         display: ['"JetBrains Mono"', "monospace"],
       },
       colors: {
-        // leave all for now
+        // fyi
+        //
         // amber: colors.amber,
         // cyan: colors.cyan,
         // emerald: colors.emerald,
@@ -42,6 +46,7 @@ module.exports = {
   variants: {
     extend: {
       opacity: ["disabled"],
+      cursor: ["disabled"],
     },
   },
   plugins: [require("tailwind-scrollbar"), require("@tailwindcss/forms")],
