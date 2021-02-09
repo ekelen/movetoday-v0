@@ -25,7 +25,7 @@ import { bloatDataInMemory } from "../src/util/test.js";
 
 const Home = ({ content }) => {
   const [initialMoveList] = useState(
-    process.env.NEXT_PUBLIC_LIGHTHOUSE === "on"
+    process.env.NEXT_PUBLIC_HEAVY === "on"
       ? bloatDataInMemory(moveList)
       : moveList
   );
