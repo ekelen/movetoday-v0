@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const Back = ({ onClick }) => (
   <button
     onClick={onClick}
@@ -78,10 +80,22 @@ const SequenceDisplay = ({
   onEdit,
   ...props
 }) => {
+  const [displayMessage, setDisplayMessage] = useState(
+    "💡 Click a move when you've completed a set."
+  );
+  useEffect(() => {
+    let timer;
+    if (!timer)
+      timer = setTimeout(() => setDisplayMessage(`${"🤸‍♀️🤸‍♀️🤸‍♀️"}`), 3000);
+    return () => clearTimeout(timer);
+  });
   return (
     <div className="bg-primary-900 h-screen overflow-y-auto p-5 pt-0 flex flex-wrap space-y-4 space-x-4 pr-4 items-stretch content-start">
       <div className="w-full p-2">
         <Back onClick={onEdit} />
+      </div>
+      <div className="w-full p-2 pt-0 text-primary-300 text-bold">
+        {displayMessage}
       </div>
 
       {selectedMoves.map((move, i) => (

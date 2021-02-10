@@ -12,7 +12,7 @@ const AvailableMove = ({ move, onClick, selected }) => {
       className={selected ? selectedCn : unselectedCn}
     >
       <div className="mr-2 text-xs">{name}</div>
-      <div className="text-primiary-200 bg-primary-800 text-xs px-2 py-1 rounded">
+      <div className="text-primary-200 bg-primary-800 text-xs px-2 py-1 rounded">
         {focus}
       </div>
     </button>
