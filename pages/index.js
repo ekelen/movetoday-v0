@@ -12,7 +12,14 @@ import {
   cloneDeep,
 } from "lodash";
 import Head from "next/head";
-import { Fragment, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import AllMoves from "../src/components/allMoves";
 
 import Header from "../src/components/header";
@@ -23,19 +30,18 @@ import { defaults, foci } from "../src/data/meta.json";
 import moveList from "../src/data/moveList.json";
 import { bloatDataInMemory } from "../src/util/test.js";
 
-const defaultSortR = (arr) =>
-  sortBy(arr, (item) => foci.indexOf(item.focus), ["name"]);
+const oneTimeMoveListSort = (listOfMoves) =>
+  sortBy(listOfMoves, (item) => foci.indexOf(item.focus), ["name"]);
 
-const initialMoveListR = defaultSortR(
+const initialMoveList = oneTimeMoveListSort(
   process.env.NEXT_PUBLIC_HEAVY === "on"
     ? bloatDataInMemory(moveList)
     : moveList
 );
 
-const formattedInitialMoveListR = initialMoveListR.map((m, idx) => ({
+const cleanInitialMoveList = initialMoveList.map((m, idx) => ({
   ...m,
   selected: false,
-  // filteredOut: false,
   idx,
   sets: m.sets || 1,
   setsDone: 0,
@@ -43,31 +49,46 @@ const formattedInitialMoveListR = initialMoveListR.map((m, idx) => ({
 }));
 
 const INITIAL_STATE = {
-  moveListR: formattedInitialMoveListR,
+  moveList: cleanInitialMoveList,
 };
+
+const LOCALSTORAGE_DATA_KEY = "LOCALSTORAGE_DATA_KEY";
+
+const getLocalStorageItem = (key) => JSON.parse(localStorage.getItem(key));
+const setLocalStorageItem = (key, data) =>
+  localStorage.setItem(key, JSON.stringify(data));
+const localStorageCheck = (key) =>
+  typeof window !== "undefined" && !!localStorage.getItem(key);
+
+const init = (initialState) =>
+  localStorageCheck(LOCALSTORAGE_DATA_KEY)
+    ? {
+        moveList: getLocalStorageItem(LOCALSTORAGE_DATA_KEY),
+      }
+    : cloneDeep(initialState);
 
 const moveReducer = (
   state = INITIAL_STATE,
   action = { type: "", payload: {} }
 ) => {
-  console.log(`[state, action]:`, [state, action]);
   const { type, payload } = action;
   const stateCopy = cloneDeep(state);
   console.log(`type:`, type);
   console.log(`action:`, action);
   switch (type) {
     case "TOGGLE_SINGLE_SELECTED":
-      stateCopy.moveListR[payload.move.idx].selected = !payload.move.selected;
-      stateCopy.moveListR[payload.move.idx].setsDone = 0;
+      stateCopy.moveList[payload.move.idx].selected = !payload.move.selected;
+      stateCopy.moveList[payload.move.idx].setsDone = 0;
       return stateCopy;
     case "SET_MULTIPLE_SELECTED_TRUE":
       payload.listOfIdxs.forEach(
-        (idx) => (stateCopy.moveListR[idx].selected = true)
+        (idx) => (stateCopy.moveList[idx].selected = true)
       );
       return stateCopy;
     case "SET_ALL_SELECTED":
-      stateCopy.moveListR.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveListR.forEach(
+      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
+      // todo: remove many maps
+      stateCopy.moveList.forEach(
         (mv) =>
           (mv.selected = !!payload.listOfMoves
             .map((m) => m.idx)
@@ -75,39 +96,39 @@ const moveReducer = (
       );
       return stateCopy;
     case "SET_ALL_SELECTED_BY_IDX":
-      stateCopy.moveListR.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveListR.forEach(
+      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
+      stateCopy.moveList.forEach(
         (mv) => (mv.selected = !!payload.listOfIdxs.includes(mv.idx))
       );
       return stateCopy;
     case "SET_ALL_SELECTED_BY_SLUGS":
-      stateCopy.moveListR.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveListR.forEach(
+      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
+      stateCopy.moveList.forEach(
         (mv) => (mv.selected = payload.listOfSlugs.includes(mv.slug))
       );
       return stateCopy;
     case "CLEAR_ALL_SELECTED":
-      stateCopy.moveListR.forEach((mv) => (mv.selected = false));
-      stateCopy.moveListR.forEach((mv) => (mv.setsDone = 0));
+      stateCopy.moveList.forEach((mv) => (mv.selected = false));
+      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
       return stateCopy;
     case "ADD_SINGLE_SETS_DONE":
-      const currentSetsDone = stateCopy.moveListR[payload.move.idx].setsDone;
-      const sets = stateCopy.moveListR[payload.move.idx].sets;
-      stateCopy.moveListR[payload.move.idx].setsDone =
+      const currentSetsDone = stateCopy.moveList[payload.move.idx].setsDone;
+      const sets = stateCopy.moveList[payload.move.idx].sets;
+      stateCopy.moveList[payload.move.idx].setsDone =
         currentSetsDone === sets ? 0 : (currentSetsDone % sets) + 1;
       return stateCopy;
     case "SET_ALL_FILTERED_IN":
       const hasSearchFilter = !!payload.searchFilter;
       const hasFocusFilter =
         payload.focusFilter && payload.focusFilter !== "any";
-      stateCopy.moveListR.forEach((mv) => (mv.filteredIn = true));
+      stateCopy.moveList.forEach((mv) => (mv.filteredIn = true));
       if (hasFocusFilter) {
-        stateCopy.moveListR.forEach(
+        stateCopy.moveList.forEach(
           (mv) => (mv.filteredIn = mv.focus === payload.focusFilter)
         );
       }
       if (hasSearchFilter) {
-        stateCopy.moveListR.forEach(
+        stateCopy.moveList.forEach(
           (mv) =>
             (mv.filteredIn =
               (mv.filteredIn &&
@@ -120,30 +141,28 @@ const moveReducer = (
         );
       }
       return stateCopy;
+    case "RESET":
+      return init(action.payload);
     default:
       return INITIAL_STATE;
   }
 };
 
 const Home = ({ content }) => {
-  // const [initialMoveList] = useState(
-  //   process.env.NEXT_PUBLIC_HEAVY === "on"
-  //     ? bloatDataInMemory(moveList)
-  //     : moveList
-  // );
   const [searchFilter, setSearchFilter] = useState("");
   const [focusFilter, setFocusFilter] = useState("");
   const [editMode, setEditMode] = useState(true);
 
-  const [state, dispatch] = useReducer(
-    moveReducer,
-    INITIAL_STATE
-    // , init
-  );
+  const [state, dispatch] = useReducer(moveReducer, INITIAL_STATE, init);
 
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
   };
+
+  const selectedMoves = useMemo(
+    () => state.moveList.filter((mv) => !!mv.selected),
+    [state.moveList]
+  );
 
   useEffect(() => {
     dispatch({
@@ -151,6 +170,14 @@ const Home = ({ content }) => {
       payload: { searchFilter, focusFilter },
     });
   }, [searchFilter, focusFilter]);
+
+  useEffect(() => {
+    if (editMode) {
+      localStorage.removeItem(LOCALSTORAGE_DATA_KEY);
+    } else {
+      setLocalStorageItem(LOCALSTORAGE_DATA_KEY, state.moveList);
+    }
+  }, [editMode]);
 
   const onDoneSet = (move) => {
     dispatch({
@@ -171,7 +198,7 @@ const Home = ({ content }) => {
     dispatch({
       type: "SET_ALL_SELECTED",
       payload: {
-        listOfMoves: sampleSize(state.moveListR, 20),
+        listOfMoves: sampleSize(state.moveList, 20),
       },
     });
   };
@@ -195,6 +222,10 @@ const Home = ({ content }) => {
     setFocusFilter(e.target.value === "any" ? "" : e.target.value);
   };
 
+  const onClearSelected = () => {
+    dispatch("RESET", { payload: { moveList: cleanInitialMoveList } });
+  };
+
   const appWrapperCn =
     "relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap";
   return (
@@ -204,7 +235,7 @@ const Home = ({ content }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Header />
-      {editMode && (
+      {(editMode || editMode === null) && (
         <Fragment>
           <div className="contents">
             <AllMoves
@@ -212,7 +243,6 @@ const Home = ({ content }) => {
                 searchFilter,
                 setSearchFilter,
                 onChange,
-                availableMoves: state.moveListR.filter((mv) => !!mv.filteredIn),
                 focusFilter,
                 setFocusFilter,
                 onSearch,
@@ -221,21 +251,13 @@ const Home = ({ content }) => {
                 onToggleMove,
                 onSelectDefault,
                 onSelectRandom,
+                allMoves: state.moveList,
               }}
             />
             <SelectedMoves
               {...{
-                searchFilter,
-                setSearchFilter,
-                selectedMoves: state.moveListR.filter((mv) => !!mv.selected),
-                setSelectedMoves: (listOfMoves) =>
-                  dispatch({
-                    type: "SET_ALL_SELECTED_BY_IDX",
-                    payload: { listOfIdxs: listOfMoves.map((mv) => mv.idx) },
-                  }),
-                onChange,
-                onSelectDefault,
-                onSelectRandom,
+                selectedMoves,
+                onClearSelected,
                 onFinalize,
                 onToggleMove,
               }}
@@ -243,9 +265,9 @@ const Home = ({ content }) => {
           </div>
         </Fragment>
       )}
-      {!editMode && (
+      {editMode === false && (
         <SequenceDisplay
-          selectedMoves={state.moveListR.filter((mv) => !!mv.selected)}
+          selectedMoves={selectedMoves}
           onToggleDone={onToggleDone}
           onEdit={onEdit}
         />

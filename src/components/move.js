@@ -1,15 +1,15 @@
 const AvailableMove = ({ move, onClick, selected }) => {
   const { name, focus } = move;
-  const selectedClass =
+  // Todo: More graceful way to handle purgeable CSS
+  const selectedCn =
     "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
-  const unselectedClass =
+  const unselectedCn =
     "bg-primiary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
   return (
     <button
       aria-label={`select ${name}`}
-      disabled={selected}
       onClick={onClick}
-      className={selected ? selectedClass : unselectedClass}
+      className={selected ? selectedCn : unselectedCn}
     >
       <div className="mr-2 text-xs">{name}</div>
       <div className="text-primiary-200 bg-primary-800 text-xs px-2 py-1 rounded">

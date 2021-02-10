@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { useMemo } from "react/cjs/react.production.min";
 import { foci } from "../data/meta.json";
 import Move from "./move";
 
@@ -78,7 +79,7 @@ const AllMovesHeader = ({
 };
 
 const AllMoves = ({
-  availableMoves,
+  allMoves,
   setFocusFilter,
   focusFilter,
   setSearchFilter,
@@ -89,17 +90,18 @@ const AllMoves = ({
   onSelectDefault,
   onSelectRandom,
 }) => {
-  const presetText =
+  const presetTextCn =
     "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
+  const availableMoves = allMoves.filter((mv) => !!mv.filteredIn);
   return (
     <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
       <div className="text-primary-400 text-xs uppercase">
         1. Choose moves or use{" "}
-        <button className={presetText} onClick={onSelectDefault}>
+        <button className={presetTextCn} onClick={onSelectDefault}>
           default
         </button>{" "}
         or{" "}
-        <button className={presetText} onClick={onSelectRandom}>
+        <button className={presetTextCn} onClick={onSelectRandom}>
           random
         </button>
       </div>
@@ -118,7 +120,9 @@ const AllMoves = ({
           return (
             <Move
               key={`${m.name}-${i}`}
-              onClick={() => onToggleMove(m)}
+              onClick={() => {
+                onToggleMove(m);
+              }}
               move={m}
               selected={!!m.selected}
             />
