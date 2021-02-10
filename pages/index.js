@@ -126,11 +126,6 @@ const moveReducer = (
 };
 
 const Home = ({ content }) => {
-  // TODO: Replace [allMoves, selectedMoves, availableMoves] by one move list, preserving indices, adding 'selected' and 'available' prop
-  //    so we don't have to sort every time we update lists of moves
-  // const defaultSort = (arr) =>
-  //   sortBy(arr, (item) => foci.indexOf(item.focus), ["name"]);
-
   // const [initialMoveList] = useState(
   //   process.env.NEXT_PUBLIC_HEAVY === "on"
   //     ? bloatDataInMemory(moveList)
@@ -138,11 +133,13 @@ const Home = ({ content }) => {
   // );
   const [searchFilter, setSearchFilter] = useState("");
   const [focusFilter, setFocusFilter] = useState("");
-  // const [selectedMoves, setSelectedMoves] = useState([]);
-  // const [allMoves, setAllMoves] = useState(initialMoveList);
   const [editMode, setEditMode] = useState(true);
 
-  const [state, dispatch] = useReducer(moveReducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(
+    moveReducer,
+    INITIAL_STATE
+    // , init
+  );
 
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
@@ -155,39 +152,6 @@ const Home = ({ content }) => {
     });
   }, [searchFilter, focusFilter]);
 
-  // useEffect(() => {
-  //   setSelectedMoves(
-  //     defaultSort(
-  //       typeof window !== "undefined" && localStorage.getItem("selectedMoves")
-  //         ? JSON.parse(localStorage.getItem("selectedMoves"))
-  //         : []
-  //       // : defaults.map((slug) =>
-  //       //     initialMoveList.find((mv) => mv.slug === slug)
-  //       // )
-  //     )
-  //   );
-  // }, []);
-
-  // useEffect(() => {
-  //   setEditMode(
-  //     !(
-  //       typeof window !== "undefined" && !!localStorage.getItem("selectedMoves")
-  //     )
-  //   );
-  // }, []);
-
-  // const availableMoves = useMemo(() => {
-  //   const containsQuery = !searchFilter
-  //     ? initialMoveList
-  //     : initialMoveList.filter(
-  //         (m) => m.name.includes(searchFilter) || m.focus.includes(searchFilter)
-  //       );
-  //   const hasFocus = !focusFilter
-  //     ? initialMoveList
-  //     : initialMoveList.filter((m) => m.focus === focusFilter);
-  //   return defaultSort(intersectionBy(containsQuery, hasFocus, "id"));
-  // }, [searchFilter, focusFilter]);
-
   const onDoneSet = (move) => {
     dispatch({
       type: "ADD_SINGLE_SETS_DONE",
@@ -195,47 +159,28 @@ const Home = ({ content }) => {
     });
   };
 
-  const onToggleDone = (move) =>
-    // todo
-    {
-      onDoneSet(move);
-      // move.done = !move.done;
-      // const updatedMoveList = defaultSort([
-      //   ...selectedMoves.filter((m) => m.id !== move.id),
-      //   move,
-      // ]);
-      // setSelectedMoves(updatedMoveList);
-      // localStorage.setItem("selectedMoves", JSON.stringify(updatedMoveList));
-    };
+  const onToggleDone = (move) => {
+    onDoneSet(move);
+  };
 
   const onToggleMove = (move) => {
     editMode && dispatch({ type: "TOGGLE_SINGLE_SELECTED", payload: { move } });
-    // editMode &&
-    //   setSelectedMoves(defaultSort(xorBy(selectedMoves, [move], "id")));
   };
 
   const onSelectRandom = () => {
-    // const randomMoves = sampleSize(allMoves, 20);
-    // setSelectedMoves(defaultSort(randomMoves));
     dispatch({
-      type: "SET_ALL_SELECTED_BY_IDX",
+      type: "SET_ALL_SELECTED",
       payload: {
-        listOfIdxs: sampleSize(state.moveListR, 20).map((mv) => mv.idx),
+        listOfMoves: sampleSize(state.moveListR, 20),
       },
     });
   };
 
   const onFinalize = () => {
-    // localStorage.setItem("selectedMoves", JSON.stringify(selectedMoves));
-    // localStorage.setItem(
-    //   "selectedMovesR",
-    //   JSON.stringify(state.moveListR.filter((mv) => mv.selected))
-    // );
     setEditMode(false);
   };
 
   const onEdit = () => {
-    // localStorage.removeItem("selectedMoves");
     setEditMode(true);
   };
 
@@ -244,11 +189,6 @@ const Home = ({ content }) => {
       type: "SET_ALL_SELECTED_BY_SLUGS",
       payload: { listOfSlugs: defaults },
     });
-    // setSelectedMoves(
-    //   defaultSort(
-    //     defaults.map((slug) => initialMoveList.find((mv) => mv.slug === slug))
-    //   )
-    // );
   };
 
   const onChange = (e) => {
@@ -267,40 +207,6 @@ const Home = ({ content }) => {
       {editMode && (
         <Fragment>
           <div className="contents">
-            {/* <div className="flex flex-wrap space-x-1 space-y-1 text-primary-300 h-1/5 overflow-y-scroll">
-              {state.moveListR.map((mv) => {
-                return (
-                  <div key={`${mv.name}-${mv.idx}`} className="text-white">
-                    <p>{mv.idx}</p>
-                    <p>{mv.name}</p>
-                    <p>{mv.selected ? "S" : "NS"}</p>
-                    <p className={mv.filteredIn ? "opacity-100" : "opacity-50"}>
-                      Filtered
-                    </p>
-                    <p className="bg-blue-300">{`${mv.setsDone} / ${mv.sets}`}</p>
-                    <button
-                      onClick={() =>
-                        dispatch({
-                          type: "ADD_SINGLE_SETS_DONE",
-                          payload: { move: mv },
-                        })
-                      }
-                    >
-                      add set
-                    </button>
-                  </div>
-                );
-              })}
-              <button className="bg-blue-600" onClick={onSelectDefault}>
-                Defaults
-              </button>
-              <button
-                className="bg-blue-600"
-                onClick={() => dispatch({ type: "CLEAR_ALL_SELECTED" })}
-              >
-                clear
-              </button>
-            </div> */}
             <AllMoves
               {...{
                 searchFilter,
@@ -328,12 +234,6 @@ const Home = ({ content }) => {
                     payload: { listOfIdxs: listOfMoves.map((mv) => mv.idx) },
                   }),
                 onChange,
-                // availableMoves,
-                // focusFilter,
-                // setFocusFilter,
-                // onSearch,
-                // editMode,
-                // setEditMode,
                 onSelectDefault,
                 onSelectRandom,
                 onFinalize,
