@@ -80,15 +80,15 @@ const AllMovesHeader = ({
 
 const AllMoves = ({
   allMoves,
-  setFocusFilter,
   focusFilter,
-  setSearchFilter,
-  searchFilter,
-  onToggleMove,
   onChange,
   onSearch,
   onSelectDefault,
   onSelectRandom,
+  onToggleMove,
+  searchFilter,
+  setFocusFilter,
+  setSearchFilter,
 }) => {
   const presetTextCn =
     "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";

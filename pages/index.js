@@ -1,29 +1,8 @@
-import {
-  intersectionBy,
-  omit,
-  omitBy,
-  pick,
-  pickBy,
-  sample,
-  sampleSize,
-  sortBy,
-  uniqBy,
-  xorBy,
-  cloneDeep,
-} from "lodash";
+import { cloneDeep, sampleSize, sortBy } from "lodash";
 import Head from "next/head";
-import {
-  Fragment,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { Fragment, useEffect, useMemo, useReducer, useState } from "react";
 import AllMoves from "../src/components/allMoves";
-
 import Header from "../src/components/header";
-import Move from "../src/components/move";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
 import { defaults, foci } from "../src/data/meta.json";
@@ -52,19 +31,22 @@ const INITIAL_STATE = {
   moveList: cleanInitialMoveList,
 };
 
-const LOCALSTORAGE_DATA_KEY = "LOCALSTORAGE_DATA_KEY";
-
-const getLocalStorageItem = (key) => JSON.parse(localStorage.getItem(key));
-const setLocalStorageItem = (key, data) =>
-  localStorage.setItem(key, JSON.stringify(data));
+// Utils for NextJS pre-rendering
+const windowCheck = () => typeof window !== "undefined";
 const localStorageCheck = (key) =>
   typeof window !== "undefined" && !!localStorage.getItem(key);
 
+// Utils for persisting data in localStorage
+const LOCALSTORAGE_DATA_KEY = "LOCALSTORAGE_DATA_KEY";
+const getLocalStorageItem = (key) =>
+  windowCheck && JSON.parse(localStorage.getItem(key));
+const setLocalStorageItem = (key, data) =>
+  windowCheck && localStorage.setItem(key, JSON.stringify(data));
+const rmLocalStorageItem = (key) => windowCheck && localStorage.removeItem(key);
+
 const init = (initialState) =>
   localStorageCheck(LOCALSTORAGE_DATA_KEY)
-    ? {
-        moveList: getLocalStorageItem(LOCALSTORAGE_DATA_KEY),
-      }
+    ? { moveList: getLocalStorageItem(LOCALSTORAGE_DATA_KEY) }
     : cloneDeep(initialState);
 
 const moveReducer = (
@@ -155,8 +137,14 @@ const Home = ({ content }) => {
 
   const [state, dispatch] = useReducer(moveReducer, INITIAL_STATE, init);
 
+  // =============== handle move list filters (TODO: Codesplit)
+
   const onSearch = (e) => {
     setSearchFilter(e.target.value);
+  };
+
+  const onChange = (e) => {
+    setFocusFilter(e.target.value === "any" ? "" : e.target.value);
   };
 
   const selectedMoves = useMemo(
@@ -171,13 +159,17 @@ const Home = ({ content }) => {
     });
   }, [searchFilter, focusFilter]);
 
+  // =============== control localStorage data (TODO: Codesplit)
+
   useEffect(() => {
     if (editMode) {
-      localStorage.removeItem(LOCALSTORAGE_DATA_KEY);
+      rmLocalStorageItem(LOCALSTORAGE_DATA_KEY);
     } else {
       setLocalStorageItem(LOCALSTORAGE_DATA_KEY, state.moveList);
     }
   }, [editMode]);
+
+  // =============== action creators (TODO: Codesplit)
 
   const onDoneSet = (move) => {
     dispatch({
@@ -203,12 +195,8 @@ const Home = ({ content }) => {
     });
   };
 
-  const onFinalize = () => {
-    setEditMode(false);
-  };
-
-  const onEdit = () => {
-    setEditMode(true);
+  const onClearSelected = () => {
+    dispatch("RESET", { payload: { moveList: cleanInitialMoveList } });
   };
 
   const onSelectDefault = () => {
@@ -218,16 +206,21 @@ const Home = ({ content }) => {
     });
   };
 
-  const onChange = (e) => {
-    setFocusFilter(e.target.value === "any" ? "" : e.target.value);
+  // =============== control current view
+
+  const onFinalize = () => {
+    setEditMode(false);
   };
 
-  const onClearSelected = () => {
-    dispatch("RESET", { payload: { moveList: cleanInitialMoveList } });
+  const onEdit = () => {
+    setEditMode(true);
   };
+
+  // =============== class names
 
   const appWrapperCn =
     "relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap";
+
   return (
     <div className={appWrapperCn}>
       <Head>
@@ -240,37 +233,31 @@ const Home = ({ content }) => {
           <div className="contents">
             <AllMoves
               {...{
-                searchFilter,
-                setSearchFilter,
-                onChange,
+                allMoves: state.moveList,
                 focusFilter,
-                setFocusFilter,
+                onChange,
                 onSearch,
-                editMode,
-                setEditMode,
-                onToggleMove,
                 onSelectDefault,
                 onSelectRandom,
-                allMoves: state.moveList,
+                onToggleMove,
+                searchFilter,
+                setFocusFilter,
+                setSearchFilter,
               }}
             />
             <SelectedMoves
               {...{
-                selectedMoves,
                 onClearSelected,
                 onFinalize,
                 onToggleMove,
+                selectedMoves,
               }}
             />
           </div>
         </Fragment>
       )}
-      {editMode === false && (
-        <SequenceDisplay
-          selectedMoves={selectedMoves}
-          onToggleDone={onToggleDone}
-          onEdit={onEdit}
-        />
+      {!editMode && (
+        <SequenceDisplay {...{ selectedMoves, onToggleDone, onEdit }} />
       )}
     </div>
   );
