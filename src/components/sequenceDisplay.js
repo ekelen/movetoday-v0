@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Move from "./move";
 
 const Back = ({ onClick }) => (
   <button
@@ -8,70 +9,6 @@ const Back = ({ onClick }) => (
     {`◀ back`}
   </button>
 );
-
-const MoveBlock = ({ onClick, move }) => {
-  const {
-    name,
-    focus,
-    repsMin,
-    repsMax,
-    durationMin,
-    durationMax,
-    sets,
-    setsDone,
-    source,
-  } = move;
-  // Todo: More graceful way to handle purgeable CSS
-  const containerCn =
-    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
-  const containerCnDone =
-    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
-
-  const inProgressLabelCn =
-    "absolute right-2 center bg-primary-300 rounded-md p-1 text-primary-700 font-bold";
-  const done = setsDone === sets;
-  const inProgress = setsDone > 0 && !done;
-  return (
-    <button
-      onClick={() => onClick(move)}
-      className={done ? containerCnDone : containerCn}
-    >
-      {!!done && <div className="absolute right-2 center text-lg">☑️</div>}
-      {inProgress && (
-        <div className={inProgressLabelCn}>{`${setsDone} / ${sets}`}</div>
-      )}
-      <header className="text-primary-400 text-sm sm:text-sm md:text-lg font-display w-full">
-        <span>{name}</span>
-      </header>
-      <div className="ml-0 text-primary-200 flex flex-wrap text-sm">
-        {repsMin && (
-          <div className="mr-2 mb-2">
-            {repsMin && repsMin}
-            {repsMax && `-${repsMax}`}
-            {sets && ` x ${sets}`}
-          </div>
-        )}
-        {durationMin && (
-          <div className="mr-2 mb-2">
-            {durationMin && durationMin}
-            {durationMax && `-${durationMax}`}
-            {sets && ` x ${sets}`}
-          </div>
-        )}
-        {focus && (
-          <div className="mr-2 mb-2 text-secondary-200 bg-primary-700 text-xs leading-relaxed px-2 rounded">
-            {focus}
-          </div>
-        )}
-        {source && (
-          <div className="mb-2 text-secondary-200 bg-primary-700 text-xs leading-relaxed px-2 rounded">
-            {source}
-          </div>
-        )}
-      </div>
-    </button>
-  );
-};
 
 const SequenceDisplay = ({
   children,
@@ -99,7 +36,12 @@ const SequenceDisplay = ({
       </div>
 
       {selectedMoves.map((move, i) => (
-        <MoveBlock key={`${move.id}-${i}`} move={move} onClick={onToggleDone} />
+        <Move
+          area="sequenceDisplay"
+          key={`${move.id}-${i}`}
+          move={move}
+          onClick={onToggleDone}
+        />
       ))}
     </div>
   );

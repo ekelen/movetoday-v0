@@ -6,6 +6,8 @@ const Header = ({ children }) => {
     "grid grid-flow-col auto-cols-max grid-rows-1 gap-x-2 justify-items-center";
   const logoCn = "bg-heart bg-no-repeat bg-center bg-size-cover h-10 w-8";
   const appNameCn = "flex items-center text-2xl font-display text-primary-900";
+
+  // =============== constants
   const name = "move today";
   return (
     <header className={wrapperCn}>
