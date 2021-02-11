@@ -12,7 +12,7 @@ const SelectedMoves = ({
     setDisabled(!selectedMoves || selectedMoves.length < 1);
   }, [selectedMoves]);
   return (
-    <div className="p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-auto scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900">
+    <div className="p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900">
       <div className="border-primary-400 border-2 mb-5 w-full p-3 rounded-md flex flex-wrap space-y-4 space-x-4 items-start flex-start content-start">
         <div className="text-primary-400 text-xs  uppercase">
           2. Review and done!
