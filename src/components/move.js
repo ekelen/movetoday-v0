@@ -1,17 +1,21 @@
 import { useEffect, useRef } from "react";
 
+const selectedMoveCn =
+  "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-600";
+const unselectedMoveCn =
+  "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-900";
 const FilteredInMove = ({ move, onClick, selected }) => {
   const { name, focus } = move;
   // Todo: More graceful way to handle purgeable CSS
-  const selectedCn =
-    "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
-  const unselectedCn =
-    "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+  // const selectedCn =
+  //   "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+  // const unselectedCn =
+  //   "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   return (
     <button
       aria-label={`select ${name}`}
       onClick={onClick}
-      className={selected ? selectedCn : unselectedCn}
+      className={selected ? selectedMoveCn : unselectedMoveCn}
     >
       <div className="mr-2 text-xs">{name}</div>
       <div className="text-primary-200 bg-primary-800 text-xs px-2 py-1 rounded">
@@ -27,7 +31,8 @@ const SelectedMove = ({ move, onClick }) => {
     <button
       aria-label={`unselect ${name}`}
       onClick={onClick}
-      className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
+      className={selectedMoveCn}
+      // className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
     >
       <div className="mr-2">{name}</div>
       <div className="text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded">

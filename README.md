@@ -10,7 +10,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ### Todo:
 
-- [ ] Interactive buttons
+- [x] Interactive buttons
 - [x] Done state for moves
 - [x] Progress bar in sequence
 - [ ] A comfortably large timer
