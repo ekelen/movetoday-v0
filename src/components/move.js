@@ -58,9 +58,9 @@ const MoveBlock = ({ onClick, move, order }) => {
   } = move;
   // Todo: More graceful way to handle purgeable CSS
   const containerCn =
-    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 focus:bg-primary-600";
   const containerCnDone =
-    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 focus:bg-primary-600";
 
   const inProgressLabelCn =
     "absolute right-2 center bg-primary-300 rounded-md p-1 text-primary-700 font-bold";
@@ -80,16 +80,17 @@ const MoveBlock = ({ onClick, move, order }) => {
       <header className="text-primary-400 text-sm sm:text-sm md:text-lg font-display w-full">
         <span>{name}</span>
       </header>
-      <div className="ml-0 text-primary-200 flex flex-wrap text-sm">
+      {/* TODO: Why group-hover not working..? */}
+      <div className="group hover:text-primary-800 ml-0 text-primary-200 flex flex-wrap text-sm">
         {repsMin && (
-          <div className="mr-2 mb-2">
+          <div className="group-hover:text-primary-800 mr-2 mb-2 ">
             {repsMin && repsMin}
             {repsMax && `-${repsMax}`}
             {sets && ` x ${sets}`}
           </div>
         )}
         {durationMin && (
-          <div className="mr-2 mb-2">
+          <div className="group-hover:text-primary-800 mr-2 mb-2">
             {durationMin && durationMin}
             {durationMax && `-${durationMax}`}
             {sets && ` x ${sets}`}

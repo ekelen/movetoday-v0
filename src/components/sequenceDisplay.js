@@ -5,7 +5,7 @@ import Move from "./move";
 const Back = ({ onClick }) => (
   <button
     onClick={onClick}
-    className="bg-primaryAction-600 text-black font-display ml-4 py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
+    className="bg-primaryAction-600 text-black font-display ml-4 py-1 px-3 rounded-full flex items-center hover:bg-yellow-500 focus:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
   >
     {`◀ back`}
   </button>
