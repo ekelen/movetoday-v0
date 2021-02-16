@@ -1,4 +1,5 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
+
 import Move from "./move";
 
 const SelectedMoves = ({
@@ -24,14 +25,14 @@ const SelectedMoves = ({
           <button
             onClick={onClearSelected}
             disabled={disabled}
-            className="w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300"
+            className="w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
           >
             clear
           </button>
           <button
             onClick={onFinalize}
             disabled={disabled}
-            className="bg-primaryAction-600 disabled:opacity-50 disabled:cursor-default text-primary-900 font-display py-1 px-3 rounded-full flex items-center focus:outline-none focus:bg-primary-400"
+            className="bg-primaryAction-600 disabled:opacity-50 disabled:cursor-default text-primary-900 font-display py-1 px-3 rounded-full flex items-center focus:outline-none focus:outline-none focus:bg-primary-400 focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
           >
             {"done! ▶"}
           </button>

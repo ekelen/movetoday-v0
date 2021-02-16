@@ -1,10 +1,12 @@
+import { useEffect, useRef } from "react";
+
 const FilteredInMove = ({ move, onClick, selected }) => {
   const { name, focus } = move;
   // Todo: More graceful way to handle purgeable CSS
   const selectedCn =
-    "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
+    "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   const unselectedCn =
-    "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
+    "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   return (
     <button
       aria-label={`select ${name}`}
@@ -25,7 +27,7 @@ const SelectedMove = ({ move, onClick }) => {
     <button
       aria-label={`unselect ${name}`}
       onClick={onClick}
-      className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md"
+      className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
     >
       <div className="mr-2">{name}</div>
       <div className="text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded">
@@ -35,7 +37,14 @@ const SelectedMove = ({ move, onClick }) => {
   );
 };
 
-const MoveBlock = ({ onClick, move }) => {
+const MoveBlock = ({ onClick, move, order }) => {
+  const myRef = useRef(null);
+  useEffect(() => {
+    console.log(myRef.current);
+    if (order === 0) {
+      myRef.current.focus();
+    }
+  }, []);
   const {
     name,
     focus,
@@ -49,18 +58,20 @@ const MoveBlock = ({ onClick, move }) => {
   } = move;
   // Todo: More graceful way to handle purgeable CSS
   const containerCn =
-    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
+    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   const containerCnDone =
-    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
+    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
 
   const inProgressLabelCn =
     "absolute right-2 center bg-primary-300 rounded-md p-1 text-primary-700 font-bold";
   const done = setsDone === sets;
   const inProgress = setsDone > 0 && !done;
+
   return (
     <button
       onClick={() => onClick(move)}
       className={done ? containerCnDone : containerCn}
+      ref={myRef}
     >
       {!!done && <div className="absolute right-2 center text-lg">☑️</div>}
       {inProgress && (
@@ -104,11 +115,12 @@ const Move = ({
   area = "available",
   move = {},
   onClick = () => {},
+  order = -1,
 }) => {
   return area === "available" ? (
     <FilteredInMove selected={selected} move={move} onClick={onClick} />
   ) : area === "sequenceDisplay" ? (
-    <MoveBlock onClick={onClick} move={move} />
+    <MoveBlock order={order} onClick={onClick} move={move} />
   ) : (
     <SelectedMove move={move} onClick={onClick} />
   );

@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { useMemo } from "react/cjs/react.production.min";
+
 import { foci } from "../data/meta.json";
 import Move from "./move";
 
@@ -19,7 +20,7 @@ const AllMovesHeader = ({
         placeholder="🔎 search!"
         onChange={onSearch}
         value={searchFilter}
-        className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-primary-100`}
+        className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-primary-100 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300`}
       ></input>
       {/* Dropdown */}
       <select
@@ -52,8 +53,8 @@ const AllMovesHeader = ({
             }
             className={
               focus === focusFilter || (!focusFilter && focus === "any")
-                ? "bg-primaryAction-500 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full cursor-default"
-                : "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full"
+                ? "bg-primaryAction-500 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full cursor-default focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
+                : "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
             }
             onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
           >
@@ -70,7 +71,7 @@ const AllMovesHeader = ({
           setSearchFilter("");
           setFocusFilter("");
         }}
-        className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 focus:ring-opacity-50 disabled:opacity-30 disabled:cursor-not-allowed"
+        className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 disabled:opacity-30 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
       >
         reset
       </button>
@@ -91,7 +92,7 @@ const AllMoves = ({
   setSearchFilter,
 }) => {
   const presetTextCn =
-    "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
+    "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   const availableMoves = allMoves.filter((mv) => !!mv.filteredIn);
   return (
     <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
@@ -115,7 +116,7 @@ const AllMoves = ({
           focusFilter,
         }}
       />
-      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5">
+      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300">
         {availableMoves.map((m, i) => {
           return (
             <Move
