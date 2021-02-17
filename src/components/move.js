@@ -1,15 +1,21 @@
+import { useEffect, useRef } from "react";
+
+const selectedMoveCn =
+  "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-600";
+const unselectedMoveCn =
+  "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-900";
 const FilteredInMove = ({ move, onClick, selected }) => {
   const { name, focus } = move;
   // Todo: More graceful way to handle purgeable CSS
-  const selectedCn =
-    "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
-  const unselectedCn =
-    "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono";
+  // const selectedCn =
+  //   "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+  // const unselectedCn =
+  //   "bg-primary-900 text-primary-100 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   return (
     <button
       aria-label={`select ${name}`}
       onClick={onClick}
-      className={selected ? selectedCn : unselectedCn}
+      className={selected ? selectedMoveCn : unselectedMoveCn}
     >
       <div className="mr-2 text-xs">{name}</div>
       <div className="text-primary-200 bg-primary-800 text-xs px-2 py-1 rounded">
@@ -25,7 +31,8 @@ const SelectedMove = ({ move, onClick }) => {
     <button
       aria-label={`unselect ${name}`}
       onClick={onClick}
-      className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md"
+      className={selectedMoveCn}
+      // className="font-mono bg-primary-600 flex text-sm items-center py-2 px-2 rounded-md focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
     >
       <div className="mr-2">{name}</div>
       <div className="text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded">
@@ -35,7 +42,14 @@ const SelectedMove = ({ move, onClick }) => {
   );
 };
 
-const MoveBlock = ({ onClick, move }) => {
+const MoveBlock = ({ onClick, move, order }) => {
+  const myRef = useRef(null);
+  useEffect(() => {
+    console.log(myRef.current);
+    if (order === 0) {
+      myRef.current.focus();
+    }
+  }, []);
   const {
     name,
     focus,
@@ -49,18 +63,20 @@ const MoveBlock = ({ onClick, move }) => {
   } = move;
   // Todo: More graceful way to handle purgeable CSS
   const containerCn =
-    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
+    "bg-primary-800 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 focus:bg-primary-600";
   const containerCnDone =
-    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start";
+    "bg-primary-500 relative py-2 px-2 flex-auto w-1/4 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 focus:bg-primary-600";
 
   const inProgressLabelCn =
     "absolute right-2 center bg-primary-300 rounded-md p-1 text-primary-700 font-bold";
   const done = setsDone === sets;
   const inProgress = setsDone > 0 && !done;
+
   return (
     <button
       onClick={() => onClick(move)}
       className={done ? containerCnDone : containerCn}
+      ref={myRef}
     >
       {!!done && <div className="absolute right-2 center text-lg">☑️</div>}
       {inProgress && (
@@ -69,16 +85,17 @@ const MoveBlock = ({ onClick, move }) => {
       <header className="text-primary-400 text-sm sm:text-sm md:text-lg font-display w-full">
         <span>{name}</span>
       </header>
-      <div className="ml-0 text-primary-200 flex flex-wrap text-sm">
+      {/* TODO: Why group-hover not working..? */}
+      <div className="group hover:text-primary-800 ml-0 text-primary-200 flex flex-wrap text-sm">
         {repsMin && (
-          <div className="mr-2 mb-2">
+          <div className="group-hover:text-primary-800 mr-2 mb-2 ">
             {repsMin && repsMin}
             {repsMax && `-${repsMax}`}
             {sets && ` x ${sets}`}
           </div>
         )}
         {durationMin && (
-          <div className="mr-2 mb-2">
+          <div className="group-hover:text-primary-800 mr-2 mb-2">
             {durationMin && durationMin}
             {durationMax && `-${durationMax}`}
             {sets && ` x ${sets}`}
@@ -104,11 +121,12 @@ const Move = ({
   area = "available",
   move = {},
   onClick = () => {},
+  order = -1,
 }) => {
   return area === "available" ? (
     <FilteredInMove selected={selected} move={move} onClick={onClick} />
   ) : area === "sequenceDisplay" ? (
-    <MoveBlock onClick={onClick} move={move} />
+    <MoveBlock order={order} onClick={onClick} move={move} />
   ) : (
     <SelectedMove move={move} onClick={onClick} />
   );

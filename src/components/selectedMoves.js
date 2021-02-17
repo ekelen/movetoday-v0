@@ -1,4 +1,5 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
+
 import Move from "./move";
 
 const SelectedMoves = ({
@@ -11,8 +12,17 @@ const SelectedMoves = ({
   useEffect(() => {
     setDisabled(!selectedMoves || selectedMoves.length < 1);
   }, [selectedMoves]);
+  const clearRef = useRef(null);
+  useEffect(() => {
+    if (clearRef.current) {
+      clearRef.current.disabled = disabled;
+      clearRef.current.className = disabled
+        ? "w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 opacity-30 cursor-default"
+        : "w-min bg-primaryAction-400 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-primaryAction-200 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+    }
+  }, [disabled]);
   return (
-    <div className="p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-auto scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900">
+    <div className="p-5 w-full min-h-3/6 h-3/6 flex flex-wrap overflow-y-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900">
       <div className="border-primary-400 border-2 mb-5 w-full p-3 rounded-md flex flex-wrap space-y-4 space-x-4 items-start flex-start content-start">
         <div className="text-primary-400 text-xs  uppercase">
           2. Review and done!
@@ -21,17 +31,13 @@ const SelectedMoves = ({
           <h3 className="text-primary-200 font-display">
             {selectedMoves.length} selected
           </h3>
-          <button
-            onClick={onClearSelected}
-            disabled={disabled}
-            className="w-min bg-primary-300 text-primary-800 text-sm py-2 px-3 rounded font-mono flex items-center mr-4 hover:bg-primary-400 focus:outline-none focus:bg-primary-300"
-          >
+          <button onClick={onClearSelected} ref={clearRef}>
             clear
           </button>
           <button
             onClick={onFinalize}
             disabled={disabled}
-            className="bg-primaryAction-600 disabled:opacity-50 disabled:cursor-default text-primary-900 font-display py-1 px-3 rounded-full flex items-center focus:outline-none focus:bg-primary-400"
+            className="bg-primaryAction-600 disabled:opacity-50 disabled:cursor-default text-primary-900 font-display py-1 px-3 rounded-full flex items-center focus:outline-none focus:outline-none focus:bg-primary-400 focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
           >
             {"done! ▶"}
           </button>

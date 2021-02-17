@@ -1,5 +1,5 @@
-import { Fragment } from "react";
-import { useMemo } from "react/cjs/react.production.min";
+import { Fragment, useRef, useEffect, useMemo } from "react";
+
 import { foci } from "../data/meta.json";
 import Move from "./move";
 
@@ -11,15 +11,26 @@ const AllMovesHeader = ({
   setSearchFilter,
   setFocusFilter,
 }) => {
+  const clearRef = useRef(null);
+
+  useEffect(() => {
+    const disabled = !searchFilter && (!focusFilter || focusFilter === "any");
+    if (!clearRef.current) return;
+    clearRef.current.disabled = disabled;
+    clearRef.current.className = clearRef.current.disabled
+      ? "w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 opacity-30 cursor-default"
+      : "w-min bg-primaryAction-400 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 hover:bg-primaryAction-200 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
+  }, [focusFilter, searchFilter]);
+
   return (
-    <div className="flex items-center w-full space-x-3 px-3 p-4">
+    <div className=" flex items-center w-full space-x-3 px-3 p-4">
       <input
         type="text"
         aria-label="search"
         placeholder="🔎 search!"
         onChange={onSearch}
         value={searchFilter}
-        className={`w-min text-primary-100 bg-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 hover:bg-primary-100`}
+        className={`w-min text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 text-primary-100 placeholder-gray-100 bg-primary-700 hover:bg-primary-600`}
       ></input>
       {/* Dropdown */}
       <select
@@ -52,8 +63,8 @@ const AllMovesHeader = ({
             }
             className={
               focus === focusFilter || (!focusFilter && focus === "any")
-                ? "bg-primaryAction-500 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full cursor-default"
-                : "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full"
+                ? "bg-primaryAction-500 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full cursor-default focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-primary-300 active:ring-4 active:ring-offset-1 active:ring-primary-300"
+                : "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-400"
             }
             onClick={() => setFocusFilter(focus === "any" ? "" : focus)}
           >
@@ -65,12 +76,11 @@ const AllMovesHeader = ({
       {/* Clear filters */}
       <button
         aria-label="clear filters"
-        disabled={!searchFilter && (!focusFilter || focusFilter === "any")}
         onClick={() => {
           setSearchFilter("");
           setFocusFilter("");
         }}
-        className="w-min bg-primary-200 text-primary-700 text-sm py-2 px-3 rounded font-bold flex items-center mr-4 focus:ring-opacity-50 disabled:opacity-30 disabled:cursor-not-allowed"
+        ref={clearRef}
       >
         reset
       </button>
@@ -91,7 +101,7 @@ const AllMoves = ({
   setSearchFilter,
 }) => {
   const presetTextCn =
-    "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded";
+    "inline-block uppercase text-primary-100 bg-primary-800 text-xs px-2 py-1 rounded focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300";
   const availableMoves = allMoves.filter((mv) => !!mv.filteredIn);
   return (
     <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
@@ -115,7 +125,7 @@ const AllMoves = ({
           focusFilter,
         }}
       />
-      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5">
+      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300">
         {availableMoves.map((m, i) => {
           return (
             <Move
