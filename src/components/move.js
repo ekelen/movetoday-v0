@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 const selectedMoveCn =
   "bg-primary-700 text-primary-100 opacity-50 flex text-sm items-center py-2 px-2 rounded-md justify-between font-mono focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-600";
 const unselectedMoveCn =
@@ -42,14 +40,7 @@ const SelectedMove = ({ move, onClick }) => {
   );
 };
 
-const MoveBlock = ({ onClick, move, order }) => {
-  const myRef = useRef(null);
-  useEffect(() => {
-    console.log(myRef.current);
-    if (order === 0) {
-      myRef.current.focus();
-    }
-  }, []);
+const MoveBlock = ({ onClick, move }) => {
   const {
     name,
     focus,
@@ -60,6 +51,7 @@ const MoveBlock = ({ onClick, move, order }) => {
     sets,
     setsDone,
     source,
+    history = null,
   } = move;
   // Todo: More graceful way to handle purgeable CSS
   const containerCn =
@@ -76,7 +68,6 @@ const MoveBlock = ({ onClick, move, order }) => {
     <button
       onClick={() => onClick(move)}
       className={done ? containerCnDone : containerCn}
-      ref={myRef}
     >
       {!!done && <div className="absolute right-2 center text-lg">☑️</div>}
       {inProgress && (
@@ -107,9 +98,16 @@ const MoveBlock = ({ onClick, move, order }) => {
           </div>
         )}
         {source && (
-          <div className="mb-2 text-secondary-200 bg-primary-700 text-xs leading-relaxed px-2 rounded">
+          <div className="mr-2 mb-2 text-secondary-200 bg-primary-700 text-xs leading-relaxed px-2 rounded">
             {source}
           </div>
+        )}
+        {history && history.length > 0 ? (
+          <div className="mr-2 mb-2 text-secondary-200 bg-primary-700 text-xs leading-relaxed px-2 rounded">
+            last done: {history[history.length - 1].date}
+          </div>
+        ) : (
+          ""
         )}
       </div>
     </button>

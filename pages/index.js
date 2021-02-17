@@ -1,6 +1,7 @@
 import { cloneDeep, sampleSize, sortBy } from "lodash";
 import Head from "next/head";
 import { Fragment, useEffect, useMemo, useReducer, useState } from "react";
+
 import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
 import SelectedMoves from "../src/components/selectedMoves";
@@ -25,6 +26,7 @@ const cleanInitialMoveList = initialMoveList.map((m, idx) => ({
   sets: m.sets || 1,
   setsDone: 0,
   filteredIn: true,
+  history: [],
 }));
 
 const INITIAL_STATE = {
@@ -93,11 +95,29 @@ const moveReducer = (
       stateCopy.moveList.forEach((mv) => (mv.selected = false));
       stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
       return stateCopy;
+    case "CLEAR_ALL_PROGRESS":
+      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
+      stateCopy.moveList.forEach((mv) => (mv.history = []));
+      return stateCopy;
     case "ADD_SINGLE_SETS_DONE":
       const currentSetsDone = stateCopy.moveList[payload.move.idx].setsDone;
       const sets = stateCopy.moveList[payload.move.idx].sets;
       stateCopy.moveList[payload.move.idx].setsDone =
         currentSetsDone === sets ? 0 : (currentSetsDone % sets) + 1;
+      return stateCopy;
+    case "SET_MULTIPLE_HISTORY":
+      // just need move idxs
+      payload.listOfIdxs.forEach((_idx) => {
+        const move = stateCopy.moveList[_idx];
+        const done = move.setsDone >= move.sets;
+        if (done) {
+          const previousHistory = cloneDeep(move.history || []);
+          const today = new Date().toLocaleDateString();
+          const newHistory = { date: today };
+          stateCopy.moveList[_idx].history = [...previousHistory, newHistory];
+        }
+      });
+      // console.log(`stateCopy:`, stateCopy);
       return stateCopy;
     case "SET_ALL_FILTERED_IN":
       const hasSearchFilter = !!payload.searchFilter;
@@ -171,6 +191,17 @@ const Home = ({ content }) => {
 
   // =============== action creators (TODO: Codesplit)
 
+  const onSave = () => {
+    dispatch({
+      type: "SET_MULTIPLE_HISTORY",
+      payload: {
+        listOfIdxs: state.moveList
+          .filter((mv) => mv.sets && mv.setsDone === mv.sets)
+          .map((mv) => mv.idx),
+      },
+    });
+  };
+
   const onDoneSet = (move) => {
     dispatch({
       type: "ADD_SINGLE_SETS_DONE",
@@ -204,6 +235,10 @@ const Home = ({ content }) => {
       type: "SET_ALL_SELECTED_BY_SLUGS",
       payload: { listOfSlugs: defaults },
     });
+  };
+
+  const onClearProgress = () => {
+    dispatch({ type: "CLEAR_ALL_PROGRESS" });
   };
 
   // =============== control current view
@@ -257,7 +292,16 @@ const Home = ({ content }) => {
         </Fragment>
       )}
       {!editMode && (
-        <SequenceDisplay {...{ selectedMoves, onToggleDone, onEdit }} />
+        <SequenceDisplay
+          {...{
+            moveList: state.moveList,
+            selectedMoves,
+            onToggleDone,
+            onEdit,
+            onSave,
+            onReset: onClearProgress,
+          }}
+        />
       )}
     </div>
   );
