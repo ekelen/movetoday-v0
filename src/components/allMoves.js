@@ -32,6 +32,7 @@ const AllMovesHeader = ({
         value={searchFilter}
         className={`w-min text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 text-primary-100 placeholder-gray-100 bg-primary-700 hover:bg-primary-600`}
       ></input>
+
       {/* Dropdown */}
       <select
         className="px-2 py-1 rounded-full flex lg:hidden"
