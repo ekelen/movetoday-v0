@@ -3,7 +3,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Move from "./move";
 
 const SelectedMoves = ({
-  onToggleMove,
+  toggleOneSelected,
   selectedMoves,
   onClearSelected,
   onFinalize,
@@ -34,23 +34,19 @@ const SelectedMoves = ({
           <button onClick={onClearSelected} ref={clearRef}>
             clear
           </button>
-          <button
-            onClick={onFinalize}
-            disabled={disabled}
-            className="bg-primaryAction-600 disabled:opacity-50 disabled:cursor-default text-primary-900 font-display py-1 px-3 rounded-full flex items-center focus:outline-none focus:outline-none focus:bg-primary-400 focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300"
-          >
+          <button onClick={onFinalize} disabled={disabled} className="btn-pill">
             {"done! ▶"}
           </button>
         </header>
 
         <Fragment>
-          {selectedMoves.map((m, i) => {
+          {selectedMoves.map((m) => {
             return (
               <Move
-                key={`${m.name}-${i}`}
-                onClick={() => onToggleMove(m)}
+                key={`${m.name}-${m.idx}`}
+                onClick={toggleOneSelected}
                 move={m}
-                area="selected"
+                selected={true}
               />
             );
           })}

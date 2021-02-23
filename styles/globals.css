@@ -13,3 +13,16 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@layer components {
+  .btn-pill {
+    @apply py-1 px-3 rounded-full flex items-center lowercase font-display shadow-md text-black whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-opacity-75 hover:bg-yellow-500 focus:bg-yellow-500 bg-primaryAction-600;
+  }
+  .btn-pill:disabled {
+    @apply py-1 px-3 rounded-full flex items-center lowercase font-display shadow-md text-black whitespace-nowrap cursor-default bg-primary-500;
+  }
+
+  .tag {
+    @apply text-primary-200 bg-primary-800 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
+  }
+}

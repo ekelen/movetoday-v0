@@ -1,260 +1,104 @@
-import { cloneDeep, sampleSize, sortBy } from "lodash";
+import { sampleSize } from "lodash";
 import Head from "next/head";
-import { Fragment, useEffect, useMemo, useReducer, useState } from "react";
-
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { GitHub } from "react-feather";
+// import { connectToCollection } from "../mongo";
 import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
-import { defaults, foci } from "../src/data/meta.json";
-import moveList from "../src/data/moveList.json";
-import { bloatDataInMemory } from "../src/util/test.js";
+import { defaults } from "../src/data/meta.json";
+import {
+  INITIAL_STATE,
+  moveReducer,
+  replaceAllSelected,
+  setInitialData,
+  setOneProgress,
+  toggleOneSelected,
+  useMoveListThunkReducer,
+} from "../state/reducer";
 
-const oneTimeMoveListSort = (listOfMoves) =>
-  sortBy(listOfMoves, (item) => foci.indexOf(item.focus), ["name"]);
+const LS_PAGE = "LS_MOVETODAY_PAGE";
+const EDIT = "EDIT";
+const SEQUENCE = "SEQUENCE";
 
-const initialMoveList = oneTimeMoveListSort(
-  process.env.NEXT_PUBLIC_HEAVY === "on"
-    ? bloatDataInMemory(moveList)
-    : moveList
-);
-
-const cleanInitialMoveList = initialMoveList.map((m, idx) => ({
-  ...m,
-  selected: false,
-  idx,
-  sets: m.sets || 1,
-  setsDone: 0,
-  filteredIn: true,
-  history: [],
-}));
-
-const INITIAL_STATE = {
-  moveList: cleanInitialMoveList,
-};
-
-// Utils for NextJS pre-rendering
 const windowCheck = () => typeof window !== "undefined";
-const localStorageCheck = (key) =>
-  typeof window !== "undefined" && !!localStorage.getItem(key);
 
-// Utils for persisting data in localStorage
-const LOCALSTORAGE_DATA_KEY = "LOCALSTORAGE_DATA_KEY";
-const getLocalStorageItem = (key) =>
-  windowCheck && JSON.parse(localStorage.getItem(key));
-const setLocalStorageItem = (key, data) =>
-  windowCheck && localStorage.setItem(key, JSON.stringify(data));
-const rmLocalStorageItem = (key) => windowCheck && localStorage.removeItem(key);
+const Home = ({ ...props }) => {
+  const [page, setPage] = useState(null);
+  const [state, dispatch] = useMoveListThunkReducer(moveReducer, INITIAL_STATE);
 
-const init = (initialState) =>
-  localStorageCheck(LOCALSTORAGE_DATA_KEY)
-    ? { moveList: getLocalStorageItem(LOCALSTORAGE_DATA_KEY) }
-    : cloneDeep(initialState);
+  useEffect(() => {
+    dispatch(setInitialData);
+    if (page === null)
+      setPage((windowCheck() && localStorage.getItem(LS_PAGE)) || EDIT);
+  }, []);
 
-const moveReducer = (
-  state = INITIAL_STATE,
-  action = { type: "", payload: {} }
-) => {
-  const { type, payload } = action;
-  const stateCopy = cloneDeep(state);
-  console.log(`type:`, type);
-  console.log(`action:`, action);
-  switch (type) {
-    case "TOGGLE_SINGLE_SELECTED":
-      stateCopy.moveList[payload.move.idx].selected = !payload.move.selected;
-      stateCopy.moveList[payload.move.idx].setsDone = 0;
-      return stateCopy;
-    case "SET_MULTIPLE_SELECTED_TRUE":
-      payload.listOfIdxs.forEach(
-        (idx) => (stateCopy.moveList[idx].selected = true)
-      );
-      return stateCopy;
-    case "SET_ALL_SELECTED":
-      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
-      // todo: remove many maps
-      stateCopy.moveList.forEach(
-        (mv) =>
-          (mv.selected = !!payload.listOfMoves
-            .map((m) => m.idx)
-            .includes(mv.idx))
-      );
-      return stateCopy;
-    case "SET_ALL_SELECTED_BY_IDX":
-      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveList.forEach(
-        (mv) => (mv.selected = !!payload.listOfIdxs.includes(mv.idx))
-      );
-      return stateCopy;
-    case "SET_ALL_SELECTED_BY_SLUGS":
-      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveList.forEach(
-        (mv) => (mv.selected = payload.listOfSlugs.includes(mv.slug))
-      );
-      return stateCopy;
-    case "CLEAR_ALL_SELECTED":
-      stateCopy.moveList.forEach((mv) => (mv.selected = false));
-      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
-      return stateCopy;
-    case "CLEAR_ALL_PROGRESS":
-      stateCopy.moveList.forEach((mv) => (mv.setsDone = 0));
-      stateCopy.moveList.forEach((mv) => (mv.history = []));
-      return stateCopy;
-    case "ADD_SINGLE_SETS_DONE":
-      const currentSetsDone = stateCopy.moveList[payload.move.idx].setsDone;
-      const sets = stateCopy.moveList[payload.move.idx].sets;
-      stateCopy.moveList[payload.move.idx].setsDone =
-        currentSetsDone === sets ? 0 : (currentSetsDone % sets) + 1;
-      return stateCopy;
-    case "SET_MULTIPLE_HISTORY":
-      // just need move idxs
-      payload.listOfIdxs.forEach((_idx) => {
-        const move = stateCopy.moveList[_idx];
-        const done = move.setsDone >= move.sets;
-        if (done) {
-          const previousHistory = cloneDeep(move.history || []);
-          const today = new Date().toLocaleDateString();
-          const newHistory = { date: today };
-          stateCopy.moveList[_idx].history = [...previousHistory, newHistory];
-        }
-      });
-      // console.log(`stateCopy:`, stateCopy);
-      return stateCopy;
-    case "SET_ALL_FILTERED_IN":
-      const hasSearchFilter = !!payload.searchFilter;
-      const hasFocusFilter =
-        payload.focusFilter && payload.focusFilter !== "any";
-      stateCopy.moveList.forEach((mv) => (mv.filteredIn = true));
-      if (hasFocusFilter) {
-        stateCopy.moveList.forEach(
-          (mv) => (mv.filteredIn = mv.focus === payload.focusFilter)
-        );
-      }
-      if (hasSearchFilter) {
-        stateCopy.moveList.forEach(
-          (mv) =>
-            (mv.filteredIn =
-              (mv.filteredIn &&
-                mv.name
-                  .toLowerCase()
-                  .includes(payload.searchFilter.toLowerCase())) ||
-              mv.focus
-                .toLowerCase()
-                .includes(payload.searchFilter.toLowerCase()))
-        );
-      }
-      return stateCopy;
-    case "RESET":
-      return init(action.payload);
-    default:
-      return INITIAL_STATE;
-  }
-};
+  useEffect(() => {
+    if (page) localStorage.setItem(LS_PAGE, page);
+  }, [page]);
 
-const Home = ({ content }) => {
-  const [searchFilter, setSearchFilter] = useState("");
-  const [focusFilter, setFocusFilter] = useState("");
-  const [editMode, setEditMode] = useState(true);
+  const selectedMoves = useMemo(() => {
+    const { moveListStatic } = state;
+    const selected = moveListStatic.filter((m) =>
+      Object.keys(state.movesProgress).includes(m.slug)
+    );
+    return selected;
+  }, [state.moveListStatic, state.movesProgress]);
 
-  const [state, dispatch] = useReducer(moveReducer, INITIAL_STATE, init);
-
-  // =============== handle move list filters (TODO: Codesplit)
-
-  const onSearch = (e) => {
-    setSearchFilter(e.target.value);
-  };
-
-  const onChange = (e) => {
-    setFocusFilter(e.target.value === "any" ? "" : e.target.value);
-  };
-
-  const selectedMoves = useMemo(
-    () => state.moveList.filter((mv) => !!mv.selected),
-    [state.moveList]
+  const onSetOneSelected = useCallback(
+    (move, toSelect) => {
+      dispatch(toggleOneSelected(move, toSelect));
+    },
+    [dispatch]
   );
-
-  useEffect(() => {
-    dispatch({
-      type: "SET_ALL_FILTERED_IN",
-      payload: { searchFilter, focusFilter },
-    });
-  }, [searchFilter, focusFilter]);
-
-  // =============== control localStorage data (TODO: Codesplit)
-
-  useEffect(() => {
-    if (editMode) {
-      rmLocalStorageItem(LOCALSTORAGE_DATA_KEY);
-    } else {
-      setLocalStorageItem(LOCALSTORAGE_DATA_KEY, state.moveList);
-    }
-  }, [editMode]);
 
   // =============== action creators (TODO: Codesplit)
 
-  const onSave = () => {
-    dispatch({
-      type: "SET_MULTIPLE_HISTORY",
-      payload: {
-        listOfIdxs: state.moveList
-          .filter((mv) => mv.sets && mv.setsDone === mv.sets)
-          .map((mv) => mv.idx),
-      },
-    });
-  };
-
-  const onDoneSet = (move) => {
-    dispatch({
-      type: "ADD_SINGLE_SETS_DONE",
-      payload: { move },
-    });
-  };
-
-  const onToggleDone = (move) => {
-    onDoneSet(move);
-  };
-
-  const onToggleMove = (move) => {
-    editMode && dispatch({ type: "TOGGLE_SINGLE_SELECTED", payload: { move } });
-  };
+  const onSetOneProgress = useCallback(
+    (slug, setsDone) => {
+      dispatch(setOneProgress(slug, setsDone));
+    },
+    [dispatch]
+  );
 
   const onSelectRandom = () => {
-    dispatch({
-      type: "SET_ALL_SELECTED",
-      payload: {
-        listOfMoves: sampleSize(state.moveList, 20),
-      },
-    });
+    dispatch(
+      replaceAllSelected(
+        sampleSize(
+          state.moveListStatic.map((m) => m.slug),
+          20
+        )
+      )
+    );
   };
 
-  const onClearSelected = () => {
-    dispatch("RESET", { payload: { moveList: cleanInitialMoveList } });
-  };
+  const onClearSelected = useCallback(() => {
+    dispatch(replaceAllSelected([]));
+  }, [dispatch]);
 
   const onSelectDefault = () => {
-    dispatch({
-      type: "SET_ALL_SELECTED_BY_SLUGS",
-      payload: { listOfSlugs: defaults },
-    });
+    dispatch(replaceAllSelected([...defaults]));
   };
 
-  const onClearProgress = () => {
-    dispatch({ type: "CLEAR_ALL_PROGRESS" });
-  };
-
-  // =============== control current view
+  // =============== control current page
 
   const onFinalize = () => {
-    setEditMode(false);
+    setPage(SEQUENCE);
   };
 
   const onEdit = () => {
-    setEditMode(true);
+    setPage(EDIT);
   };
 
   // =============== class names
 
   const appWrapperCn =
     "relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap";
+  const navCnActive =
+    "bg-primaryAction-500 w-min py-1 px-2 rounded-sm mr-2 cursor-default focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-primary-300 active:ring-4 active:ring-offset-1 active:ring-primary-300";
+  const navCnUnselected =
+    "bg-primary-400 w-min py-1 px-2 rounded-sm mr-2 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-400";
 
   return (
     <div className={appWrapperCn}>
@@ -262,46 +106,76 @@ const Home = ({ content }) => {
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Header />
-      {(editMode || editMode === null) && (
+      <Header>
+        <div className="w-full flex items-center p-2 text-md ">
+          <nav className="whitespace-nowrap uppercase text-primary-800 font-bold">
+            <button
+              onClick={() => setPage(EDIT)}
+              disabled={page === EDIT}
+              className={page === EDIT ? navCnActive : navCnUnselected}
+            >
+              EDIT
+            </button>
+            <button
+              onClick={() => setPage(SEQUENCE)}
+              disabled={page === SEQUENCE}
+              className={page === SEQUENCE ? navCnActive : navCnUnselected}
+            >
+              SEQUENCE
+            </button>
+          </nav>
+
+          {state.fetchError.isError && <p>{state.fetchError.msg}</p>}
+          <div className="ml-auto flex items-center text-secondaryAction-800 text-sm font-bold ">
+            <GitHub size={16} />
+            <p className="ml-2 ">
+              <a href="https://github.com/ekelen">ekelen</a>
+            </p>
+          </div>
+        </div>
+      </Header>
+      {page === EDIT && (
         <Fragment>
           <div className="contents">
-            <AllMoves
-              {...{
-                allMoves: state.moveList,
-                focusFilter,
-                onChange,
-                onSearch,
-                onSelectDefault,
-                onSelectRandom,
-                onToggleMove,
-                searchFilter,
-                setFocusFilter,
-                setSearchFilter,
-              }}
-            />
+            <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
+              <AllMoves
+                onSelectDefault={onSelectDefault}
+                onSelectRandom={onSelectRandom}
+                movesProgress={state.movesProgress}
+                moveListStatic={state.moveListStatic}
+                onSetOneSelected={onSetOneSelected}
+              ></AllMoves>
+            </div>
             <SelectedMoves
-              {...{
-                onClearSelected,
-                onFinalize,
-                onToggleMove,
-                selectedMoves,
-              }}
+              onClearSelected={onClearSelected}
+              onFinalize={onFinalize}
+              toggleOneSelected={onSetOneSelected}
+              selectedMoves={selectedMoves}
             />
           </div>
         </Fragment>
       )}
-      {!editMode && (
-        <SequenceDisplay
-          {...{
-            moveList: state.moveList,
-            selectedMoves,
-            onToggleDone,
-            onEdit,
-            onSave,
-            onReset: onClearProgress,
-          }}
-        />
+      {page === SEQUENCE && (
+        <Fragment>
+          {state.moveListStatic.length > 0 ? (
+            <SequenceDisplay
+              onEdit={onEdit}
+              selectedMoves={selectedMoves}
+              movesProgress={state.movesProgress}
+              toggleOneSelected={onSetOneSelected}
+              setOneProgress={onSetOneProgress}
+              moveListStatic={state.moveListStatic}
+              zeroOneProgress={onSetOneProgress}
+              zeroAllProgress={() =>
+                Object.keys(state.movesProgress).forEach((slug) =>
+                  onSetOneProgress(slug, 0)
+                )
+              }
+            ></SequenceDisplay>
+          ) : (
+            "No moves in state yet..."
+          )}
+        </Fragment>
       )}
     </div>
   );
