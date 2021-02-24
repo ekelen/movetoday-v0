@@ -13,3 +13,15 @@ export const safeJsonStringify = (dataObj, fallback = "") => {
     return fallback;
   }
 };
+
+const getDaysDiff = (toDate) =>
+  Math.ceil(
+    (new Date(new Date().toLocaleDateString()).getTime() -
+      new Date(toDate).getTime()) /
+      86400000
+  );
+
+const formatter = (timeDiff) =>
+  timeDiff === 0 ? "today" : `${timeDiff} days ago`;
+
+export const daysAgo = (toDate) => formatter(getDaysDiff(toDate));

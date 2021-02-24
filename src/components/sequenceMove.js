@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import { Check, RotateCcw, Trash, X } from "react-feather";
+import { daysAgo } from "../util/util";
 
 const SequenceMove = memo(
   ({ move, setsDone, toggleOneSelected, setOneProgress }) => {
@@ -14,7 +15,7 @@ const SequenceMove = memo(
       sets,
       source,
       isPerSide,
-      // history = null,
+      history = null,
     } = move;
 
     const done = setsDone === sets;
@@ -117,11 +118,11 @@ const SequenceMove = memo(
               </button>
             </div>
           )}
-          {/* {history && history.length > 0 ? (
-          <div className="tag">last done: {history[history.length - 1]}</div>
-        ) : (
-          ""
-        )} */}
+          {history && history.length > 0 ? (
+            <div className="tag">{daysAgo(history[history.length - 1])}</div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     );
