@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { isArray } from "lodash";
 
 export const useFetchForHistory = (apiKey, slugs) => {
-  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const updateHistory = () => {
-    setResults(null);
+  const updateHistory = useCallback(() => {
+    console.log(`calling updateHistory with key ${apiKey}`);
+    setSuccess(null);
+    setLoading(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Basic ${btoa(apiKey)}`);
     myHeaders.append("Content-Type", "application/json");
@@ -17,12 +21,22 @@ export const useFetchForHistory = (apiKey, slugs) => {
 
     const fetchForSlug = (s) => {
       return fetch(`/api/move/${s}`, requestOptions).then((response) =>
-        response.json().catch((err) => err.json())
+        !response.ok ? null : response.json().catch((err) => null)
       );
     };
 
-    return Promise.all(slugs.map(fetchForSlug)).then(setResults);
-  };
+    return Promise.all(slugs.map(fetchForSlug))
+      .then((results) => {
+        setSuccess(
+          !!(
+            results &&
+            isArray(results) &&
+            results.filter((r) => !!r).length === slugs.length
+          )
+        );
+      })
+      .finally(() => setLoading(false));
+  }, [apiKey]);
 
-  return { updateHistory, results };
+  return [success, loading, updateHistory];
 };

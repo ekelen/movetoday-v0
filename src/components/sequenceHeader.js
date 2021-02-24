@@ -1,5 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useFetchForHistory } from "../../state/history";
+import { Save, Check, X } from "react-feather";
 const windowCheck = () => typeof window !== "undefined";
 const LS_ACCESS = "LS_ACCESS";
 const LS_APIKEY = "LS_API_KEY";
@@ -28,19 +29,23 @@ const SequenceHeader = ({
   ...props
 }) => {
   const [apiKey, setApiKey] = useState("");
-  // const [showForm, setShowForm] = useState(false);
-  const { response, updateHistory } = useFetchForHistory(apiKey, [
+  const [showForm, setShowForm] = useState(false);
+  const [success, loading, updateHistory] = useFetchForHistory(apiKey, [
     ...Object.keys(movesProgress),
   ]);
 
-  // const onEnterKey = (e) => {
-  //   setApiKey(e.target.value);
-  // };
+  const onEnterKey = (e) => {
+    setApiKey(e.target.value);
+  };
 
-  // const onMakeRequest = () => {
-  //   console.log("onMakeRequest");
-  //   updateHistory();
-  // };
+  const onMakeRequest = () => {
+    console.log("onMakeRequest");
+    updateHistory();
+  };
+
+  useEffect(() => {
+    console.log(`success:`, success);
+  }, [success]);
 
   return (
     <Fragment>
@@ -52,25 +57,23 @@ const SequenceHeader = ({
           </p>
           clear all progress
         </Button>
-        {/* {(!showForm || !loading) && (
-          <Button
-            onClick={() => (!authed ? setShowForm(true) : onMakeRequest())}
-          >
+        {!showForm && (
+          <Button onClick={() => setShowForm(true)}>
             <p className="relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1">
               <span className="h-full align-middle">
                 <Save size={16} />
               </span>
             </p>
-            {authed ? "save" : "login + save"}
+            {"save"}
           </Button>
-        )} */}
-        {/* {!authed && showForm && (
+        )}
+        {showForm && (
           <div className="flex items-center">
             <input
               id="api-key"
               type="text"
               aria-label="API Key"
-              placeholder="Enter API key"
+              placeholder={"Enter API key"}
               onChange={onEnterKey}
               value={apiKey}
               className={`w-min mr-2 text-xs py-1 px-1 rounded-sm flex items-center self-bottom focus:outline-none focus:ring-2 focus:ring-yellow-300 text-primary-100 placeholder-gray-100 bg-primary-700 hover:bg-primary-600`}
@@ -81,6 +84,13 @@ const SequenceHeader = ({
             >
               <Check size={18} /> <p className="ml-1">Submit</p>
             </button>
+            <p>
+              {success === null
+                ? "Enter API key"
+                : success === false
+                ? "Error saving. Check API key."
+                : "Success."}
+            </p>
             <button
               className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
               onClick={() => setShowForm(false)}
@@ -89,7 +99,7 @@ const SequenceHeader = ({
               <p className="ml-1">Cancel</p>
             </button>
           </div>
-        )} */}
+        )}
         <div className="flex-auto ml-auto mr-0 flex justify-end text-primary-300 border-2 hidden">
           {/* <p>{error && `Error: ${error}`}</p>
           <p className="font-mono">{`Loading: ${loading}`}</p> */}
