@@ -1,12 +1,8 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
+import { Check, Save, X } from "react-feather";
 import { useFetchForHistory } from "../../state/history";
-import { Save, Check, X } from "react-feather";
-const windowCheck = () => typeof window !== "undefined";
-const LS_ACCESS = "LS_ACCESS";
-const LS_APIKEY = "LS_API_KEY";
 
-export const EDITOR = "EDITOR";
-export const READER = "READER";
+const LS_APIKEY = "LS_API_KEY";
 
 const Button = ({ onClick, disabled, children, ...props }) => {
   return (
@@ -33,19 +29,15 @@ const SequenceHeader = ({
   const [success, loading, updateHistory] = useFetchForHistory(apiKey, [
     ...Object.keys(movesProgress),
   ]);
+  const saveDisabled = process.env.NODE_ENV !== "development";
 
   const onEnterKey = (e) => {
     setApiKey(e.target.value);
   };
 
   const onMakeRequest = () => {
-    console.log("onMakeRequest");
     updateHistory();
   };
-
-  useEffect(() => {
-    console.log(`success:`, success);
-  }, [success]);
 
   return (
     <Fragment>
@@ -58,8 +50,14 @@ const SequenceHeader = ({
           clear all progress
         </Button>
         {!showForm && (
-          <Button onClick={() => setShowForm(true)}>
-            <p className="relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1">
+          <Button onClick={() => setShowForm(true)} disabled={saveDisabled}>
+            <p
+              className={
+                process.env.NODE_ENV !== "development"
+                  ? "relative font-mono mr-2 rounded-full bg-black text-primary-500 h-6 w-6 px-1 py-1"
+                  : "relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1"
+              }
+            >
               <span className="h-full align-middle">
                 <Save size={16} />
               </span>
@@ -68,7 +66,7 @@ const SequenceHeader = ({
           </Button>
         )}
         {showForm && (
-          <div className="flex items-center">
+          <div className="flex items-center relative">
             <input
               id="api-key"
               type="text"
@@ -78,19 +76,20 @@ const SequenceHeader = ({
               value={apiKey}
               className={`w-min mr-2 text-xs py-1 px-1 rounded-sm flex items-center self-bottom focus:outline-none focus:ring-2 focus:ring-yellow-300 text-primary-100 placeholder-gray-100 bg-primary-700 hover:bg-primary-600`}
             ></input>
-            <button
-              className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
-              onClick={onMakeRequest}
-            >
-              <Check size={18} /> <p className="ml-1">Submit</p>
-            </button>
-            <p>
+            <p className="absolute text-xs -bottom-5">
               {success === null
                 ? "Enter API key"
                 : success === false
                 ? "Error saving. Check API key."
                 : "Success."}
             </p>
+            <button
+              className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
+              onClick={onMakeRequest}
+            >
+              <Check size={18} /> <p className="ml-1">Submit</p>
+            </button>
+
             <button
               className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
               onClick={() => setShowForm(false)}

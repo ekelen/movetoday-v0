@@ -22,6 +22,6 @@ const getDaysDiff = (toDate) =>
   );
 
 const formatter = (timeDiff) =>
-  timeDiff === 0 ? "today" : `${timeDiff} days ago`;
+  timeDiff === 0 ? "today" : `${timeDiff} ${timeDiff > 1 ? "days" : "day"} ago`;
 
 export const daysAgo = (toDate) => formatter(getDaysDiff(toDate));

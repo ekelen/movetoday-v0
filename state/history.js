@@ -6,7 +6,6 @@ export const useFetchForHistory = (apiKey, slugs) => {
   const [success, setSuccess] = useState(null);
 
   const updateHistory = useCallback(() => {
-    console.log(`calling updateHistory with key ${apiKey}`);
     setSuccess(null);
     setLoading(true);
     var myHeaders = new Headers();
@@ -21,7 +20,7 @@ export const useFetchForHistory = (apiKey, slugs) => {
 
     const fetchForSlug = (s) => {
       return fetch(`/api/move/${s}`, requestOptions).then((response) =>
-        !response.ok ? null : response.json().catch((err) => null)
+        !response.ok ? null : response.json().catch((_) => null)
       );
     };
 
