@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import { Check, Save, X } from "react-feather";
+
 import { useFetchForHistory } from "../../state/history";
 
 const LS_APIKEY = "LS_API_KEY";
@@ -50,12 +51,16 @@ const SequenceHeader = ({
           clear all progress
         </Button>
         {!showForm && (
-          <Button onClick={() => setShowForm(true)} disabled={saveDisabled}>
+          <Button
+            onClick={() => setShowForm(true)}
+            // disabled={saveDisabled}
+          >
             <p
               className={
-                process.env.NODE_ENV !== "development"
-                  ? "relative font-mono mr-2 rounded-full bg-black text-primary-500 h-6 w-6 px-1 py-1"
-                  : "relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1"
+                "relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1"
+                // process.env.NODE_ENV !== "development"
+                //   ? "relative font-mono mr-2 rounded-full bg-black text-primary-500 h-6 w-6 px-1 py-1"
+                //   : "relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1"
               }
             >
               <span className="h-full align-middle">
