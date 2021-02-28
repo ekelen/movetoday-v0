@@ -8,6 +8,7 @@ import Header from "../src/components/header";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
 import { defaults } from "../src/data/meta.json";
+import { setLsSafe } from "../src/util/util";
 import {
   INITIAL_STATE,
   moveReducer,
@@ -35,7 +36,7 @@ const Home = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (page) localStorage.setItem(LS_PAGE, page);
+    if (page) setLsSafe(LS_PAGE, page);
   }, [page]);
 
   const selectedMoves = useMemo(() => {

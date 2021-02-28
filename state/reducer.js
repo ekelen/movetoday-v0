@@ -19,7 +19,12 @@ import {
   ZERO_ONE_PROGRESS,
 } from "./actionTypes";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { safeJsonParse, safeJsonStringify } from "../src/util/util";
+import {
+  safeJsonParse,
+  safeJsonStringify,
+  setLsObj,
+  setLsSafe,
+} from "../src/util/util";
 
 export const INITIAL_STATE = {
   moveListStatic: [],
@@ -125,7 +130,7 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
   useEffect(() => {
     hasCheckedLsProgress &&
       state.movesProgress &&
-      localStorage.setItem(LS_PROGRESS, safeJsonStringify(state.movesProgress));
+      setLsObj(LS_PROGRESS, state.movesProgress);
   }, [hasCheckedLsProgress, state.movesProgress]);
 
   return [state, enhancedMoveListDispatch];
@@ -141,10 +146,8 @@ const getMovelistStaticFromAPI = (dispatch) => {
       return res.json();
     })
     .then((json) => {
-      const { moveList: moveListStatic } = json;
-
-      windowCheck() &&
-        localStorage.setItem(LS_STATIC, JSON.stringify({ moveListStatic }));
+      const { moveList: moveListStatic = [] } = json;
+      setLsObj(LS_STATIC, { moveListStatic });
       dispatch({ type: SET_ALL_STATIC, payload: { moveListStatic } });
       dispatch({ type: SET_FETCH_SUCCESS });
     })
@@ -174,6 +177,7 @@ const getMovelistStaticFromAPI = (dispatch) => {
 };
 
 export const setInitialData = (dispatch) => {
+  dispatch({ type: "TEST" });
   if (
     !windowCheck() ||
     (windowCheck() && localStorage.getItem(LS_STATIC) === null)

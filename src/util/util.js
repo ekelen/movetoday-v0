@@ -1,18 +1,36 @@
-export const safeJsonParse = (dataString, fallback = {}) => {
+import { toNumber, isPlainObject, isNull, isNumber, isArray } from "lodash";
+
+// Return only plain object or null
+export const safeJsonParse = (dataString = null) => {
   try {
-    return JSON.parse(dataString);
+    const data = JSON.parse(dataString || null);
+    return isPlainObject(data) || isNull(data) ? data : null;
   } catch (error) {
-    return fallback;
+    return null;
   }
 };
 
-export const safeJsonStringify = (dataObj, fallback = "") => {
+// Return null for all inputs except serialized valid plain object
+export const safeJsonStringify = (dataObj) => {
+  if (!dataObj || !isPlainObject(dataObj)) return null;
   try {
     return JSON.stringify(dataObj, 2, null);
   } catch (error) {
-    return fallback;
+    return null;
   }
 };
+
+const setLs = (transformer = null) => (key, data) => {
+  const windowCheck = typeof window !== "undefined";
+  if (!windowCheck) {
+    console.warn(`window object not available`);
+  } else {
+    localStorage.setItem(key, !transformer ? data : transformer(data));
+  }
+};
+
+export const setLsObj = setLs(safeJsonStringify);
+export const setLsSafe = setLs();
 
 const getDaysDiff = (toDate) =>
   Math.ceil(
