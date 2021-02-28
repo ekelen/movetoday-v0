@@ -25,7 +25,11 @@ const setLs = (transformer = null) => (key, data) => {
   if (!windowCheck) {
     console.warn(`window object not available`);
   } else {
-    localStorage.setItem(key, !transformer ? data : transformer(data));
+    try {
+      localStorage.setItem(key, !transformer ? data : transformer(data));
+    } catch (error) {
+      console.warn(`Could not set ${key}: ${error.message}`);
+    }
   }
 };
 
