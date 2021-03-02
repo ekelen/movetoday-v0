@@ -36,6 +36,19 @@ const setLs = (transformer = null) => (key, data) => {
 export const setLsObj = setLs(safeJsonStringify);
 export const setLsSafe = setLs();
 
+const getLs = (key) => {
+  const windowCheck = typeof window !== "undefined";
+  return windowCheck ? localStorage.getItem(key) : null;
+};
+
+const getLsItemWithParser = (parser) => (key) => {
+  return parser(getLs(key));
+};
+
+export const getLsSafe = getLs;
+export const getLsObj = getLsItemWithParser(safeJsonParse);
+export const getLsNumeric = getLsItemWithParser(toNumber);
+
 const getDaysDiff = (toDate) =>
   Math.ceil(
     (new Date(new Date().toLocaleDateString()).getTime() -

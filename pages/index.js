@@ -8,7 +8,7 @@ import Header from "../src/components/header";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
 import { defaults } from "../src/data/meta.json";
-import { setLsSafe } from "../src/util/util";
+import { getLsSafe, setLsSafe } from "../src/util/util";
 import {
   INITIAL_STATE,
   moveReducer,
@@ -23,16 +23,13 @@ const LS_PAGE = "LS_MOVETODAY_PAGE";
 const EDIT = "EDIT";
 const SEQUENCE = "SEQUENCE";
 
-const windowCheck = () => typeof window !== "undefined";
-
 const Home = ({ ...props }) => {
   const [page, setPage] = useState(null);
   const [state, dispatch] = useMoveListThunkReducer(moveReducer, INITIAL_STATE);
 
   useEffect(() => {
     dispatch(setInitialData);
-    if (page === null)
-      setPage((windowCheck() && localStorage.getItem(LS_PAGE)) || EDIT);
+    if (page === null) setPage(getLsSafe(LS_PAGE) || EDIT);
   }, []);
 
   useEffect(() => {
@@ -40,6 +37,7 @@ const Home = ({ ...props }) => {
   }, [page]);
 
   const selectedMoves = useMemo(() => {
+    console.log("Setting selected moves");
     const { moveListStatic } = state;
     const selected = moveListStatic.filter((m) =>
       Object.keys(state.movesProgress).includes(m.slug)
@@ -63,7 +61,7 @@ const Home = ({ ...props }) => {
     [dispatch]
   );
 
-  const onSelectRandom = () => {
+  const onSelectRandom = useCallback(() => {
     dispatch(
       replaceAllSelected(
         sampleSize(
@@ -72,15 +70,15 @@ const Home = ({ ...props }) => {
         )
       )
     );
-  };
+  }, [state.moveListStatic, dispatch]);
 
   const onClearSelected = useCallback(() => {
     dispatch(replaceAllSelected([]));
   }, [dispatch]);
 
-  const onSelectDefault = () => {
+  const onSelectDefault = useCallback(() => {
     dispatch(replaceAllSelected([...defaults]));
-  };
+  }, [dispatch]);
 
   // =============== control current page
 
@@ -126,7 +124,8 @@ const Home = ({ ...props }) => {
             </button>
           </nav>
 
-          {state.fetchError.isError && <p>{state.fetchError.msg}</p>}
+          {state.errorMessage && <p>{state.errorMessage}</p>}
+          {state.loading && <p>Loading...</p>}
           <div className="ml-auto flex items-center text-secondaryAction-800 text-sm font-bold ">
             <GitHub size={16} />
             <p className="ml-2 ">

@@ -7,8 +7,10 @@ import {
   fromPairs,
 } from "lodash";
 import {
+  RECEIVED_SERVER_RESPONSE,
   REMOVE_ONE_PROGRESS,
   REPLACE_ALL_PROGRESS,
+  SENT_SERVER_REQUEST,
   SET_ALL_PROGRESS,
   SET_ALL_STATIC,
   SET_FETCH_ERROR,
@@ -20,6 +22,7 @@ import {
 } from "./actionTypes";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import {
+  getLsObj,
   safeJsonParse,
   safeJsonStringify,
   setLsObj,
@@ -29,8 +32,9 @@ import {
 export const INITIAL_STATE = {
   moveListStatic: [],
   movesProgress: {},
-  fetchError: { isError: false },
+  fetchError: null,
   loading: false,
+  errorMessage: "",
 };
 
 export const LS_STATIC = "LS_STATIC";
@@ -39,6 +43,17 @@ export const LS_PROGRESS = "LS_PROGRESS";
 export const moveReducer = (state, action = { type: "", payload: {} }) => {
   const { type, payload } = action;
   switch (type) {
+    case SET_ALL_STATIC: {
+      const { moveListStatic } = payload;
+      return { ...state, moveListStatic: cloneDeep(moveListStatic) };
+    }
+    case SENT_SERVER_REQUEST: {
+      return { ...state, loading: true };
+    }
+    case RECEIVED_SERVER_RESPONSE: {
+      const { errorMessage = "", moveListStatic = null } = payload;
+      return { ...state, loading: false, moveListStatic, errorMessage };
+    }
     case ZERO_ONE_PROGRESS:
     case SET_ONE_PROGRESS: {
       const { slug, setsDone = 0 } = payload;
@@ -71,33 +86,10 @@ export const moveReducer = (state, action = { type: "", payload: {} }) => {
         movesProgress: fromPairs(selectedSlugs.map((slug) => [slug, 0])),
       };
     }
-
-    case SET_ALL_STATIC: {
-      const { moveListStatic } = payload;
-      return { ...state, moveListStatic: cloneDeep(moveListStatic) };
-    }
-
-    case SET_LOADING: {
-      const { loading = true } = payload;
-      return { ...state, loading };
-    }
-    case SET_FETCH_ERROR: {
-      const { isError = true, status = 500, statusText = "", msg } =
-        payload || {};
-      const fetchError = isError
-        ? { isError, status, statusText, msg }
-        : { isError };
-      return { ...state, fetchError };
-    }
-    case SET_FETCH_ERROR_FALSE: {
-      return { ...state, fetchError: { isError: false } };
-    }
     default:
       return state;
   }
 };
-
-const windowCheck = () => typeof window !== "undefined";
 
 export const useMoveListThunkReducer = (reducer, initialData) => {
   const [state, dispatch] = useReducer(reducer, initialData);
@@ -117,11 +109,11 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
   );
 
   useEffect(() => {
-    if (!hasCheckedLsProgress && localStorage.getItem(LS_PROGRESS) !== null)
+    if (!hasCheckedLsProgress && getLsObj(LS_PROGRESS) !== null)
       enhancedMoveListDispatch({
         type: SET_ALL_PROGRESS,
         payload: {
-          movesProgress: JSON.parse(localStorage.getItem(LS_PROGRESS)),
+          movesProgress: getLsObj(LS_PROGRESS),
         },
       });
     setHasCheckedLsProgress(true);
@@ -137,7 +129,7 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
 };
 
 const getMovelistStaticFromAPI = (dispatch) => {
-  dispatch({ type: SET_LOADING, payload: { loading: true } });
+  dispatch({ type: SENT_SERVER_REQUEST });
   fetch("/api/move")
     .then((res) => {
       if (!res.ok) {
@@ -146,46 +138,39 @@ const getMovelistStaticFromAPI = (dispatch) => {
       return res.json();
     })
     .then((json) => {
-      const { moveList: moveListStatic = [] } = json;
+      const { moveList: moveListStatic } = json;
+      console.log(`moveListStatic:`, moveListStatic);
       setLsObj(LS_STATIC, { moveListStatic });
-      dispatch({ type: SET_ALL_STATIC, payload: { moveListStatic } });
-      dispatch({ type: SET_FETCH_SUCCESS });
+      dispatch({ type: RECEIVED_SERVER_RESPONSE, payload: { moveListStatic } });
     })
     .catch((error) => {
+      const { status, statusText } = error;
       if (error instanceof Error || !error.json) {
         dispatch({
-          type: SET_FETCH_ERROR,
+          type: RECEIVED_SERVER_RESPONSE,
+          payload: { errorMessage: "500 Unknown Error" },
         });
-        return;
       } else {
-        return error.json().then((responseJson) => {
+        error.json().then((responseJson) =>
           dispatch({
-            type: SET_FETCH_ERROR,
+            type: RECEIVED_SERVER_RESPONSE,
             payload: {
-              statusText: error.statusText,
-              status: error.status,
-              isError: true,
-              message: responseJson.msg,
+              errorMessage: `${status} ${statusText} ${
+                responseJson.msg && " :: ".concat(responseJson.msg)
+              }`,
             },
-          });
-        });
+          })
+        );
       }
-    })
-    .finally(() => {
-      dispatch({ type: SET_LOADING, payload: { loading: false } });
     });
 };
 
 export const setInitialData = (dispatch) => {
-  dispatch({ type: "TEST" });
-  if (
-    !windowCheck() ||
-    (windowCheck() && localStorage.getItem(LS_STATIC) === null)
-  ) {
-    getMovelistStaticFromAPI(dispatch);
-  } else if (windowCheck() && localStorage.getItem(LS_STATIC)) {
-    const { moveListStatic = [] } = JSON.parse(localStorage.getItem(LS_STATIC));
+  const { moveListStatic = null } = getLsObj(LS_STATIC) || {};
+  if (moveListStatic) {
     dispatch({ type: SET_ALL_STATIC, payload: { moveListStatic } });
+  } else {
+    return getMovelistStaticFromAPI(dispatch);
   }
 };
 
