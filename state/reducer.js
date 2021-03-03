@@ -1,12 +1,6 @@
 import { cloneDeep, fromPairs, isFunction, mapValues, omit } from "lodash";
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
-import { getLsObj, setLsObj } from "../src/util/util";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import { getLsNumeric, getLsObj, setLsObj, setLsSafe } from "../src/util/util";
 import {
   RECEIVED_SERVER_RESPONSE,
   REMOVE_ONE_PROGRESS,
@@ -29,6 +23,7 @@ export const INITIAL_STATE = {
 
 export const LS_STATIC = "LS_STATIC";
 export const LS_PROGRESS = "LS_PROGRESS";
+export const LS_EXPIRY = "LS_EXPIRY";
 
 export const moveReducer = (state, action = { type: "", payload: {} }) => {
   const { type, payload } = action;
@@ -111,6 +106,7 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
   }, []);
 
   useEffect(() => {
+    // Update localstorage whenever progress is updated
     hasCheckedLsProgress &&
       state.movesProgress &&
       setLsObj(LS_PROGRESS, state.movesProgress);
@@ -120,6 +116,7 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
 };
 
 const getMovelistStaticFromAPI = (dispatch) => {
+  console.log(`Getting movelist from server`);
   dispatch({ type: SENT_SERVER_REQUEST });
   fetch("/api/move")
     .then((res) => {
@@ -130,8 +127,8 @@ const getMovelistStaticFromAPI = (dispatch) => {
     })
     .then((json) => {
       const { moveList: moveListStatic } = json;
-      console.log(`moveListStatic:`, moveListStatic);
       setLsObj(LS_STATIC, { moveListStatic });
+      setLsSafe(LS_EXPIRY, new Date().getTime() + 1000 * 60);
       dispatch({ type: RECEIVED_SERVER_RESPONSE, payload: { moveListStatic } });
     })
     .catch((error) => {
@@ -158,7 +155,9 @@ const getMovelistStaticFromAPI = (dispatch) => {
 
 export const setInitialData = (dispatch) => {
   const { moveListStatic = null } = getLsObj(LS_STATIC) || {};
-  if (moveListStatic) {
+  const expiredLocalStorage = getLsNumeric(LS_EXPIRY) < new Date().getTime();
+  if (moveListStatic && !expiredLocalStorage) {
+    console.log(`Getting movelist from localStorage`);
     dispatch({ type: SET_ALL_STATIC, payload: { moveListStatic } });
   } else {
     return getMovelistStaticFromAPI(dispatch);
