@@ -1,5 +1,11 @@
 import { cloneDeep, fromPairs, isFunction, mapValues, omit } from "lodash";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { getLsObj, setLsObj } from "../src/util/util";
 import {
   RECEIVED_SERVER_RESPONSE,
@@ -93,6 +99,7 @@ export const useMoveListThunkReducer = (reducer, initialData) => {
   );
 
   useEffect(() => {
+    // Get sequence progress from localStorage if it exists (no validation)
     if (!hasCheckedLsProgress && getLsObj(LS_PROGRESS) !== null)
       enhancedMoveListDispatch({
         type: SET_ALL_PROGRESS,

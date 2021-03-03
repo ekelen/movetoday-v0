@@ -5,8 +5,11 @@ import { GitHub } from "react-feather";
 // import { connectToCollection } from "../mongo";
 import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
+import Move from "../src/components/move";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
+import SequenceHeader from "../src/components/sequenceHeader";
+import SequenceMove from "../src/components/sequenceMove";
 import { defaults } from "../src/data/meta.json";
 import { getLsSafe, setLsSafe } from "../src/util/util";
 import {
@@ -149,7 +152,15 @@ const Home = ({ ...props }) => {
               onClearSelected={onClearSelected}
               onFinalize={onFinalize}
               toggleOneSelected={onSetOneSelected}
-              selectedMoves={selectedMoves}
+              nSelectedMoves={selectedMoves.length}
+              selectedMovesDisplay={selectedMoves.map((m) => (
+                <Move
+                  key={`${m.name}-${m.idx}`}
+                  onClick={onSetOneSelected}
+                  move={m}
+                  selected={true}
+                />
+              ))}
             />
           </div>
         </Fragment>
@@ -158,18 +169,30 @@ const Home = ({ ...props }) => {
         <Fragment>
           {state.moveListStatic.length > 0 ? (
             <SequenceDisplay
-              onEdit={onEdit}
-              selectedMoves={selectedMoves}
-              movesProgress={state.movesProgress}
-              toggleOneSelected={onSetOneSelected}
-              setOneProgress={onSetOneProgress}
-              moveListStatic={state.moveListStatic}
-              zeroOneProgress={onSetOneProgress}
-              zeroAllProgress={() =>
-                Object.keys(state.movesProgress).forEach((slug) =>
-                  onSetOneProgress(slug, 0)
-                )
+              sequenceHeader={
+                <SequenceHeader
+                  onEdit={onEdit}
+                  zeroAllProgress={() =>
+                    Object.keys(state.movesProgress).forEach((slug) =>
+                      onSetOneProgress(slug, 0)
+                    )
+                  }
+                  movesProgress={state.movesProgress}
+                  moveListStatic={state.moveListStatic}
+                  selectedMoves={selectedMoves}
+                />
               }
+              sequenceMoves={selectedMoves.map((move) => {
+                return (
+                  <SequenceMove
+                    key={`${move.name}-${move.idx}`}
+                    move={move}
+                    setsDone={state.movesProgress[move.slug]}
+                    toggleOneSelected={onSetOneSelected}
+                    setOneProgress={onSetOneProgress}
+                  />
+                );
+              })}
             ></SequenceDisplay>
           ) : (
             "No moves in state yet..."
