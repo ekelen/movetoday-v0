@@ -1,11 +1,6 @@
-import {
-  cloneDeep,
-  isFunction,
-  omit,
-  mapValues,
-  toInteger,
-  fromPairs,
-} from "lodash";
+import { cloneDeep, fromPairs, isFunction, mapValues, omit } from "lodash";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import { getLsObj, setLsObj } from "../src/util/util";
 import {
   RECEIVED_SERVER_RESPONSE,
   REMOVE_ONE_PROGRESS,
@@ -13,21 +8,10 @@ import {
   SENT_SERVER_REQUEST,
   SET_ALL_PROGRESS,
   SET_ALL_STATIC,
-  SET_FETCH_ERROR,
-  SET_FETCH_ERROR_FALSE,
-  SET_LOADING,
   SET_ONE_PROGRESS,
   ZERO_ALL_CURRENT_IN_PROGRESS,
   ZERO_ONE_PROGRESS,
 } from "./actionTypes";
-import { useCallback, useEffect, useReducer, useState } from "react";
-import {
-  getLsObj,
-  safeJsonParse,
-  safeJsonStringify,
-  setLsObj,
-  setLsSafe,
-} from "../src/util/util";
 
 export const INITIAL_STATE = {
   moveListStatic: [],

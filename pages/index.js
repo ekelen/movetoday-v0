@@ -37,7 +37,6 @@ const Home = ({ ...props }) => {
   }, [page]);
 
   const selectedMoves = useMemo(() => {
-    console.log("Setting selected moves");
     const { moveListStatic } = state;
     const selected = moveListStatic.filter((m) =>
       Object.keys(state.movesProgress).includes(m.slug)
