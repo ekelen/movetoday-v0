@@ -5,9 +5,13 @@ import { GitHub } from "react-feather";
 // import { connectToCollection } from "../mongo";
 import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
+import Move from "../src/components/move";
 import SelectedMoves from "../src/components/selectedMoves";
 import SequenceDisplay from "../src/components/sequenceDisplay";
+import SequenceHeader from "../src/components/sequenceHeader";
+import SequenceMove from "../src/components/sequenceMove";
 import { defaults } from "../src/data/meta.json";
+import { getLsSafe, setLsSafe } from "../src/util/util";
 import {
   INITIAL_STATE,
   moveReducer,
@@ -22,20 +26,17 @@ const LS_PAGE = "LS_MOVETODAY_PAGE";
 const EDIT = "EDIT";
 const SEQUENCE = "SEQUENCE";
 
-const windowCheck = () => typeof window !== "undefined";
-
 const Home = ({ ...props }) => {
   const [page, setPage] = useState(null);
   const [state, dispatch] = useMoveListThunkReducer(moveReducer, INITIAL_STATE);
 
   useEffect(() => {
     dispatch(setInitialData);
-    if (page === null)
-      setPage((windowCheck() && localStorage.getItem(LS_PAGE)) || EDIT);
+    if (page === null) setPage(getLsSafe(LS_PAGE) || EDIT);
   }, []);
 
   useEffect(() => {
-    if (page) localStorage.setItem(LS_PAGE, page);
+    if (page) setLsSafe(LS_PAGE, page);
   }, [page]);
 
   const selectedMoves = useMemo(() => {
@@ -62,7 +63,7 @@ const Home = ({ ...props }) => {
     [dispatch]
   );
 
-  const onSelectRandom = () => {
+  const onSelectRandom = useCallback(() => {
     dispatch(
       replaceAllSelected(
         sampleSize(
@@ -71,15 +72,15 @@ const Home = ({ ...props }) => {
         )
       )
     );
-  };
+  }, [state.moveListStatic, dispatch]);
 
   const onClearSelected = useCallback(() => {
     dispatch(replaceAllSelected([]));
   }, [dispatch]);
 
-  const onSelectDefault = () => {
+  const onSelectDefault = useCallback(() => {
     dispatch(replaceAllSelected([...defaults]));
-  };
+  }, [dispatch]);
 
   // =============== control current page
 
@@ -125,7 +126,8 @@ const Home = ({ ...props }) => {
             </button>
           </nav>
 
-          {state.fetchError.isError && <p>{state.fetchError.msg}</p>}
+          {state.errorMessage && <p>{state.errorMessage}</p>}
+          {state.loading && <p>Loading...</p>}
           <div className="ml-auto flex items-center text-secondaryAction-800 text-sm font-bold ">
             <GitHub size={16} />
             <p className="ml-2 ">
@@ -150,7 +152,15 @@ const Home = ({ ...props }) => {
               onClearSelected={onClearSelected}
               onFinalize={onFinalize}
               toggleOneSelected={onSetOneSelected}
-              selectedMoves={selectedMoves}
+              nSelectedMoves={selectedMoves.length}
+              selectedMovesDisplay={selectedMoves.map((m) => (
+                <Move
+                  key={`${m.name}-${m.idx}`}
+                  onClick={onSetOneSelected}
+                  move={m}
+                  selected={true}
+                />
+              ))}
             />
           </div>
         </Fragment>
@@ -159,18 +169,30 @@ const Home = ({ ...props }) => {
         <Fragment>
           {state.moveListStatic.length > 0 ? (
             <SequenceDisplay
-              onEdit={onEdit}
-              selectedMoves={selectedMoves}
-              movesProgress={state.movesProgress}
-              toggleOneSelected={onSetOneSelected}
-              setOneProgress={onSetOneProgress}
-              moveListStatic={state.moveListStatic}
-              zeroOneProgress={onSetOneProgress}
-              zeroAllProgress={() =>
-                Object.keys(state.movesProgress).forEach((slug) =>
-                  onSetOneProgress(slug, 0)
-                )
+              sequenceHeader={
+                <SequenceHeader
+                  onEdit={onEdit}
+                  zeroAllProgress={() =>
+                    Object.keys(state.movesProgress).forEach((slug) =>
+                      onSetOneProgress(slug, 0)
+                    )
+                  }
+                  movesProgress={state.movesProgress}
+                  moveListStatic={state.moveListStatic}
+                  selectedMoves={selectedMoves}
+                />
               }
+              sequenceMoves={selectedMoves.map((move) => {
+                return (
+                  <SequenceMove
+                    key={`${move.name}-${move.idx}`}
+                    move={move}
+                    setsDone={state.movesProgress[move.slug]}
+                    toggleOneSelected={onSetOneSelected}
+                    setOneProgress={onSetOneProgress}
+                  />
+                );
+              })}
             ></SequenceDisplay>
           ) : (
             "No moves in state yet..."
