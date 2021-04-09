@@ -18,7 +18,7 @@ const SaveForm = ({ children, ...props }) => {
 
   const formCn = "flex items-center relative";
   const formCnDisabled =
-    "flex items-center relative opacity-30 cursor-default pointer-events-none";
+    "flex items-center relative opacity-60 cursor-default pointer-events-none";
 
   return (
     <div className={loading ? formCnDisabled : formCn}>
