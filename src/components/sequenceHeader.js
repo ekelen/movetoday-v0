@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { Save } from "react-feather";
+import { Save, RotateCcw } from "react-feather";
 import SaveForm from "./saveForm";
 
 const Button = ({ onClick, disabled, children, ...props }) => {
@@ -23,15 +23,16 @@ const SequenceHeader = ({
   ...props
 }) => {
   const [showForm, setShowForm] = useState(false);
+
   return (
     <Fragment>
       <div className="relative w-full p-2 flex items-center space-x-2">
-        <Button onClick={onEdit}>◀ Back</Button>
-        <Button onClick={zeroAllProgress}>
-          <p className="font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6">
-            0
-          </p>
-          clear all progress
+        <Button onClick={onEdit} disabled={showForm}>
+          ◀ Back
+        </Button>
+        <Button onClick={zeroAllProgress} disabled={showForm}>
+          <RotateCcw size={16} />{" "}
+          <span className="ml-2">clear all progress</span>
         </Button>
 
         {showForm ? (
@@ -41,16 +42,8 @@ const SequenceHeader = ({
           />
         ) : (
           <Button onClick={() => setShowForm(true)}>
-            <p
-              className={
-                "relative font-mono mr-2 rounded-full bg-black text-primaryAction-600 h-6 w-6 px-1 py-1"
-              }
-            >
-              <span className="h-full align-middle">
-                <Save size={16} />
-              </span>
-            </p>
-            {"save"}
+            <Save size={16} />
+            <span className="ml-2">Save</span>
           </Button>
         )}
       </div>

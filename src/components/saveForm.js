@@ -46,13 +46,13 @@ const SaveForm = ({ children, ...props }) => {
       <button
         onClick={onMakeRequest}
         disabled={loading}
-        className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
+        className="flex items-center text-gray-800 bg-primaryAction-600 rounded-lg py-1 px-2 text-xs mr-2 font-bold hover:bg-primaryAction-500"
       >
         <Check size={18} /> <p className="ml-1">Submit</p>
       </button>
 
       <button
-        className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold"
+        className="flex items-center bg-primary-800 rounded-lg py-1 px-2 text-xs mr-2 font-bold hover:bg-primary-700"
         onClick={props.onCancel}
         disabled={loading}
       >
