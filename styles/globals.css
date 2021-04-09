@@ -23,6 +23,6 @@ a {
   }
 
   .tag {
-    @apply text-primary-200 bg-primary-800 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
+    @apply text-primary-200 bg-primary-900 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
   }
 }
