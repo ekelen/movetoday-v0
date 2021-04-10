@@ -1,8 +1,6 @@
 import { sampleSize } from "lodash";
 import Head from "next/head";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
-import { GitHub } from "react-feather";
-// import { connectToCollection } from "../mongo";
 import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
 import Move from "../src/components/move";
