@@ -7,6 +7,17 @@ module.exports = {
   },
   darkMode: "class", // or 'media' or 'class'
   theme: {
+    minHeight: {
+      0: "0",
+
+      "1/4": "25%",
+
+      "1/2": "50%",
+
+      "3/4": "75%",
+
+      full: "100%",
+    },
     extend: {
       gridTemplateRows: {
         moveHeight: "repeat(3, 2.25rem)",
@@ -17,13 +28,13 @@ module.exports = {
       colors: {
         // fyi
         //
-        // amber: colors.amber,
-        // cyan: colors.cyan,
+        amber: colors.amber,
+        cyan: colors.cyan,
         // emerald: colors.emerald,
         // fuchsia: colors.fuchsia,
         // lightBlue: colors.lightBlue,
         // lime: colors.lime,
-        // orange: colors.orange,
+        orange: colors.orange,
         // rose: colors.rose,
         // teal: colors.teal,
         // violet: colors.violet,

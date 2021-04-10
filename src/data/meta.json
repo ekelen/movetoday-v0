@@ -14,5 +14,9 @@
     "handstand_shrugs",
     "baddha_konasana_leans"
   ],
-  "foci": ["warmup", "flow", "core", "mobility", "handstand", "challenge pose"]
+  "foci": ["warmup", "flow", "core", "mobility", "handstand", "challenge pose"],
+  "pages": {
+    "EDIT": "EDIT",
+    "SEQUENCE": "SEQUENCE"
+  }
 }

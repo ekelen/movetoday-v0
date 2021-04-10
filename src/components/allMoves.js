@@ -103,7 +103,7 @@ const AllMoves = ({
           reset
         </button>
       </div>
-      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 w-screen relative overflow-x-scroll scrollbar scrollbar-thumb-primary-800 scrollbar-track-primary-900 p-5 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300">
+      <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 relative overflow-x-scroll scrollbar-thin scrollbar-thumb-primary-700 scrollbar-track-primary-900 p-5 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300">
         {moveListStatic
           .filter((mv) => {
             const filteredIn =

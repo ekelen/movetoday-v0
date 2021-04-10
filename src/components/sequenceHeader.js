@@ -6,7 +6,7 @@ const Button = ({ onClick, disabled, children, ...props }) => {
   return (
     <button
       onClick={onClick}
-      className="btn-pill self-center"
+      className="btn-pill self-center mb-2"
       disabled={disabled}
     >
       {children}
@@ -25,29 +25,26 @@ const SequenceHeader = ({
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <Fragment>
-      <div className="relative w-full p-2 flex items-center space-x-2">
-        <Button onClick={onEdit} disabled={showForm}>
-          ◀ Back
-        </Button>
-        <Button onClick={zeroAllProgress} disabled={showForm}>
-          <RotateCcw size={16} />{" "}
-          <span className="ml-2">clear all progress</span>
-        </Button>
+    <div className="flex items-center p-2 relative space-x-2 w-full overflow-x-auto">
+      <Button onClick={onEdit} disabled={showForm}>
+        ◀ Back
+      </Button>
+      <Button onClick={zeroAllProgress} disabled={showForm}>
+        <RotateCcw size={16} /> <span className="ml-2">clear all progress</span>
+      </Button>
 
-        {showForm ? (
-          <SaveForm
-            onCancel={() => setShowForm(false)}
-            movesProgress={movesProgress}
-          />
-        ) : (
-          <Button onClick={() => setShowForm(true)}>
-            <Save size={16} />
-            <span className="ml-2">Save</span>
-          </Button>
-        )}
-      </div>
-    </Fragment>
+      {showForm ? (
+        <SaveForm
+          onCancel={() => setShowForm(false)}
+          movesProgress={movesProgress}
+        />
+      ) : (
+        <Button onClick={() => setShowForm(true)}>
+          <Save size={16} />
+          <span className="ml-2">Save</span>
+        </Button>
+      )}
+    </div>
   );
 };
 

@@ -7,10 +7,10 @@ import AllMoves from "../src/components/allMoves";
 import Header from "../src/components/header";
 import Move from "../src/components/move";
 import SelectedMoves from "../src/components/selectedMoves";
-import SequenceDisplay from "../src/components/sequenceDisplay";
 import SequenceHeader from "../src/components/sequenceHeader";
 import SequenceMove from "../src/components/sequenceMove";
-import { defaults } from "../src/data/meta.json";
+import { defaults, pages } from "../src/data/meta.json";
+import Nav from "../src/components/navigation";
 import { getLsSafe, setLsSafe } from "../src/util/util";
 import {
   INITIAL_STATE,
@@ -23,8 +23,8 @@ import {
 } from "../state/reducer";
 
 const LS_PAGE = "LS_MOVETODAY_PAGE";
-const EDIT = "EDIT";
-const SEQUENCE = "SEQUENCE";
+
+const { EDIT, SEQUENCE } = pages;
 
 const Home = ({ ...props }) => {
   const [page, setPage] = useState(null);
@@ -94,112 +94,97 @@ const Home = ({ ...props }) => {
 
   // =============== class names
 
-  const appWrapperCn =
-    "relative overflow-hidden bg-primary-900 h-screen border-2 border-gray-600 flex flex-wrap";
-  const navCnActive =
-    "bg-primaryAction-500 w-min py-1 px-2 rounded-sm mr-2 cursor-default focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-primary-300 active:ring-4 active:ring-offset-1 active:ring-primary-300";
-  const navCnUnselected =
-    "bg-primary-400 w-min py-1 px-2 rounded-sm mr-2 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-400";
+  const wrapper = {
+    app: "bg-primary-900 flex flex-col h-screen overflow-x-hidden",
+    header: "bg-primary-400 flex-none h-20 overflow-y-hidden p-2 w-full",
+    all:
+      "border-2 border-primary-400 flex-none mt-6 mx-5 mb-4 overflow-hidden px-1 py-2 relative rounded",
+    sequence:
+      "content-start flex flex-wrap overflow-y-auto mt-0 p-5 pt-6 space-y-4 text-primary-300 w-full scrollbar scrollbar-thumb-primary-600 scrollbar-track-primary-800",
+    selected:
+      "border-2 border-primary-400 flex-grow mb-4 mx-5 min-h-1/4 px-2 py-1 rounded",
+  };
 
   return (
-    <div className={appWrapperCn}>
+    <Fragment>
       <Head>
         <title>Move Today</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Header>
-        <div className="w-full flex items-center p-2 text-md ">
-          <nav className="whitespace-nowrap uppercase text-primary-800 font-bold">
-            <button
-              onClick={() => setPage(EDIT)}
-              disabled={page === EDIT}
-              className={page === EDIT ? navCnActive : navCnUnselected}
-            >
-              EDIT
-            </button>
-            <button
-              onClick={() => setPage(SEQUENCE)}
-              disabled={page === SEQUENCE}
-              className={page === SEQUENCE ? navCnActive : navCnUnselected}
-            >
-              SEQUENCE
-            </button>
-          </nav>
-
-          {state.errorMessage && <p>{state.errorMessage}</p>}
-          {state.loading && <p>Loading...</p>}
-          <div className="ml-auto flex items-center text-secondaryAction-800 text-sm font-bold ">
-            <GitHub size={16} />
-            <p className="ml-2 ">
-              <a href="https://github.com/ekelen">ekelen</a>
-            </p>
-          </div>
-        </div>
-      </Header>
-      {page === EDIT && (
+      <div className={wrapper.app}>
+        <header className={wrapper.header}>
+          <Header>
+            <Nav page={page} setPage={setPage} />
+            {state.errorMessage && <p>{state.errorMessage}</p>}
+            {state.loading && <p>Loading...</p>}
+          </Header>
+        </header>
         <Fragment>
-          <div className="contents">
-            <div className="relative overflow-hidden mx-5 my-2 p-3 rounded border-primary-400 border-2">
-              <AllMoves
-                onSelectDefault={onSelectDefault}
-                onSelectRandom={onSelectRandom}
-                movesProgress={state.movesProgress}
-                moveListStatic={state.moveListStatic}
-                onSetOneSelected={onSetOneSelected}
-              ></AllMoves>
-            </div>
-            <SelectedMoves
-              onClearSelected={onClearSelected}
-              onFinalize={onFinalize}
-              toggleOneSelected={onSetOneSelected}
-              nSelectedMoves={selectedMoves.length}
-              selectedMovesDisplay={selectedMoves.map((m) => (
-                <Move
-                  key={`${m.name}-${m.idx}`}
-                  onClick={onSetOneSelected}
-                  move={m}
-                  selected={true}
-                />
-              ))}
-            />
-          </div>
-        </Fragment>
-      )}
-      {page === SEQUENCE && (
-        <Fragment>
-          {state.moveListStatic.length > 0 ? (
-            <SequenceDisplay
-              sequenceHeader={
-                <SequenceHeader
-                  onEdit={onEdit}
-                  zeroAllProgress={() =>
-                    Object.keys(state.movesProgress).forEach((slug) =>
-                      onSetOneProgress(slug, 0)
-                    )
-                  }
+          {page === EDIT && (
+            <Fragment>
+              <div className={wrapper.all}>
+                <AllMoves
+                  onSelectDefault={onSelectDefault}
+                  onSelectRandom={onSelectRandom}
                   movesProgress={state.movesProgress}
                   moveListStatic={state.moveListStatic}
-                  selectedMoves={selectedMoves}
+                  onSetOneSelected={onSetOneSelected}
+                ></AllMoves>
+              </div>
+              <div className={wrapper.selected}>
+                <SelectedMoves
+                  onClearSelected={onClearSelected}
+                  onFinalize={onFinalize}
+                  toggleOneSelected={onSetOneSelected}
+                  nSelectedMoves={selectedMoves.length}
+                  selectedMovesDisplay={selectedMoves.map((m) => (
+                    <Move
+                      key={`${m.name}-${m.idx}`}
+                      onClick={onSetOneSelected}
+                      move={m}
+                      selected={true}
+                    />
+                  ))}
                 />
-              }
-              sequenceMoves={selectedMoves.map((move) => {
-                return (
-                  <SequenceMove
-                    key={`${move.name}-${move.idx}`}
-                    move={move}
-                    setsDone={state.movesProgress[move.slug]}
-                    toggleOneSelected={onSetOneSelected}
-                    setOneProgress={onSetOneProgress}
+              </div>
+            </Fragment>
+          )}
+          {page === SEQUENCE && (
+            <div className={wrapper.sequence}>
+              {state.moveListStatic.length > 0 ? (
+                <div className="contents">
+                  <SequenceHeader
+                    onEdit={onEdit}
+                    zeroAllProgress={() =>
+                      Object.keys(state.movesProgress).forEach((slug) =>
+                        onSetOneProgress(slug, 0)
+                      )
+                    }
+                    movesProgress={state.movesProgress}
+                    moveListStatic={state.moveListStatic}
+                    selectedMoves={selectedMoves}
                   />
-                );
-              })}
-            ></SequenceDisplay>
-          ) : (
-            "No moves in state yet..."
+
+                  {selectedMoves.map((m) => {
+                    return (
+                      <SequenceMove
+                        key={`${m.name}-${m.idx}`}
+                        move={m}
+                        setsDone={state.movesProgress[m.slug]}
+                        toggleOneSelected={onSetOneSelected}
+                        setOneProgress={onSetOneProgress}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                "No moves in state yet..."
+              )}
+            </div>
           )}
         </Fragment>
-      )}
-    </div>
+      </div>
+    </Fragment>
   );
 };
 
