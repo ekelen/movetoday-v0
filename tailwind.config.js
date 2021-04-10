@@ -28,14 +28,14 @@ module.exports = {
       colors: {
         // fyi
         //
-        amber: colors.amber,
-        cyan: colors.cyan,
+        // amber: colors.amber,
+        // cyan: colors.cyan,
         // emerald: colors.emerald,
         // fuchsia: colors.fuchsia,
         // lightBlue: colors.lightBlue,
         // lime: colors.lime,
-        orange: colors.orange,
-        // rose: colors.rose,
+        // orange: colors.orange,
+        rose: colors.rose,
         // teal: colors.teal,
         // violet: colors.violet,
         // trueGray: colors.trueGray,

@@ -94,7 +94,7 @@ const Home = ({ ...props }) => {
 
   const wrapper = {
     app: "bg-primary-900 flex flex-col h-screen overflow-x-hidden",
-    header: "bg-primary-400 flex-none h-20 overflow-y-hidden p-2 w-full",
+    header: "bg-black flex-none h-20 overflow-y-hidden p-2 w-full",
     all:
       "border-2 border-primary-400 flex-none mt-6 mx-5 mb-4 overflow-hidden px-1 py-2 relative rounded",
     sequence:
