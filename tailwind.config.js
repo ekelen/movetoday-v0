@@ -60,8 +60,6 @@ module.exports = {
       opacity: ["disabled"],
       cursor: ["disabled"],
       backgroundColor: ["disabled"],
-
-      textColor: ["group-hover"], // TODO: Not working in sequence display
     },
   },
   plugins: [require("tailwind-scrollbar"), require("@tailwindcss/forms")],
