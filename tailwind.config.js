@@ -51,6 +51,7 @@ module.exports = {
       },
       backgroundImage: (theme) => ({
         heart: "url('/noun_Heart_170033.svg')",
+        heartFilled: "url('/noun_Heart_396283.svg')",
       }),
     },
   },
