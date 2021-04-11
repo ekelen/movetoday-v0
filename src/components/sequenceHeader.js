@@ -6,7 +6,7 @@ const Button = ({ onClick, disabled, children, ...props }) => {
   return (
     <button
       onClick={onClick}
-      className="btn-pill self-center mb-2"
+      className="btn-pill btn-primary"
       disabled={disabled}
     >
       {children}
@@ -25,12 +25,13 @@ const SequenceHeader = ({
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="flex items-center p-2 relative space-x-2 w-full overflow-x-auto">
+    <div className="flex items-center p-2 relative space-x-2 w-full">
       <Button onClick={onEdit} disabled={showForm}>
         ◀ Back
       </Button>
       <Button onClick={zeroAllProgress} disabled={showForm}>
-        <RotateCcw size={16} /> <span className="ml-2">clear all progress</span>
+        <RotateCcw size={16} />{" "}
+        <span className="hidden md:inline ml-2">clear all progress</span>
       </Button>
 
       {showForm ? (

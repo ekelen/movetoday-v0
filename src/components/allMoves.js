@@ -96,7 +96,7 @@ const AllMoves = ({
             setSearchFilter("");
             setFocusFilter("");
           }}
-          className="btn-pill"
+          className="btn-pill btn-primary"
           disabled={disabled}
         >
           reset

@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import { Play, X } from "react-feather";
 
 const SelectedMoves = ({
   nSelectedMoves,
@@ -18,14 +19,20 @@ const SelectedMoves = ({
           {nSelectedMoves} selected
         </h3>
         <button
-          className="btn-pill"
+          className="btn-pill btn-primary"
           onClick={onClearSelected}
           disabled={disabled}
         >
-          clear
+          <X size={16} />
+          <p className="ml-2">clear</p>
         </button>
-        <button onClick={onFinalize} disabled={disabled} className="btn-pill">
-          {"done! ▶"}
+        <button
+          onClick={onFinalize}
+          disabled={disabled}
+          className="btn-pill btn-primary"
+        >
+          <p className="mr-2">go!</p>
+          <Play size={16} />
         </button>
       </header>
       <Fragment>{selectedMovesDisplay}</Fragment>

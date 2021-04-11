@@ -8,7 +8,7 @@ const Header = ({ children }) => {
   const logoCn =
     "block bg-heart bg-no-repeat bg-center bg-size-cover h-10 w-10";
   const appNameCn =
-    "flex items-center text-2xl mx-2 md:mx-4 font-display whitespace-nowrap";
+    "hidden md:flex items-center text-2xl mx-2 md:mx-4 font-display whitespace-nowrap";
 
   // =============== constants
   const name = "move today";

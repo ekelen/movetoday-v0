@@ -16,10 +16,14 @@ a {
 
 @layer components {
   .btn-pill {
-    @apply py-1 px-3 rounded-full flex items-center lowercase font-display shadow-md text-black whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-opacity-75 hover:bg-yellow-500 focus:bg-yellow-500 bg-primaryAction-600;
+    @apply px-3 h-8 rounded-full flex items-center lowercase font-display shadow-md text-black whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-opacity-75 focus:bg-yellow-500;
   }
   .btn-pill:disabled {
     @apply cursor-default bg-primary-500;
+  }
+
+  .btn-primary {
+    @apply text-primary-900 bg-primaryAction-600 hover:bg-primaryAction-400;
   }
 
   .tag {

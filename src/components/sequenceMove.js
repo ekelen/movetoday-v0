@@ -13,7 +13,6 @@ const SequenceMove = memo(
       durationMin,
       durationMax,
       sets,
-      source,
       isPerSide,
       history = null,
     } = move;
@@ -84,7 +83,6 @@ const SequenceMove = memo(
             </div>
           )}
           {focus && <div className="tag mr-2">{focus}</div>}
-          {source && <div className="tag">{source}</div>}
           {
             <button
               onClick={onZeroProgress}
