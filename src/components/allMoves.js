@@ -29,7 +29,7 @@ const AllMoves = ({
     "bg-primary-400 text-primary-800 whitespace-nowrap uppercase text-xs w-min py-1 px-2 rounded-full focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-400";
   return (
     <Fragment>
-      <div className="text-primary-400 text-xs uppercase">
+      <div className="mt-2 px-3 text-primary-400 text-xs uppercase">
         1. Choose moves or use{" "}
         <button className={presetTextCn} onClick={onSelectDefault}>
           default
