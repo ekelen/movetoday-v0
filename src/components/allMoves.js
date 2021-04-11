@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import { Search, X } from "react-feather";
 import { foci } from "../data/meta.json";
 import Move from "./move";
 
@@ -40,22 +41,24 @@ const AllMoves = ({
         </button>
       </div>
 
-      <div className="flex items-center w-full space-x-3 px-3 p-4">
+      <div className="flex items-center w-full space-x-4 px-3 py-4">
         <input
           type="text"
           aria-label="search"
-          placeholder="🔎 search!"
+          placeholder={"🔎   search!"}
           onChange={onSearch}
           value={searchFilter}
-          className={`w-min text-sm py-2 px-3 rounded font-bold flex items-center self-bottom mr-4 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 text-primary-100 placeholder-gray-100 bg-primary-700 hover:bg-primary-600`}
+          className={`bg-primary-700 flex focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 font-bold hover:bg-primary-600 items-center placeholder-opacity-75 placeholder-primary-100 px-3 py-2 relative rounded self-bottom text-primary-100 text-sm w-min`}
         ></input>
 
         {/* Dropdown */}
+
         <select
-          className="px-2 py-1 rounded-full flex lg:hidden"
+          className="bg-primary-700 flex font-bold font-sans lg:hidden opacity-75 px-2 py-1 rounded-full text-primary-100 text-sm"
           value={focusFilter}
           onChange={onEnterSearchText}
           autoComplete="on"
+          type="text"
         >
           {[...foci, ""].map((focus, i) => {
             return (
@@ -99,7 +102,8 @@ const AllMoves = ({
           className="btn-pill btn-primary"
           disabled={disabled}
         >
-          reset
+          <X size={16} />
+          <p className="ml-1">reset filters</p>
         </button>
       </div>
       <div className="grid grid-rows-moveHeight grid-flow-col auto-cols-max gap-2 relative overflow-x-scroll scrollbar-thin scrollbar-thumb-primary-700 scrollbar-track-primary-900 p-5 focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300">

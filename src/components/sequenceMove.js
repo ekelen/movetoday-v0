@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Check, RotateCcw, Trash, X } from "react-feather";
 import { daysAgo } from "../util/util";
 
@@ -17,17 +17,9 @@ const SequenceMove = memo(
       // history = null,
     } = move;
 
-    const done = setsDone === sets;
-    const inProgress = setsDone > 0 && !done;
-
     // Todo: More graceful way to handle purgeable CSS
     const containerCn =
-      "bg-primary-800 relative my-2 mx-2 pt-2 px-2 pb-8 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 cursor-pointer";
-    const containerCnDone =
-      "bg-primary-500 relative my-2 mx-2 pt-2 px-2 pb-8 rounded-md flex flex-wrap items-center text-left content-start focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primary-600 cursor-pointer";
-
-    const tagCn = "tag mr-2 mt-2";
-    const tagCnDone = "tag mr=2 mt-2 opacity-50";
+      "bg-primary-800 content-start cursor-pointer flex flex-wrap items-center mx-2 my-2 pb-8 pt-2 px-2 relative rounded-md text-left";
 
     const onRemoveMoveFromSequence = (e) => {
       setShowConfirmDelete(true);
@@ -54,35 +46,11 @@ const SequenceMove = memo(
     };
 
     return (
-      <div
-        onClick={onIncrementSetsDone}
-        className={done ? containerCnDone : containerCn}
-      >
-        <div className="absolute bottom-1 flex h-6">
-          {Array.from(Array(sets).keys()).map((set) => {
-            return (
-              <div
-                className={
-                  done
-                    ? "bg-heartFilled h-5 w-5 bg-size-cover mr-1 filter hue-rotate-90 brightness-200 opacity-40"
-                    : set < setsDone
-                    ? "bg-heartFilled h-5 w-5 bg-size-cover mr-1"
-                    : "bg-heart h-5 w-5 bg-size-cover mr-1"
-                }
-              />
-            );
-          })}
-        </div>
+      <div onClick={onIncrementSetsDone} className={containerCn}>
         <header className="text-primary-400 text-sm sm:text-sm md:text-lg font-display w-full">
           <span>{name}</span>
         </header>
-        <div
-          className={
-            !done
-              ? "ml-0 mb-2 flex flex-wrap text-sm"
-              : "ml-0 mb-2 flex flex-wrap text-sm opacity-50"
-          }
-        >
+        <div className="ml-0 mb-2 flex flex-wrap text-sm">
           {repsMin && (
             <div className="tag mr-2 mt-2">
               {repsMin && repsMin}
@@ -100,8 +68,19 @@ const SequenceMove = memo(
           )}
           {focus && <div className="tag mr-2 mt-2">{focus}</div>}
         </div>
-        {/* {!!done && <div className="absolute bottom-1 right-12">☑️</div>} */}
-
+        <div className="absolute bottom-1 flex h-6">
+          {Array.from(Array(sets).keys()).map((set) => {
+            return (
+              <div
+                className={
+                  set < setsDone
+                    ? "bg-heartFilled h-5 w-5 bg-size-cover mr-1"
+                    : "bg-heart h-5 w-5 bg-size-cover mr-1"
+                }
+              />
+            );
+          })}
+        </div>
         {
           <button
             onClick={onZeroProgress}

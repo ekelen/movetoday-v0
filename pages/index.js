@@ -136,12 +136,14 @@ const Home = ({ ...props }) => {
                   toggleOneSelected={onSetOneSelected}
                   nSelectedMoves={selectedMoves.length}
                   selectedMovesDisplay={selectedMoves.map((m) => (
-                    <Move
-                      key={`${m.name}-${m.idx}`}
-                      onClick={onSetOneSelected}
-                      move={m}
-                      selected={true}
-                    />
+                    <div className="mr-2 my-2">
+                      <Move
+                        key={`${m.name}-${m.idx}`}
+                        onClick={onSetOneSelected}
+                        move={m}
+                        selected={true}
+                      />
+                    </div>
                   ))}
                 />
               </div>
