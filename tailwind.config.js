@@ -29,7 +29,7 @@ module.exports = {
         // fyi
         //
         // amber: colors.amber,
-        // cyan: colors.cyan,
+        cyan: colors.cyan,
         // emerald: colors.emerald,
         // fuchsia: colors.fuchsia,
         // lightBlue: colors.lightBlue,
@@ -60,6 +60,7 @@ module.exports = {
       opacity: ["disabled"],
       cursor: ["disabled"],
       backgroundColor: ["disabled"],
+      display: ["group-hover"],
     },
   },
   plugins: [require("tailwind-scrollbar"), require("@tailwindcss/forms")],
