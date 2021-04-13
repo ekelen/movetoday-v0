@@ -55,7 +55,8 @@ const SequenceMove = memo(
             <div className="tag mr-2 mt-2">
               {repsMin && repsMin}
               {repsMax && `-${repsMax}`}
-              {isPerSide && `per side`}
+              {` reps`}
+              {isPerSide && `/side`}
               {sets && ` x ${sets}`}
             </div>
           )}
