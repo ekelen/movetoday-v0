@@ -16,10 +16,10 @@ a {
 
 @layer components {
   .btn-pill {
-    @apply cursor-pointer flex focus:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-opacity-75 focus:ring-primary-400 font-display h-8 items-center lowercase px-3 rounded-full shadow-md text-black whitespace-nowrap;
+    @apply whitespace-nowrap text-black shadow-md rounded-full px-3 lowercase items-center h-8 font-display focus:ring-primary-400 focus:ring-opacity-75 focus:ring-2 focus:outline-none focus:bg-yellow-500 flex cursor-pointer;
   }
   .btn-pill:disabled {
-    @apply cursor-default bg-primary-500 hover:bg-primary-500;
+    @apply bg-primary-500 cursor-default hover:bg-primary-500;
   }
 
   .btn-primary {
@@ -27,7 +27,7 @@ a {
   }
 
   .tag {
-    @apply border border-primary-900 font-mono text-primary-200 bg-primary-900 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
+    @apply align-middle bg-primary-900 border border-primary-900 flex font-mono items-center px-2 py-1 rounded text-primary-200 text-xs whitespace-nowrap;
   }
 
   .tag-on-dark {
