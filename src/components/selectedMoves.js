@@ -12,7 +12,7 @@ const SelectedMoves = ({
   return (
     <div className="content-start flex flex-start flex-wrap h-full items-start overflow-y-scroll py-4 px-3 relative scrollbar scrollbar-thin scrollbar-thumb-primary-600 scrollbar-track-primary-900 w-full">
       <div className="mb-4 text-primary-400 text-xs uppercase">
-        2. Review and done!
+        2. Review and go!
       </div>
       <header className="mb-4 w-full flex items-center space-x-4">
         <h3 className="text-primary-200 font-display">

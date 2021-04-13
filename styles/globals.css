@@ -23,14 +23,22 @@ a {
   }
 
   .btn-primary {
-    @apply text-primary-900 bg-primaryAction-600 hover:bg-primaryAction-400;
+    @apply bg-primaryAction-600 hover:bg-primaryAction-400 text-primary-900;
   }
 
   .tag {
-    @apply text-primary-200 bg-primary-900 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
+    @apply border border-primary-900 font-mono text-primary-200 bg-primary-900 text-xs px-2 py-1 rounded whitespace-nowrap flex items-center align-middle;
   }
 
   .tag-on-dark {
-    @apply bg-primary-700;
+    @apply bg-primary-700 border-primary-700;
+  }
+
+  .tag-btn {
+    @apply border-primary-700 cursor-pointer hover:border-primaryAction-600;
+  }
+
+  .tag-btn:disabled {
+    @apply bg-opacity-40 border-primaryAction-700 cursor-default hover:border-primaryAction-700 text-primary-400;
   }
 }
