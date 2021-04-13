@@ -5,7 +5,7 @@ const Nav = ({ page, setPage }) => {
     navSelected:
       "active:ring-4 active:ring-offset-1 active:ring-primary-300 border-b-2 border-primaryAction-600 cursor-default focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-primary-300 mr-2 px-2 py-1 rounded-sm text-primary-500 w-min",
     navUnselected:
-      "cursor-pointer focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-600 hover:text-primary-900 mr-2 px-2 py-1 rounded-sm text-primary-500 w-min",
+      "cursor-pointer focus:outline-none focus:ring-4 focus:ring-offset-1 focus:ring-yellow-300 hover:bg-primaryAction-600 hover:text-primary-900 mr-2 px-2 py-1 rounded-sm text-primary-200 w-min",
   };
 
   const { EDIT, SEQUENCE } = pages;
